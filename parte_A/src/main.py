@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from app.modules.producto.routers import router as producto_router
-from app.modules.categoria.routers import router as categoria_router
-from app.modules.proveedor.routers import router as proveedor_router
-from app.exceptions import register_exception_handlers
+from src.modules.producto.routers import router as producto_router
+from src.modules.categoria.routers import router as categoria_router
+from src.modules.proveedor.routers import router as proveedor_router
+from src.exceptions import register_exception_handlers
 
 def create_app() -> FastAPI:
     app = FastAPI(

@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from app.modules.proveedor.errors import ConflictError
+from src.modules.proveedor.errors import ConflictError
 
 
 async def conflict_handler(request: Request, exc: ConflictError) -> JSONResponse:
