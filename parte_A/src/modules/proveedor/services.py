@@ -16,8 +16,7 @@ def _codigo_existe(session: Session, codigo: str) -> bool:
 def crear(session: Session, data: ProveedorCreate) -> ProveedorRead:
     data.codigo = _normalizar(data.codigo)
 
-    existe = _codigo_existe(session, data.codigo)
-    if existe:
+    if _codigo_existe(session, data.codigo):
         raise CodigoProveedorDuplicadoError(data.codigo)
     
     nuevo_proveedor = Proveedor(**data.model_dump())

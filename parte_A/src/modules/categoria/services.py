@@ -11,15 +11,13 @@ def _normalizar(codigo: str) -> str:
     return codigo.strip().upper()
 
 def _codigo_existe(session: Session, codigo: str) -> bool:
-    return session.exec(
-        select(Categoria).where(Categoria.codigo == codigo)
-    ).first() is not None
+    statement = select(Categoria).where(Categoria.codigo == codigo)
+    return session.exec(statement).first() is not None
 
 def crear(session: Session, data: CategoriaCreate) -> CategoriaRead:
     data.codigo = _normalizar(data.codigo)
 
-    existe = _codigo_existe(session, data.codigo)
-    if existe:
+    if _codigo_existe(session, data.codigo):
         raise CodigoCategoriaDuplicadoError(data.codigo)
 
     nueva_categoria = Categoria(**data.model_dump())

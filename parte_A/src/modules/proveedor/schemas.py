@@ -3,7 +3,7 @@ from typing import Optional
 
 
 class ProveedorBase(BaseModel):
-    codigo: str = Field(min_length=1, example="PRO-01")
+    codigo: str = Field(min_length=1, pattern=r"^[A-Z]{3}-\d{2}$", example="PRO-01")
     razon_social: str = Field(min_length=4, example="Ejemplo S.A.")
     cuit: str = Field(min_length=11, max_length=15, example="30-12345678-9")
     email: str = Field(default="", example="contacto@ejemplo.com")
@@ -11,9 +11,6 @@ class ProveedorBase(BaseModel):
     activo: bool = True
 
 class ProveedorCreate(ProveedorBase):
-    pass
-
-class ProveedorUpdate(ProveedorBase):
     pass
 
 class ProveedorRead(ProveedorBase):
