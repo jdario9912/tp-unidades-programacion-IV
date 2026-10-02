@@ -1,54 +1,96 @@
 from typing import List, Optional
-from .schemas import ProveedorCreate, ProveedorRead
-from .errors import CodigoDuplicadoError, ProveedorYaInactivoError
 
-db_proveedores: List[ProveedorRead] = []
-id_counter = 1
-
-def crear(data: ProveedorCreate) -> ProveedorRead:
-    global id_counter
-    nuevo = ProveedorRead(id=id_counter, **data.model_dump())
-    db_proveedores.append(nuevo)
-    id_counter += 1
-    return nuevo
-
-def obtener_todos(skip: int, limit: int) -> List[ProveedorRead]:
-    return db_proveedores[skip : skip + limit]
-
-def obtener_por_id(id: int) -> Optional[ProveedorRead]:
-    for p in db_proveedores:
-        if p.id == id:
-            return p
-    return None
+from sqlmodel import Session, select
+from .schemas import ProveedorCreate, ProveedorRead, ProveedorUpdate
+from .errors import CodigoDuplicadoError, ProveedorYaInactivoError, ProveedorNoEncontradoError
+from .models import Proveedor
 
 def _normalizar(codigo: str) -> str:
     return codigo.strip().upper()
 
+def _codigo_existe(session: Session, codigo: str) -> bool:
+    return session.exec(
+        select(Proveedor).where(Proveedor.codigo == codigo)
+    ).first() is not None
 
-def _validar_codigo_unico(codigo: str, id_actual: int) -> None:
-    nuevo = _normalizar(codigo)
-    for p in db_proveedores:
-        if p.id != id_actual and _normalizar(p.codigo) == nuevo:
-            raise CodigoDuplicadoError(codigo)
+def crear(session: Session, data: ProveedorCreate) -> ProveedorRead:
+    data.codigo = _normalizar(data.codigo)
 
-def actualizar_total(id: int, data: ProveedorCreate) -> Optional[ProveedorRead]:
-    for index, p in enumerate(db_proveedores):
-        if p.id == id:
-            _validar_codigo_unico(data.codigo, id)
-            proveedor_actualizado = ProveedorRead(id=id, **data.model_dump())
-            db_proveedores[index] = proveedor_actualizado
-            return proveedor_actualizado
-    return None
+    existe = _codigo_existe(session, data.codigo)
+    if existe:
+        raise CodigoDuplicadoError(data.codigo)
+    
+    nuevo_proveedor = Proveedor(**data.model_dump())
+    session.add(nuevo_proveedor)
+    session.commit()
+    session.refresh(nuevo_proveedor)
+
+    return ProveedorRead(**nuevo_proveedor.model_dump())
+
+def obtener_todos(session: Session,skip: int, limit: int) -> List[ProveedorRead]:
+    statement = (
+        select(Proveedor)
+        .order_by(Proveedor.id)
+        .offset(skip)
+        .limit(limit)
+    )
+
+    return [ProveedorRead(**p.model_dump()) for p in session.exec(statement).all()]
+
+def obtener_por_id(session: Session, id: int) -> ProveedorRead:
+    proveedor = session.exec(
+            select(Proveedor).where(Proveedor.id == id)
+        ).first()
+    if not proveedor:
+        raise ProveedorNoEncontradoError(id)
+    
+    return ProveedorRead(**proveedor.model_dump())
+    
 
 
-def desactivar(id: int) -> Optional[ProveedorRead]:
-    for index, p in enumerate(db_proveedores):
-        if p.id == id:
-            if not p.activo:
-                raise ProveedorYaInactivoError(id)  # RN-05 -> 409
-            p_dict = p.model_dump()
-            p_dict["activo"] = False
-            proveedor_actualizado = ProveedorRead(**p_dict)
-            db_proveedores[index] = proveedor_actualizado
-            return proveedor_actualizado
-    return None
+def actualizar(session: Session, id: int, data: ProveedorUpdate) -> ProveedorRead:
+    proveedor = session.exec(
+            select(Proveedor).where(Proveedor.id == id)
+        ).first()
+    if not proveedor:
+        raise ProveedorNoEncontradoError(id)
+    
+    codigo_normalizado = _normalizar(data.codigo)
+
+    if  codigo_normalizado != proveedor.codigo:
+        existe = _codigo_existe(session, codigo_normalizado)
+        if existe:
+            raise CodigoDuplicadoError(codigo_normalizado)
+        
+    data.codigo = codigo_normalizado
+
+    proveedor.codigo = data.codigo
+    proveedor.razon_social = data.razon_social
+    proveedor.email = data.email
+    proveedor.cuit = data.cuit
+    proveedor.telefono = data.telefono
+    proveedor.activo = data.activo
+
+    session.add(proveedor)
+    session.commit()
+    session.refresh(proveedor)
+
+    return ProveedorRead(**proveedor.model_dump())
+
+
+def desactivar(session: Session, id: int) -> ProveedorRead:
+    proveedor = session.exec(
+            select(Proveedor).where(Proveedor.id == id)
+        ).first()
+    if not proveedor:
+        raise ProveedorNoEncontradoError(id)
+
+    if not proveedor.activo:
+        raise ProveedorYaInactivoError(id)
+    
+    proveedor.activo = False
+
+    session.add(proveedor)
+    session.commit()
+    session.refresh(proveedor)
+    return ProveedorRead(**proveedor.model_dump())

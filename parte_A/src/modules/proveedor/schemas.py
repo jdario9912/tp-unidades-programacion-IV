@@ -13,6 +13,9 @@ class ProveedorBase(BaseModel):
 class ProveedorCreate(ProveedorBase):
     pass
 
+class ProveedorUpdate(ProveedorBase):
+    pass
+
 class ProveedorRead(ProveedorBase):
     id: int
 
