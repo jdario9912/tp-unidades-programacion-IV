@@ -1,6 +1,4 @@
-class ConflictError(Exception):
-    pass
-
+from src.modules.errors import ConflictError, NotFoundError
 
 class CodigoDuplicadoError(ConflictError):
     def __init__(self, codigo: str):
@@ -12,10 +10,6 @@ class ProveedorYaInactivoError(ConflictError):
     def __init__(self, id: int):
         self.id = id
         super().__init__(f"El proveedor {id} ya está desactivado")
-
-
-class NotFoundError(Exception):
-    pass
 
 
 class ProveedorNoEncontradoError(NotFoundError):

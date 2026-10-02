@@ -5,7 +5,7 @@ from src.database import crear_tablas
 from src.modules.producto.routers import router as producto_router
 from src.modules.categoria.routers import router as categoria_router
 from src.modules.proveedor.routers import router as proveedor_router
-from src.exceptions import register_exception_handlers
+from .exceptions_handler import register_exception_handlers
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
