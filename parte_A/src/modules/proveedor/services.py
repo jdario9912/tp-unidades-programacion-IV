@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from sqlmodel import Session, select
 from .schemas import ProveedorCreate, ProveedorRead, ProveedorUpdate
-from .errors import CodigoDuplicadoError, ProveedorYaInactivoError, ProveedorNoEncontradoError
+from .errors import CodigoProveedorDuplicadoError, ProveedorYaInactivoError, ProveedorNoEncontradoError
 from .models import Proveedor
 
 def _normalizar(codigo: str) -> str:
@@ -18,7 +18,7 @@ def crear(session: Session, data: ProveedorCreate) -> ProveedorRead:
 
     existe = _codigo_existe(session, data.codigo)
     if existe:
-        raise CodigoDuplicadoError(data.codigo)
+        raise CodigoProveedorDuplicadoError(data.codigo)
     
     nuevo_proveedor = Proveedor(**data.model_dump())
     session.add(nuevo_proveedor)
@@ -60,7 +60,7 @@ def actualizar(session: Session, id: int, data: ProveedorUpdate) -> ProveedorRea
     if  codigo_normalizado != proveedor.codigo:
         existe = _codigo_existe(session, codigo_normalizado)
         if existe:
-            raise CodigoDuplicadoError(codigo_normalizado)
+            raise CodigoProveedorDuplicadoError(codigo_normalizado)
         
     data.codigo = codigo_normalizado
 

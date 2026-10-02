@@ -1,6 +1,6 @@
 from src.modules.errors import ConflictError, NotFoundError
 
-class CodigoDuplicadoError(ConflictError):
+class CodigoProveedorDuplicadoError(ConflictError):
     def __init__(self, codigo: str):
         self.codigo = codigo
         super().__init__(f"Ya existe otro proveedor con el código '{codigo}'")
