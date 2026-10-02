@@ -12,16 +12,16 @@ POST {{baseUrl}}/categorias/
 Content-Type: application/json
 
 {
-  "codigo": "HER-03",
-  "descripcion": "Herramientas Manuales",
+  "codigo": "HER-01",
+  "descripcion": "Herramientas Automaticas",
   "activo": true
 }
 
 ### 3. Detalle de Categoría Exitoso
-GET {{baseUrl}}/categorias/3
+GET {{baseUrl}}/categorias/2
 
 ### 4. Actualizar Categoría (Reemplazo Total)
-PUT {{baseUrl}}/categorias/3
+PUT {{baseUrl}}/categorias/1
 Content-Type: application/json
 
 {
