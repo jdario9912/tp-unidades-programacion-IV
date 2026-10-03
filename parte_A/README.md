@@ -1,16 +1,16 @@
-## Crear entorno virtual
+### Crear entorno virtual
 
 ```sh
 python3 -m venv .venv
 ```
 
-## Activar entorno
+### Activar entorno
 
 ```sh
 source .venv/bin/activate
 ```
 
-## Instalar dependencias
+### Instalar dependencias
 
 ```sh
 pip install -r requirements.txt
