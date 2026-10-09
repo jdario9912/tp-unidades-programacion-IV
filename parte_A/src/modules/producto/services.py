@@ -92,3 +92,12 @@ def obtener_estado_stock(session: Session, id: int) -> ProductoStockResponse:
         bajo_stock_minimo=alerta_stock,
         activo=producto.activo
     )
+
+def borrar(session: Session, id: int) -> None:
+    statement = select(Producto).where(Producto.id == id)
+    producto = session.exec(statement).first()
+    if not producto:
+        raise ProductoNoEncontradoError(id)
+
+    session.delete(producto)
+    session.commit()

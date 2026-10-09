@@ -47,6 +47,12 @@ def borrado_logico(session: SessionDep, id: int = Path(..., gt=0)):
     response_model=schemas.ProductoStockResponse,
     status_code=status.HTTP_200_OK,
 )
-@router.get("/{id}/stock", response_model=schemas.ProductoStockResponse)
 def consultar_stock(session: SessionDep, id: int = Path(..., gt=0)):
     return services.obtener_estado_stock(session, id)
+
+@router.delete(
+    "/{id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def borrar_producto(session: SessionDep, id: int = Path(..., gt=0)):
+    return services.borrar(session, id)

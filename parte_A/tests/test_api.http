@@ -97,6 +97,12 @@ Content-Type: application/json
   "activo": true
 }
 
+### 14. Borrar Producto (Prueba: DELETE, status 204)
+DELETE {{baseUrl}}/productos/1
+
+### 15. Borrar Producto Inexistente (Prueba: Error 404)
+DELETE {{baseUrl}}/productos/99
+
 ### ==========================================
 ### MÓDULO: PROVEEDORES
 ### ==========================================
