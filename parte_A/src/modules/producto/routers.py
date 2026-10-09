@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Path, Query, status
+from fastapi import APIRouter, Path, Query, status
 from typing import List
 from . import schemas, services
 from src.core.database import SessionDep
@@ -41,14 +41,6 @@ def actualizar_producto(session: SessionDep, producto: schemas.ProductoCreate, i
 def borrado_logico(session: SessionDep, id: int = Path(..., gt=0)):
     return services.desactivar(session, id)
 
-
-@router.get(
-    "/{id}/stock",
-    response_model=schemas.ProductoStockResponse,
-    status_code=status.HTTP_200_OK,
-)
-def consultar_stock(session: SessionDep, id: int = Path(..., gt=0)):
-    return services.obtener_estado_stock(session, id)
 
 @router.delete(
     "/{id}",

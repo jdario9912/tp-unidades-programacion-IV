@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Optional
-from producto.links import ProductoCategoria
-from sqlmodel import SQLModel, Field
+from src.modules.producto.links import ProductoCategoria
+from sqlmodel import SQLModel, Field, Relationship
 
 if TYPE_CHECKING:
     from producto.models import Producto

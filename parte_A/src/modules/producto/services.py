@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from .errors import CodigoProductoDuplicadoError, ProductoNoEncontradoError, ProductoYaInactivoError
 from .models import Producto
-from .schemas import ProductoCreate, ProductoRead, ProductoStockResponse
+from .schemas import ProductoCreate, ProductoRead
 from sqlmodel import Session, select
 
 def _normalizar(categoria: str) -> str:
@@ -82,19 +82,6 @@ def desactivar(session: Session, id: int) -> ProductoRead:
 
     return ProductoRead(**producto.model_dump())
     
-
-def obtener_estado_stock(session: Session, id: int) -> ProductoStockResponse:
-    producto = obtener_por_id(session, id)
-    if not producto:
-        raise ProductoNoEncontradoError(id)
-
-    alerta_stock = producto.stock < producto.stock_minimo
-
-    return ProductoStockResponse(
-        stock=producto.stock,
-        bajo_stock_minimo=alerta_stock,
-        activo=producto.activo
-    )
 
 def borrar(session: Session, id: int) -> None:
     statement = select(Producto).where(Producto.id == id)
