@@ -10,7 +10,6 @@ const ProductoCard = ({ producto }: Props) => {
       <td className="px-4 py-2">{producto.id}</td>
       <td className="px-4 py-2 font-bold">{producto.nombre}</td>
       <td className="px-4 py-2">${producto.precio}</td>
-      <td className="px-4 py-2">{producto.descripcion}</td>
     </tr>
   );
 };

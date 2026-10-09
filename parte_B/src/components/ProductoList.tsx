@@ -17,7 +17,6 @@ const ProductoList = ({ productos }: Props) => {
             <th className="px-4 py-2">ID</th>
             <th className="px-4 py-2">Nombre</th>
             <th className="px-4 py-2">Precio</th>
-            <th className="px-4 py-2">Descripción</th>
           </tr>
         </thead>
         {productos.length === 0 ? (
