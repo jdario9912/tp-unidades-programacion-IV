@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Path, Query, status
 from typing import List
 
-from src.database import SessionDep
+from src.core.database import SessionDep
 from . import schemas, services
 
 router = APIRouter(prefix="/categorias", tags=["Categorías"])
