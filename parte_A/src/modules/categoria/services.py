@@ -3,22 +3,22 @@ from typing import List, Optional
 
 from src.modules import categoria
 
-from .errors import CategoriaNoEncontradaError, CategoriaNoEncontradaError, CategoriaYaInactivaError, CodigoCategoriaDuplicadoError
+from .errors import CategoriaNoEncontradaError, CategoriaNoEncontradaError, CategoriaDuplicadaError
 from .schemas import CategoriaCreate, CategoriaRead
 from .models import Categoria
 
-def _normalizar(codigo: str) -> str:
-    return codigo.strip().upper()
+def _normalizar(nombre: str) -> str:
+    return nombre.strip().lower()
 
-def _codigo_existe(session: Session, codigo: str) -> bool:
-    statement = select(Categoria).where(Categoria.codigo == codigo)
+def _nombre_existe(session: Session, nombre: str) -> bool:
+    statement = select(Categoria).where(Categoria.nombre == nombre)
     return session.exec(statement).first() is not None
 
 def crear(session: Session, data: CategoriaCreate) -> CategoriaRead:
-    data.codigo = _normalizar(data.codigo)
+    data.nombre = _normalizar(data.nombre)
 
-    if _codigo_existe(session, data.codigo):
-        raise CodigoCategoriaDuplicadoError(data.codigo)
+    if _nombre_existe(session, data.nombre):
+        raise CategoriaDuplicadaError(data.nombre)
 
     nueva_categoria = Categoria(**data.model_dump())
     session.add(nueva_categoria)
@@ -53,10 +53,10 @@ def actualizar(session: Session, id: int, data: CategoriaCreate) -> CategoriaRea
     if not categoria:
         raise CategoriaNoEncontradaError(id)
 
-    data.codigo = _normalizar(data.codigo)
+    data.nombre = _normalizar(data.nombre)
 
-    if data.codigo != categoria.codigo and _codigo_existe(session, data.codigo):
-        raise CodigoCategoriaDuplicadoError(data.codigo)
+    if data.nombre != categoria.nombre and _nombre_existe(session, data.nombre):
+        raise CategoriaDuplicadaError(data.nombre)
 
     for key, value in data.model_dump().items():
         setattr(categoria, key, value)
@@ -68,19 +68,13 @@ def actualizar(session: Session, id: int, data: CategoriaCreate) -> CategoriaRea
     return CategoriaRead(**categoria.model_dump())
 
 
-def desactivar(session: Session, id: int) -> CategoriaRead:
+def borrar(session: Session, id: int) -> CategoriaRead:
     statement = select(Categoria).where(Categoria.id == id)
     categoria = session.exec(statement).first()
     if not categoria:
         raise CategoriaNoEncontradaError(id)
 
-    if not categoria.activo:
-        raise CategoriaYaInactivaError(id)
-
-    categoria.activo = False
-
-    session.add(categoria)
+    session.delete(categoria)
     session.commit()
-    session.refresh(categoria)
 
     return CategoriaRead(**categoria.model_dump())

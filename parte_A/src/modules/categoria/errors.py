@@ -1,16 +1,9 @@
 from src.modules.errors import ConflictError, NotFoundError
 
-class CodigoCategoriaDuplicadoError(ConflictError):
-    def __init__(self, codigo: str):
-        self.codigo = codigo
-        super().__init__(f"Ya existe otra categoría con el código '{codigo}'")
-
-
-class CategoriaYaInactivaError(ConflictError):
-    def __init__(self, id: int):
-        self.id = id
-        super().__init__(f"La categoría {id} ya está desactivada")
-
+class CategoriaDuplicadaError(ConflictError):
+    def __init__(self, nombre: str):
+        self.nombre = nombre
+        super().__init__(f"Ya existe otra categoría con el nombre '{nombre}'")
 
 class CategoriaNoEncontradaError(NotFoundError):
     def __init__(self, id: int):

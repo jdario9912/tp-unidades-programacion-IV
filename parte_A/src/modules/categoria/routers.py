@@ -35,10 +35,9 @@ def actualizar_categoria(session: SessionDep, categoria: schemas.CategoriaCreate
     return services.actualizar(session, id, categoria)
 
 
-@router.put(
-    "/{id}/desactivar",
-    response_model=schemas.CategoriaRead,
-    status_code=status.HTTP_200_OK,
+@router.delete(
+    "/{id}",
+    status_code=status.HTTP_204_NO_CONTENT,
 )
-def borrado_logico(session: SessionDep, id: int = Path(..., gt=0)):
-    return services.desactivar(session, id)
+def borrar(session: SessionDep, id: int = Path(..., gt=0)):
+    return services.borrar(session, id)

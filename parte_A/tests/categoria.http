@@ -8,22 +8,20 @@ POST {{baseUrl}}/categorias/
 Content-Type: application/json
 
 {
-  "codigo": "HER-01",
-  "descripcion": "Herramientas Automaticas",
-  "activo": true
+  "nombre": "automaticas",
+  "descripcion": "Herramientas Automaticas"
 }
 
 ### Detalle de Categoría Exitoso
-GET {{baseUrl}}/categorias/2
+GET {{baseUrl}}/categorias/1
 
 ### Actualizar Categoría
 PUT {{baseUrl}}/categorias/1
 Content-Type: application/json
 
 {
-  "codigo": "HER-03",
-  "descripcion": "Herramientas de Jardinería y Taller",
-  "activo": true
+  "nombre": "Automaticas",
+  "descripcion": "Herramientas Automaticas"
 }
 
 ### Desactivar Categoría
