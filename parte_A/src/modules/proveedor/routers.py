@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Path, Query, status
+from fastapi import APIRouter, Path, Query, status
 from typing import List
 
 from src.database import SessionDep
@@ -28,7 +28,7 @@ def detalle_proveedor(session: SessionDep, id: int = Path(..., gt=0)):
 @router.put(
     "/{id}", response_model=schemas.ProveedorRead, status_code=status.HTTP_200_OK
 )
-def actualizar_proveedor(session: SessionDep, proveedor: schemas.ProveedorCreate, id: int = Path(..., gt=0)):
+def actualizar_proveedor(session: SessionDep, proveedor: schemas.ProveedorUpdate, id: int = Path(..., gt=0)):
     return services.actualizar(session, id, proveedor)
 
 @router.put(

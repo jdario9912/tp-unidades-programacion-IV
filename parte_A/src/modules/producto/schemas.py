@@ -3,6 +3,7 @@ from typing import Optional
 
 
 class ProductoBase(BaseModel):
+    codigo: str = Field(..., min_length=1, example="PROD-001")
     nombre: str = Field(..., min_length=1, example="Silla de Oficina")
     categoria: str = Field(..., pattern=r"^[A-Z]{3}-\d{2}$", example="MUE-01")
     precio: float = Field(gt=0, example=150.50)
@@ -17,6 +18,7 @@ class ProductoCreate(ProductoBase):
 
 class ProductoUpdate(BaseModel):
     # Opcional: Se usa si en el futuro se implementa PATCH (actualización parcial)
+    codigo: Optional[str] = Field(None, min_length=1, example="PROD-001")
     nombre: Optional[str] = None
     categoria: Optional[str] = Field(None, pattern=r"^[A-Z]{3}-\d{2}$")
     precio: Optional[float] = Field(None, gt=0)

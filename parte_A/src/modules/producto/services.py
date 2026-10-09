@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from .errors import CodigoProductoDuplicadoError, ProductoNoEncontradoError
+from .errors import CodigoProductoDuplicadoError, ProductoNoEncontradoError, ProductoYaInactivoError
 from .models import Producto
 from .schemas import ProductoCreate, ProductoRead, ProductoStockResponse
 from sqlmodel import Session, select
@@ -8,14 +8,14 @@ from sqlmodel import Session, select
 def _normalizar(categoria: str) -> str:
     return categoria.strip().upper()
 
-def _codigo_existe(session: Session, categoria: str) -> bool:
+def _codigo_existe(session: Session, codigo: str) -> bool:
     return session.exec(
-        select(Producto).where(Producto.categoria == categoria)
+        select(Producto).where(Producto.codigo == codigo)
     ).first() is not None
 
 def crear(session: Session, data: ProductoCreate) -> ProductoRead:
-    if _codigo_existe(session, data.categoria):
-        raise CodigoProductoDuplicadoError(data.categoria)
+    if _codigo_existe(session, data.codigo):
+        raise CodigoProductoDuplicadoError(data.codigo)
 
     nuevo_producto = Producto(**data.model_dump())
     session.add(nuevo_producto)
@@ -52,8 +52,8 @@ def actualizar_total(session: Session, id: int, data: ProductoCreate) -> Product
 
     data.categoria = _normalizar(data.categoria)
 
-    if data.categoria != producto.categoria and _codigo_existe(session, data.categoria):
-        raise CodigoProductoDuplicadoError(data.categoria)
+    if data.codigo != producto.codigo and _codigo_existe(session, data.codigo):
+        raise CodigoProductoDuplicadoError(data.codigo)
 
     for key, value in data.model_dump().items():
         setattr(producto, key, value)
@@ -70,6 +70,9 @@ def desactivar(session: Session, id: int) -> ProductoRead:
     producto = session.exec(statement).first()
     if not producto:
         raise ProductoNoEncontradoError(id)
+
+    if not producto.activo:
+        raise ProductoYaInactivoError(id)
 
     producto.activo = False
 
