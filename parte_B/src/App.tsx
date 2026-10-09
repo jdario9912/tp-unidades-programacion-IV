@@ -8,32 +8,44 @@ const productos: Producto[] = [
   {
     id: 1,
     nombre: "Producto 1",
+    categoria: "Categoria 1",
     precio: 10.99,
-    descripcion: "Descripción del producto 1",
+    stock: 100,
+    stock_minimo: 10,
+    activo: true,
   },
   {
     id: 2,
     nombre: "Producto 2",
+    categoria: "Categoria 2",
     precio: 19.99,
-    descripcion: "Descripción del producto 2",
+    stock: 50,
+    stock_minimo: 5,
+    activo: true,
   },
   {
     id: 3,
     nombre: "Producto 3",
+    categoria: "Categoria 3",
     precio: 5.99,
-    descripcion: "Descripción del producto 3",
+    stock: 200,
+    stock_minimo: 20,
+    activo: true,
   },
   {
     id: 4,
     nombre: "Producto 4",
+    categoria: "Categoria 4",
     precio: 29.99,
-    descripcion: "Descripción del producto 4",
+    stock: 75,
+    stock_minimo: 15,
+    activo: true,
   },
 ];
 
 function App() {
   return (
-    <body className="bg-gray-100 min-h-screen text-gray-700">
+    <div className="bg-gray-100 min-h-screen text-gray-700">
       <main className="container mx-auto p-4">
         <Navbar />
 
@@ -48,7 +60,7 @@ function App() {
         </div>
         <Footer />
       </main>
-    </body>
+    </div>
   );
 }
 

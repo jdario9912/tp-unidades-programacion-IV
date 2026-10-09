@@ -20,7 +20,13 @@ const ProductoList = ({ productos }: Props) => {
           </tr>
         </thead>
         {productos.length === 0 ? (
-          <p>No hay productos disponibles.</p>
+          <tbody>
+            <tr>
+              <td colSpan={3} className="px-4 py-2 text-center">
+                No hay productos disponibles.
+              </td>
+            </tr>
+          </tbody>
         ) : (
           <tbody>
             {productos.map((producto) => (
