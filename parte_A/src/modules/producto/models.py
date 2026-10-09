@@ -1,12 +1,18 @@
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
+from links import ProductoCategoria
 from sqlmodel import SQLModel, Field
+
+if TYPE_CHECKING:
+    from categoria.models import Categoria
 
 class Producto(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    codigo: str = Field(unique=True, index=True)
     nombre: str
-    categoria: str
-    precio: float
-    stock: int
-    stock_minimo: int
-    activo: bool = True
+    descripcion: str
+    precio_base: str
+    imagen_url: str
+    disponible: bool = True
+
+    categorias: list["Categoria"] = Relationship(
+        back_populates="productos", link_model=ProductoCategoria
+    )

@@ -3,13 +3,11 @@ from typing import Optional
 
 
 class ProductoBase(BaseModel):
-    codigo: str = Field(..., min_length=1, example="PROD-001")
     nombre: str = Field(..., min_length=1, example="Silla de Oficina")
-    categoria: str = Field(..., pattern=r"^[A-Z]{3}-\d{2}$", example="MUE-01")
-    precio: float = Field(gt=0, example=150.50)
-    stock: int = Field(ge=0, example=20)
-    stock_minimo: int = Field(ge=0, example=5)
-    activo: bool = True
+    descripcion: str = Field(..., min_length=1, example="Silla ergonómica con soporte lumbar")
+    precio_base: float = Field(gt=0, example=150.50)
+    imagen_url: str = Field(..., min_length=1, example="https://example.com/silla.jpg")
+    disponible: bool = Field(default=True, example=True)
 
 
 class ProductoCreate(ProductoBase):
@@ -17,21 +15,12 @@ class ProductoCreate(ProductoBase):
 
 
 class ProductoUpdate(BaseModel):
-    # Opcional: Se usa si en el futuro se implementa PATCH (actualización parcial)
-    codigo: Optional[str] = Field(None, min_length=1, example="PROD-001")
     nombre: Optional[str] = None
-    categoria: Optional[str] = Field(None, pattern=r"^[A-Z]{3}-\d{2}$")
-    precio: Optional[float] = Field(None, gt=0)
-    stock: Optional[int] = Field(None, ge=0)
-    stock_minimo: Optional[int] = Field(None, ge=0)
-    activo: Optional[bool] = None
+    descripcion: Optional[str] = None
+    precio_base: Optional[float] = Field(None, gt=0)
+    imagen_url: Optional[str] = None
+    disponible: Optional[bool] = None
 
 
 class ProductoRead(ProductoBase):
-    id: int  # Contrato de salida: siempre incluye el ID generado
-
-
-class ProductoStockResponse(BaseModel):
-    stock: int
-    bajo_stock_minimo: bool
-    activo: bool
+    id: int
