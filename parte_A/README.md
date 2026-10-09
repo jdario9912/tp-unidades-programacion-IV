@@ -35,3 +35,9 @@ docker compose up -d
 ```sh
 docker rm -f tienda
 ```
+
+### Desactivar entorno de Python
+
+```sh
+desactivate
+```
