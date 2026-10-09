@@ -3,7 +3,7 @@ from typing import Optional
 
 
 class ProductoBase(BaseModel):
-    nombre: str = Field(..., example="Silla de Oficina")
+    nombre: str = Field(..., min_length=1, example="Silla de Oficina")
     categoria: str = Field(..., pattern=r"^[A-Z]{3}-\d{2}$", example="MUE-01")
     precio: float = Field(gt=0, example=150.50)
     stock: int = Field(ge=0, example=20)
