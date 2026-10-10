@@ -1,10 +1,15 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  type ComponentPropsWithoutRef,
+  type ReactNode,
+} from "react";
 
 type ModalProps = {
   abierto: boolean;
   onCerrar: () => void;
   children: ReactNode;
-};
+} & ComponentPropsWithoutRef<"dialog">;
 
 export const Modal = ({ abierto, onCerrar, children }: ModalProps) => {
   const ref = useRef<HTMLDialogElement>(null);
