@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8080";
+const API_URL = "http://localhost:8000";
 
 export const get = async <T>(ruta: string): Promise<T> => {
   const res = await fetch(`${API_URL}${ruta}`);
