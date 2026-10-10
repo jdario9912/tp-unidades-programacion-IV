@@ -5,6 +5,7 @@ import Input from "../ui/input";
 import Label from "../ui/label";
 import { Modal } from "../ui/modal";
 import { useCreateCategoria, useUpdateCategoria } from "../../hooks/categorias";
+import ActionButton from "../ui/action-button";
 
 type Props = {
   categoria?: Categoria;
@@ -56,12 +57,14 @@ const CategoriaModal = ({ categoria, onSave }: Props) => {
 
   return (
     <>
-      <button
+      <ActionButton
         onClick={abrir}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
+        className={
+          categoria ? "text-blue-500 underline" : "bg-blue-500 text-white"
+        }
       >
         {categoria ? "Editar" : "+ Añadir Categoría"}
-      </button>
+      </ActionButton>
 
       <Modal abierto={abierto} onCerrar={cerrar}>
         <div className="flex justify-between p-2 px-4 min-w-xl">
@@ -69,7 +72,7 @@ const CategoriaModal = ({ categoria, onSave }: Props) => {
             {categoria ? "Editar Categoría" : "Añadir Categoría"}
           </h2>
 
-          <button onClick={cerrar}>X</button>
+          <ActionButton onClick={cerrar}>X</ActionButton>
         </div>
         <form className="p-4" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-y-4 mb-4">
@@ -106,12 +109,9 @@ const CategoriaModal = ({ categoria, onSave }: Props) => {
             </div>
           </div>
           <div className="flex gap-x-2 justify-end">
-            <button
-              onClick={cerrar}
-              className="bg-gray-400 text-white px-4 py-2 rounded"
-            >
+            <ActionButton onClick={cerrar} className="bg-gray-400 text-white">
               Cancelar
-            </button>
+            </ActionButton>
             <Input
               type="submit"
               value={categoria ? "Actualizar" : "Guardar"}
