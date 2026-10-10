@@ -79,29 +79,40 @@ export const useUpdateCategoria = (id: number, categoria: CategoriaInput) => {
   return { updatedCategoria, loading, error };
 };
 
-export const useCreateCategoria = (categoria: CategoriaInput) => {
+export const useCreateCategoria = () => {
   const [createdCategoria, setCreatedCategoria] = useState<Categoria | null>(
     null,
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const createCategoria = async () => {
-      try {
-        const data = await handleCrearCategoria(categoria);
-        setCreatedCategoria(data);
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const submit = async (categoria: CategoriaInput) => {
+    try {
+      const data = await handleCrearCategoria(categoria);
+      setCreatedCategoria(data);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    createCategoria();
-  }, [categoria]);
+  // useEffect(() => {
+  //   const createCategoria = async () => {
+  //     try {
+  //       const data = await handleCrearCategoria(categoria);
+  //       setCreatedCategoria(data);
+  //     } catch (err) {
+  //       setError((err as Error).message);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-  return { createdCategoria, loading, error };
+  //   createCategoria();
+  // }, [categoria]);
+
+  return { createdCategoria, loading, error, submit };
 };
 
 export const useDeleteCategoria = (id: number) => {
