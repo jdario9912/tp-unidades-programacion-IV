@@ -1,4 +1,4 @@
-import type { Categoria } from "../types/categoria";
+import type { Categoria, CategoriaInput } from "../types/categoria";
 import { get, post, put, remove } from "./client";
 
 const URL_CATEGORIAS = "/categorias";
@@ -21,9 +21,9 @@ export const getCategoriaById = async (id: number) => {
   }
 };
 
-export const crearCategoria = async (categoria: Omit<Categoria, "id">) => {
+export const crearCategoria = async (categoria: CategoriaInput) => {
   try {
-    return await post<Omit<Categoria, "id">, Categoria>(
+    return await post<CategoriaInput, Categoria>(
       `${URL_CATEGORIAS}`,
       categoria,
     );
@@ -35,10 +35,10 @@ export const crearCategoria = async (categoria: Omit<Categoria, "id">) => {
 
 export const actualizarCategoria = async (
   id: number,
-  categoria: Omit<Categoria, "id">,
+  categoria: CategoriaInput,
 ) => {
   try {
-    return await put<Omit<Categoria, "id">, Categoria>(
+    return await put<CategoriaInput, Categoria>(
       `${URL_CATEGORIAS}/${id}`,
       categoria,
     );
