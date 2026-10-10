@@ -3,7 +3,7 @@ import { get, post, put, remove } from "./client";
 
 const URL_CATEGORIAS = "/categorias";
 
-export const getCategorias = async () => {
+export const handleGetCategorias = async () => {
   try {
     return await get<Categoria[]>(`${URL_CATEGORIAS}`);
   } catch (error) {
@@ -12,7 +12,7 @@ export const getCategorias = async () => {
   }
 };
 
-export const getCategoriaById = async (id: number) => {
+export const handleGetCategoriaById = async (id: number) => {
   try {
     return await get<Categoria>(`${URL_CATEGORIAS}/${id}`);
   } catch (error) {
@@ -21,7 +21,7 @@ export const getCategoriaById = async (id: number) => {
   }
 };
 
-export const crearCategoria = async (categoria: CategoriaInput) => {
+export const handleCrearCategoria = async (categoria: CategoriaInput) => {
   try {
     return await post<CategoriaInput, Categoria>(
       `${URL_CATEGORIAS}`,
@@ -33,7 +33,7 @@ export const crearCategoria = async (categoria: CategoriaInput) => {
   }
 };
 
-export const actualizarCategoria = async (
+export const handleActualizarCategoria = async (
   id: number,
   categoria: CategoriaInput,
 ) => {
@@ -48,7 +48,7 @@ export const actualizarCategoria = async (
   }
 };
 
-export const eliminarCategoria = async (id: number) => {
+export const handleEliminarCategoria = async (id: number) => {
   try {
     await remove(`${URL_CATEGORIAS}/${id}`);
   } catch (error) {
