@@ -1,4 +1,4 @@
-import type { Producto } from "../types/producto";
+import type { Producto } from "../../types/producto";
 import ProductoCard from "./ProductoCard";
 
 type Props = {
