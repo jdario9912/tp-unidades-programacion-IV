@@ -36,7 +36,7 @@ export const put = async <T, U>(ruta: string, body: T): Promise<U> => {
   return res.json() as Promise<U>;
 };
 
-export const del = async (ruta: string): Promise<void> => {
+export const remove = async (ruta: string): Promise<void> => {
   const res = await fetch(`${API_URL}${ruta}`, {
     method: "DELETE",
   });
