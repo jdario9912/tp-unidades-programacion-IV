@@ -3,7 +3,7 @@ import CategoriaList from "./CategoriaList";
 import CategoriaModal from "./CategoriaModal";
 
 const Categorias = () => {
-  const { categorias, error, loading } = useGetCategorias();
+  const { categorias, error, loading, refetch } = useGetCategorias();
 
   if (loading) return <p>Cargando categorías...</p>;
 
@@ -13,7 +13,7 @@ const Categorias = () => {
     <div>
       <div className="flex justify-between w-full p-2 px-4 bg-gray-200 rounded-t-md">
         <h2 className="text-2xl font-bold text-blue-500">Categorías</h2>
-        <CategoriaModal />
+        <CategoriaModal onSave={refetch} />
       </div>
       <CategoriaList categorias={categorias} />
     </div>

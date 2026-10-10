@@ -8,9 +8,10 @@ import { useCreateCategoria } from "../../hooks/categorias";
 
 type Props = {
   categoria?: Categoria;
+  onSave: () => void | Promise<void>;
 };
 
-const CategoriaModal = ({ categoria }: Props) => {
+const CategoriaModal = ({ categoria, onSave }: Props) => {
   const { abierto, abrir, cerrar } = useModal();
 
   const initialValues = {
@@ -29,6 +30,7 @@ const CategoriaModal = ({ categoria }: Props) => {
       console.log("actualizando");
     } else {
       await submit(categoriaInput);
+      await onSave();
     }
   };
 

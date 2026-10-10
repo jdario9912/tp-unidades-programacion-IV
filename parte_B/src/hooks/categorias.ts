@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { Categoria, CategoriaInput } from "../types/categoria";
 import {
   handleActualizarCategoria,
@@ -10,25 +10,26 @@ import {
 
 export const useGetCategorias = () => {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // solo la carga inicial
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchCategorias = async () => {
-      try {
-        const data = await handleGetCategorias();
-        setCategorias(data);
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategorias();
+  const fetchCategorias = useCallback(async () => {
+    try {
+      setError(null);
+      const data = await handleGetCategorias();
+      setCategorias(data);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  return { categorias, loading, error };
+  useEffect(() => {
+    fetchCategorias();
+  }, [fetchCategorias]);
+
+  return { categorias, loading, error, refetch: fetchCategorias };
 };
 
 export const useGetCategoriaById = (id: number) => {
