@@ -8,9 +8,9 @@ type Props = {
 
 const CategoriaList = ({ categorias, onSave }: Props) => {
   return (
-    <table className="min-w-full border border-gray-200">
-      <thead>
-        <tr className="bg-gray-100">
+    <table className="min-w-full border rounded-lg overflow-hidden">
+      <thead className="">
+        <tr className="bg-gray-200">
           <th className="px-4 py-2 text-left">ID</th>
           <th className="px-4 py-2 text-left">Nombre</th>
           <th className="px-4 py-2 text-left">Descripción</th>

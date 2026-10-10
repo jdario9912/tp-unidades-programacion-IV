@@ -11,7 +11,7 @@ const Categorias = () => {
 
   return (
     <div>
-      <div className="flex justify-between w-full p-2 px-4 bg-gray-200 rounded-t-md">
+      <div className="flex justify-between w-full p-2 px-4">
         <h2 className="text-2xl font-bold text-blue-500">Categorías</h2>
         <CategoriaModal onSave={refetch} />
       </div>
