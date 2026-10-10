@@ -15,7 +15,7 @@ const Categorias = () => {
         <h2 className="text-2xl font-bold text-blue-500">Categorías</h2>
         <CategoriaModal onSave={refetch} />
       </div>
-      <CategoriaList categorias={categorias} />
+      <CategoriaList onSave={refetch} categorias={categorias} />
     </div>
   );
 };

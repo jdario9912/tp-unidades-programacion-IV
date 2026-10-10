@@ -4,7 +4,7 @@ import type { Categoria, CategoriaInput } from "../../types/categoria";
 import Input from "../ui/input";
 import Label from "../ui/label";
 import { Modal } from "../ui/modal";
-import { useCreateCategoria } from "../../hooks/categorias";
+import { useCreateCategoria, useUpdateCategoria } from "../../hooks/categorias";
 
 type Props = {
   categoria?: Categoria;
@@ -13,23 +13,43 @@ type Props = {
 
 const CategoriaModal = ({ categoria, onSave }: Props) => {
   const { abierto, abrir, cerrar } = useModal();
+  const [error, setError] = useState<string | null>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const initialValues = {
-    nombre: "",
-    descripcion: "",
+    nombre: categoria ? categoria.nombre : "",
+    descripcion: categoria ? categoria.descripcion : "",
   };
   const [categoriaInput, setCategoriaInput] =
     useState<CategoriaInput>(initialValues);
 
-  const { submit, error, loading } = useCreateCategoria();
+  const {
+    submit: submitCreate,
+    error: errorCreate,
+    loading: loadingCreate,
+  } = useCreateCategoria();
+
+  const {
+    submit: submitUpdate,
+    error: errorUpdate,
+    loading: loadingUpdate,
+  } = useUpdateCategoria();
 
   const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (categoria) {
-      console.log("actualizando");
+      setLoading(loadingUpdate);
+      await submitUpdate(categoria.id, {
+        nombre: categoriaInput.nombre,
+        descripcion: categoriaInput.descripcion,
+      });
+      setError(errorUpdate);
+      await onSave();
     } else {
-      await submit(categoriaInput);
+      setLoading(loadingCreate);
+      await submitCreate(categoriaInput);
+      setError(errorCreate);
       await onSave();
     }
   };
@@ -40,7 +60,7 @@ const CategoriaModal = ({ categoria, onSave }: Props) => {
         onClick={abrir}
         className="bg-blue-500 text-white px-4 py-2 rounded"
       >
-        + Añadir Categoría
+        {categoria ? "Editar" : "+ Añadir Categoría"}
       </button>
 
       <Modal abierto={abierto} onCerrar={cerrar}>

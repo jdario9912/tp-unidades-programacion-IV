@@ -55,29 +55,25 @@ export const useGetCategoriaById = (id: number) => {
   return { categoria, loading, error };
 };
 
-export const useUpdateCategoria = (id: number, categoria: CategoriaInput) => {
+export const useUpdateCategoria = () => {
   const [updatedCategoria, setUpdatedCategoria] = useState<Categoria | null>(
     null,
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const updateCategoria = async () => {
-      try {
-        const data = await handleActualizarCategoria(id, categoria);
-        setUpdatedCategoria(data);
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const submit = async (id: number, categoria: CategoriaInput) => {
+    try {
+      const data = await handleActualizarCategoria(id, categoria);
+      setUpdatedCategoria(data);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    updateCategoria();
-  }, [id, categoria]);
-
-  return { updatedCategoria, loading, error };
+  return { updatedCategoria, loading, error, submit };
 };
 
 export const useCreateCategoria = () => {
@@ -97,21 +93,6 @@ export const useCreateCategoria = () => {
       setLoading(false);
     }
   };
-
-  // useEffect(() => {
-  //   const createCategoria = async () => {
-  //     try {
-  //       const data = await handleCrearCategoria(categoria);
-  //       setCreatedCategoria(data);
-  //     } catch (err) {
-  //       setError((err as Error).message);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   createCategoria();
-  // }, [categoria]);
 
   return { createdCategoria, loading, error, submit };
 };
