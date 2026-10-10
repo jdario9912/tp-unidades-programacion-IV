@@ -4,7 +4,7 @@ from typing import List, Optional
 from src.modules import categoria
 
 from .errors import CategoriaNoEncontradaError, CategoriaNoEncontradaError, CategoriaDuplicadaError
-from .schemas import CategoriaCreate, CategoriaRead
+from .schemas import CategoriaCreate, CategoriaRead, CategoriaUpdate
 from .models import Categoria
 
 def _normalizar(nombre: str) -> str:
@@ -47,7 +47,7 @@ def obtener_por_id(session: Session, id: int) -> CategoriaRead:
     return CategoriaRead(**categoria.model_dump())
 
 
-def actualizar(session: Session, id: int, data: CategoriaCreate) -> CategoriaRead:
+def actualizar(session: Session, id: int, data: CategoriaUpdate) -> CategoriaRead:
     statement = select(Categoria).where(Categoria.id == id)
     categoria = session.exec(statement).first()
     if not categoria:
