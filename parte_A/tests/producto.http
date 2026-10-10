@@ -1,4 +1,6 @@
 @baseUrl = http://127.0.0.1:8000
+@idProducto = 2
+@idCategoria = 2
 
 ### Crear Producto
 POST {{baseUrl}}/productos/
@@ -9,17 +11,17 @@ Content-Type: application/json
   "descripcion": "Silla ergonómica con soporte lumbar y ajuste de altura",
   "precio_base": 250.00,
   "imagen_url": "https://example.com/silla-ergonomica.jpg",
-  "disponible": true,
+  "disponible": true
 }
 
 ### Listar Productos
 GET {{baseUrl}}/productos/?skip=0&limit=5
 
 ### Detalle Producto
-GET {{baseUrl}}/productos/1
+GET {{baseUrl}}/productos/{{idProducto}}
 
 ### Actualizar Producto
-PUT {{baseUrl}}/productos/1
+PUT {{baseUrl}}/productos/{{idProducto}}
 Content-Type: application/json
 
 {
@@ -27,11 +29,11 @@ Content-Type: application/json
   "descripcion": "Silla ergonómica con soporte lumbar y ajuste de altura",
   "precio_base": 300.00,
   "imagen_url": "https://example.com/silla-ergonomica.jpg",
-  "disponible": true,
+  "disponible": true
 }
 
 ### Desactivar Producto
-PUT {{baseUrl}}/productos/1/desactivar
+PUT {{baseUrl}}/productos/{{idProducto}}/deshabilitar
 
 ### Detalle Producto Inexistente
 GET {{baseUrl}}/productos/99
@@ -45,17 +47,17 @@ Content-Type: application/json
   "descripcion": "Silla ergonómica con soporte lumbar y ajuste de altura",
   "precio_base": -300.00,
   "imagen_url": "https://example.com/silla-ergonomica.jpg",
-  "disponible": true,
+  "disponible": true
 }
 
 ### Borrar Producto
-DELETE {{baseUrl}}/productos/1
+DELETE {{baseUrl}}/productos/{{idProducto}}
 
 ### Borrar Producto Inexistente
 DELETE {{baseUrl}}/productos/99
 
 ### Asignar categoría
-PUT {{baseUrl}}/productos/1/categorias/1
+PUT {{baseUrl}}/productos/{{idProducto}}/categorias/{{idCategoria}}
 
 ### Quitar la categoría
-DELETE {{baseUrl}}/productos/1/categorias/1
+DELETE {{baseUrl}}/productos/{{idProducto}}/categorias/{{idCategoria}}

@@ -1,6 +1,8 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 
+from src.modules.categoria.schemas import CategoriaRead
+
 
 class ProductoBase(BaseModel):
     nombre: str = Field(..., min_length=1, example="Silla de Oficina")
@@ -24,3 +26,6 @@ class ProductoUpdate(BaseModel):
 
 class ProductoRead(ProductoBase):
     id: int
+
+class ProductoReadConCategorias(ProductoRead):
+    categorias: list[CategoriaRead] = []

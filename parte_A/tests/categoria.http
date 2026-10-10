@@ -1,4 +1,5 @@
 @baseUrl = http://127.0.0.1:8000
+@idCategoria = 1
 
 ### Listar Categorías
 GET {{baseUrl}}/categorias/
@@ -8,15 +9,15 @@ POST {{baseUrl}}/categorias/
 Content-Type: application/json
 
 {
-  "nombre": "automaticas",
-  "descripcion": "Herramientas Automaticas"
+  "nombre": "hogar",
+  "descripcion": "domesticos y muebles para el hogar"
 }
 
 ### Detalle de Categoría Exitoso
-GET {{baseUrl}}/categorias/1
+GET {{baseUrl}}/categorias/{{idCategoria}}
 
 ### Actualizar Categoría
-PUT {{baseUrl}}/categorias/1
+PUT {{baseUrl}}/categorias/{{idCategoria}}
 Content-Type: application/json
 
 {
@@ -25,4 +26,4 @@ Content-Type: application/json
 }
 
 ### Borrar Categoría
-DELETE {{baseUrl}}/categorias/1
+DELETE {{baseUrl}}/categorias/{{idCategoria}}

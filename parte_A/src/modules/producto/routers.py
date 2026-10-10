@@ -20,7 +20,7 @@ def listar_productos(session: SessionDep, skip: int = Query(0, ge=0), limit: int
 
 
 @router.get(
-    "/{id}", response_model=schemas.ProductoRead, status_code=status.HTTP_200_OK
+    "/{id}", response_model=schemas.ProductoReadConCategorias, status_code=status.HTTP_200_OK
 )
 def detalle_producto(session: SessionDep, id: int = Path(..., gt=0)):
     return services.obtener_por_id(session, id)
@@ -34,12 +34,12 @@ def actualizar_producto(session: SessionDep, producto: schemas.ProductoCreate, i
 
 
 @router.put(
-    "/{id}/desactivar",
+    "/{id}/deshabilitar",
     response_model=schemas.ProductoRead,
     status_code=status.HTTP_200_OK,
 )
-def borrado_logico(session: SessionDep, id: int = Path(..., gt=0)):
-    return services.desactivar(session, id)
+def deshabilitar_producto(session: SessionDep, id: int = Path(..., gt=0)):
+    return services.deshabilitar(session, id)
 
 
 @router.delete(
@@ -48,3 +48,19 @@ def borrado_logico(session: SessionDep, id: int = Path(..., gt=0)):
 )
 def borrar_producto(session: SessionDep, id: int = Path(..., gt=0)):
     return services.borrar(session, id)
+
+@router.put(
+    "/{producto_id}/categorias/{categoria_id}",
+    response_model=schemas.ProductoReadConCategorias,
+    status_code=status.HTTP_200_OK,
+)
+def asignar_categoria_a_producto(session: SessionDep, producto_id: int= Path(..., gt=0), categoria_id: int= Path(..., gt=0)):
+    return services.asignar_categoria(session, producto_id, categoria_id)
+
+@router.delete(
+    "/{producto_id}/categorias/{categoria_id}",
+    response_model=schemas.ProductoReadConCategorias,
+    status_code=status.HTTP_200_OK,
+)
+def remover_categoria_de_producto(session: SessionDep, producto_id: int= Path(..., gt=0), categoria_id: int= Path(..., gt=0)):
+    return services.quitar_categoria(session, producto_id, categoria_id)
