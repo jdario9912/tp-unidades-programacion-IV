@@ -1,4 +1,5 @@
 import type { Categoria } from "../../types/categoria";
+import CategoriaEliminar from "./CategoriaEliminar";
 import CategoriaModal from "./CategoriaModal";
 
 type Props = {
@@ -16,8 +17,9 @@ const CategoriaCard = ({ categoria, onSave }: Props) => {
       <td className="px-4 py-2 first-letter:uppercase">
         {categoria.descripcion}
       </td>
-      <td className="flex w-full justify-end px-4 py-2">
+      <td className="flex w-full gap-x-2 justify-end px-4 py-2">
         <CategoriaModal onSave={onSave} categoria={categoria} />
+        <CategoriaEliminar onSave={onSave} idCategoria={categoria.id} />
       </td>
     </tr>
   );

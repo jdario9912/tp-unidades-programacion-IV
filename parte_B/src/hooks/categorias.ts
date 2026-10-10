@@ -97,25 +97,19 @@ export const useCreateCategoria = () => {
   return { createdCategoria, loading, error, submit };
 };
 
-export const useDeleteCategoria = (id: number) => {
-  const [deleted, setDeleted] = useState(false);
+export const useDeleteCategoria = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const deleteCategoria = async () => {
-      try {
-        await handleEliminarCategoria(id);
-        setDeleted(true);
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const submit = async (id: number) => {
+    try {
+      await handleEliminarCategoria(id);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    deleteCategoria();
-  }, [id]);
-
-  return { deleted, loading, error };
+  return { loading, error, submit };
 };

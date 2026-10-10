@@ -53,6 +53,16 @@ const CategoriaModal = ({ categoria, onSave }: Props) => {
       setError(errorCreate);
       await onSave();
     }
+
+    cerrar();
+    setCategoriaInput(initialValues);
+    setError(null);
+  };
+
+  const handleCancel = () => {
+    cerrar();
+    setCategoriaInput(initialValues);
+    setError(null);
   };
 
   return (
@@ -66,7 +76,7 @@ const CategoriaModal = ({ categoria, onSave }: Props) => {
         {categoria ? "Editar" : "+ Añadir Categoría"}
       </ActionButton>
 
-      <Modal abierto={abierto} onCerrar={cerrar}>
+      <Modal abierto={abierto} onCerrar={handleCancel}>
         <div className="flex justify-between p-2 px-4 min-w-xl">
           <h2 className="font-bold">
             {categoria ? "Editar Categoría" : "Añadir Categoría"}
@@ -109,7 +119,10 @@ const CategoriaModal = ({ categoria, onSave }: Props) => {
             </div>
           </div>
           <div className="flex gap-x-2 justify-end">
-            <ActionButton onClick={cerrar} className="bg-gray-400 text-white">
+            <ActionButton
+              onClick={handleCancel}
+              className="bg-gray-400 text-white"
+            >
               Cancelar
             </ActionButton>
             <Input
