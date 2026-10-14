@@ -9,10 +9,9 @@ import ActionButton from "../ui/action-button";
 
 type Props = {
   categoria?: Categoria;
-  onSave: () => void | Promise<void>;
 };
 
-const CategoriaModal = ({ categoria, onSave }: Props) => {
+const CategoriaModal = ({ categoria }: Props) => {
   const { abierto, abrir, cerrar } = useModal();
   const [error, setError] = useState<string | undefined>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -46,7 +45,6 @@ const CategoriaModal = ({ categoria, onSave }: Props) => {
         descripcion: categoriaInput.descripcion,
       });
       setError(errorUpdate);
-      await onSave();
     } else {
       setLoading(loadingCreate);
       await submitCreate(categoriaInput);

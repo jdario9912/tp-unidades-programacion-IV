@@ -49,24 +49,28 @@ export const useGetCategoriaById = (id: number) => {
 };
 
 export const useUpdateCategoria = () => {
-  const [updatedCategoria, setUpdatedCategoria] = useState<Categoria | null>(
-    null,
-  );
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: handleActualizarCategoria,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [CATEGORIAS_QUERY_KEY] });
+    },
+  });
 
   const submit = async (id: number, categoria: CategoriaInput) => {
-    try {
-      const data = await handleActualizarCategoria(id, categoria);
-      setUpdatedCategoria(data);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
+    mutation.mutate({
+      id,
+      nombre: categoria.nombre,
+      descripcion: categoria.descripcion,
+    });
   };
 
-  return { updatedCategoria, loading, error, submit };
+  return {
+    updatedCategoria: mutation.data,
+    loading: mutation.isPending,
+    error: mutation.error?.message,
+    submit,
+  };
 };
 
 export const useCreateCategoria = () => {

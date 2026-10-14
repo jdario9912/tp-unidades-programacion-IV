@@ -13,9 +13,9 @@ const Categorias = () => {
     <div>
       <div className="flex justify-between w-full p-2 px-4">
         <h2 className="text-2xl font-bold text-blue-500">Categorías</h2>
-        <CategoriaModal onSave={() => {}} />
+        <CategoriaModal />
       </div>
-      <CategoriaList onSave={() => {}} categorias={categorias ?? []} />
+      <CategoriaList categorias={categorias ?? []} />
     </div>
   );
 };

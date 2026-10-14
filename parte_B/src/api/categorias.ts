@@ -33,14 +33,14 @@ export const handleCrearCategoria = async (categoria: CategoriaInput) => {
   }
 };
 
-export const handleActualizarCategoria = async (
-  id: number,
-  categoria: CategoriaInput,
-) => {
+export const handleActualizarCategoria = async (categoria: Categoria) => {
   try {
     return await put<CategoriaInput, Categoria>(
-      `${URL_CATEGORIAS}/${id}`,
-      categoria,
+      `${URL_CATEGORIAS}/${categoria.id}`,
+      {
+        nombre: categoria.nombre,
+        descripcion: categoria.descripcion,
+      },
     );
   } catch (error) {
     console.error(`Error al actualizar categoría con ID ${id}:`, error);

@@ -3,10 +3,9 @@ import CategoriaCard from "./CategoriaCard";
 
 type Props = {
   categorias: Categoria[];
-  onSave: () => void | Promise<void>;
 };
 
-const CategoriaList = ({ categorias, onSave }: Props) => {
+const CategoriaList = ({ categorias }: Props) => {
   return (
     <table className="min-w-full border rounded-lg overflow-hidden">
       <thead className="">
@@ -26,11 +25,7 @@ const CategoriaList = ({ categorias, onSave }: Props) => {
           </tr>
         ) : (
           categorias.map((categoria) => (
-            <CategoriaCard
-              key={categoria.id}
-              categoria={categoria}
-              onSave={onSave}
-            />
+            <CategoriaCard key={categoria.id} categoria={categoria} />
           ))
         )}
       </tbody>
