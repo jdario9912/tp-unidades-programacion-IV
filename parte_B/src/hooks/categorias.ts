@@ -70,24 +70,24 @@ export const useUpdateCategoria = () => {
 };
 
 export const useCreateCategoria = () => {
-  const [createdCategoria, setCreatedCategoria] = useState<Categoria | null>(
-    null,
-  );
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: handleCrearCategoria,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [CATEGORIAS_QUERY_KEY] });
+    },
+  });
 
   const submit = async (categoria: CategoriaInput) => {
-    try {
-      const data = await handleCrearCategoria(categoria);
-      setCreatedCategoria(data);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
+    mutation.mutate(categoria);
   };
 
-  return { createdCategoria, loading, error, submit };
+  return {
+    createdCategoria: mutation.data,
+    loading: mutation.isPending,
+    error: mutation.error?.message,
+    submit,
+  };
 };
 
 export const useDeleteCategoria = () => {

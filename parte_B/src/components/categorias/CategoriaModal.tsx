@@ -14,7 +14,7 @@ type Props = {
 
 const CategoriaModal = ({ categoria, onSave }: Props) => {
   const { abierto, abrir, cerrar } = useModal();
-  const [error, setError] = useState<string | null>("");
+  const [error, setError] = useState<string | undefined>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const initialValues = {
@@ -51,12 +51,11 @@ const CategoriaModal = ({ categoria, onSave }: Props) => {
       setLoading(loadingCreate);
       await submitCreate(categoriaInput);
       setError(errorCreate);
-      await onSave();
     }
 
     cerrar();
     setCategoriaInput(initialValues);
-    setError(null);
+    setError("");
   };
 
   const handleCancel = () => {
@@ -133,7 +132,7 @@ const CategoriaModal = ({ categoria, onSave }: Props) => {
             />
           </div>
         </form>
-        {error ?? <span className="text-red-500">{error}</span>}
+        {error && <span className="text-red-500">{error}</span>}
       </Modal>
     </>
   );
