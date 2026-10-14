@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import type { Categoria, CategoriaInput } from "../types/categoria";
 import {
   handleActualizarCategoria,
@@ -11,6 +10,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const CATEGORIAS_QUERY_KEY = "categorias";
+const CATEGORIA_QUERY_KEY = "categoria";
 
 export const useGetCategorias = () => {
   const { data, isLoading, isError } = useQuery<Categoria[]>({
@@ -26,26 +26,12 @@ export const useGetCategorias = () => {
 };
 
 export const useGetCategoriaById = (id: number) => {
-  const [categoria, setCategoria] = useState<Categoria | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data, isLoading, isError } = useQuery<Categoria>({
+    queryKey: [CATEGORIA_QUERY_KEY, id],
+    queryFn: () => handleGetCategoriaById(id),
+  });
 
-  useEffect(() => {
-    const fetchCategoria = async () => {
-      try {
-        const data = await handleGetCategoriaById(id);
-        setCategoria(data);
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategoria();
-  }, [id]);
-
-  return { categoria, loading, error };
+  return { categoria: data, loading: isLoading, error: isError };
 };
 
 export const useUpdateCategoria = () => {

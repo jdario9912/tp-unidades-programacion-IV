@@ -35,21 +35,26 @@ const CategoriaModal = ({ categoria }: Props) => {
     loading: loadingUpdate,
   } = useUpdateCategoria();
 
+  const handleUpdate = async (id: number) => {
+    setLoading(loadingUpdate);
+    await submitUpdate(id, {
+      nombre: categoriaInput.nombre,
+      descripcion: categoriaInput.descripcion,
+    });
+    setError(errorUpdate);
+  };
+
+  const handleCreate = async () => {
+    setLoading(loadingCreate);
+    await submitCreate(categoriaInput);
+    setError(errorCreate);
+  };
+
   const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (categoria) {
-      setLoading(loadingUpdate);
-      await submitUpdate(categoria.id, {
-        nombre: categoriaInput.nombre,
-        descripcion: categoriaInput.descripcion,
-      });
-      setError(errorUpdate);
-    } else {
-      setLoading(loadingCreate);
-      await submitCreate(categoriaInput);
-      setError(errorCreate);
-    }
+    if (categoria) handleUpdate(categoria.id);
+    else handleCreate;
 
     cerrar();
     setCategoriaInput(initialValues);
@@ -59,7 +64,7 @@ const CategoriaModal = ({ categoria }: Props) => {
   const handleCancel = () => {
     cerrar();
     setCategoriaInput(initialValues);
-    setError(null);
+    setError("");
   };
 
   return (
