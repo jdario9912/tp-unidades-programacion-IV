@@ -1,4 +1,3 @@
-import Categorias from "./components/categorias/Categorias";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 
@@ -7,7 +6,6 @@ function App() {
     <div className="bg-gray-100 min-h-screen text-gray-700">
       <main className="container mx-auto p-4">
         <Navbar />
-        <Categorias />
         <Footer />
       </main>
     </div>

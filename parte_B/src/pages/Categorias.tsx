@@ -1,6 +1,6 @@
-import { useGetCategorias } from "../../hooks/categorias";
-import CategoriaList from "./CategoriaList";
-import CategoriaModal from "./CategoriaModal";
+import CategoriaList from "../components/categorias/CategoriaList";
+import CategoriaModal from "../components/categorias/CategoriaModal";
+import { useGetCategorias } from "../hooks/categorias";
 
 const Categorias = () => {
   const { categorias, error, loading, refetch } = useGetCategorias();
