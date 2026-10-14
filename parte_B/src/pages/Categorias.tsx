@@ -3,7 +3,7 @@ import CategoriaModal from "../components/categorias/CategoriaModal";
 import { useGetCategorias } from "../hooks/categorias";
 
 const Categorias = () => {
-  const { categorias, error, loading, refetch } = useGetCategorias();
+  const { categorias, error, loading } = useGetCategorias();
 
   if (loading) return <p>Cargando categorías...</p>;
 
@@ -13,9 +13,9 @@ const Categorias = () => {
     <div>
       <div className="flex justify-between w-full p-2 px-4">
         <h2 className="text-2xl font-bold text-blue-500">Categorías</h2>
-        <CategoriaModal onSave={refetch} />
+        <CategoriaModal onSave={() => {}} />
       </div>
-      <CategoriaList onSave={refetch} categorias={categorias} />
+      <CategoriaList onSave={() => {}} categorias={categorias ?? []} />
     </div>
   );
 };

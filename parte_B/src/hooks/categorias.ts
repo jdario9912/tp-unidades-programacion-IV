@@ -8,28 +8,19 @@ import {
   handleEliminarCategoria,
 } from "../api/categorias";
 
+import { useQuery } from "@tanstack/react-query";
+
 export const useGetCategorias = () => {
-  const [categorias, setCategorias] = useState<Categoria[]>([]);
-  const [loading, setLoading] = useState(true); // solo la carga inicial
-  const [error, setError] = useState<string | null>(null);
+  const { data, isLoading, isError } = useQuery<Categoria[]>({
+    queryKey: ["products"],
+    queryFn: handleGetCategorias,
+  });
 
-  const fetchCategorias = useCallback(async () => {
-    try {
-      setError(null);
-      const data = await handleGetCategorias();
-      setCategorias(data);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchCategorias();
-  }, [fetchCategorias]);
-
-  return { categorias, loading, error, refetch: fetchCategorias };
+  return {
+    categorias: data,
+    loading: isLoading,
+    error: isError,
+  };
 };
 
 export const useGetCategoriaById = (id: number) => {
