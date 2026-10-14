@@ -8,11 +8,13 @@ import {
   handleEliminarCategoria,
 } from "../api/categorias";
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+const CATEGORIAS_QUERY_KEY = "categorias";
 
 export const useGetCategorias = () => {
   const { data, isLoading, isError } = useQuery<Categoria[]>({
-    queryKey: ["products"],
+    queryKey: [CATEGORIAS_QUERY_KEY],
     queryFn: handleGetCategorias,
   });
 
@@ -89,18 +91,17 @@ export const useCreateCategoria = () => {
 };
 
 export const useDeleteCategoria = () => {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: handleEliminarCategoria,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [CATEGORIAS_QUERY_KEY] });
+    },
+  });
 
   const submit = async (id: number) => {
-    try {
-      await handleEliminarCategoria(id);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setLoading(false);
-    }
+    mutation.mutate(id);
   };
 
-  return { loading, error, submit };
+  return { loading: mutation.isPending, error: mutation.isError, submit };
 };

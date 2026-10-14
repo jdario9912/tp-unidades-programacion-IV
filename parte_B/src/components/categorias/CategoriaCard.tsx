@@ -19,7 +19,7 @@ const CategoriaCard = ({ categoria, onSave }: Props) => {
       </td>
       <td className="flex w-full gap-x-2 justify-end px-4 py-2">
         <CategoriaModal onSave={onSave} categoria={categoria} />
-        <CategoriaEliminar onSave={onSave} idCategoria={categoria.id} />
+        <CategoriaEliminar idCategoria={categoria.id} />
       </td>
     </tr>
   );

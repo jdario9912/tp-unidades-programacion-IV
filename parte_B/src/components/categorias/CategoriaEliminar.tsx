@@ -7,10 +7,9 @@ import { useDeleteCategoria } from "../../hooks/categorias";
 
 type Props = {
   idCategoria: number;
-  onSave: () => void | Promise<void>;
 };
 
-const CategoriaEliminar = ({ idCategoria, onSave }: Props) => {
+const CategoriaEliminar = ({ idCategoria }: Props) => {
   const { abierto, abrir, cerrar } = useModal();
   const { error, loading, submit } = useDeleteCategoria();
 
@@ -18,7 +17,6 @@ const CategoriaEliminar = ({ idCategoria, onSave }: Props) => {
     e.preventDefault();
 
     submit(idCategoria);
-    await onSave();
   };
 
   return (
@@ -49,7 +47,7 @@ const CategoriaEliminar = ({ idCategoria, onSave }: Props) => {
             />
           </div>
         </form>
-        {error ?? <span>{error}</span>}
+        {error && <span>{error}</span>}
       </Modal>
     </>
   );
