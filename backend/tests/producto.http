@@ -1,0 +1,63 @@
+@baseUrl = http://127.0.0.1:8000
+@idProducto = 2
+@idCategoria = 2
+
+### Crear Producto
+POST {{baseUrl}}/productos/
+Content-Type: application/json
+
+{
+  "nombre": "Silla Ergonómica",
+  "descripcion": "Silla ergonómica con soporte lumbar y ajuste de altura",
+  "precio_base": 250.00,
+  "imagen_url": "https://example.com/silla-ergonomica.jpg",
+  "disponible": true
+}
+
+### Listar Productos
+GET {{baseUrl}}/productos/?skip=0&limit=5
+
+### Detalle Producto
+GET {{baseUrl}}/productos/{{idProducto}}
+
+### Actualizar Producto
+PUT {{baseUrl}}/productos/{{idProducto}}
+Content-Type: application/json
+
+{
+  "nombre": "Silla Ergonómica Super Facha",
+  "descripcion": "Silla ergonómica con soporte lumbar y ajuste de altura",
+  "precio_base": 300.00,
+  "imagen_url": "https://example.com/silla-ergonomica.jpg",
+  "disponible": true
+}
+
+### Desactivar Producto
+PUT {{baseUrl}}/productos/{{idProducto}}/deshabilitar
+
+### Detalle Producto Inexistente
+GET {{baseUrl}}/productos/99
+
+### Producto Inválido
+POST {{baseUrl}}/productos/
+Content-Type: application/json
+
+{
+  "nombre": "Silla Ergonómica Super Facha",
+  "descripcion": "Silla ergonómica con soporte lumbar y ajuste de altura",
+  "precio_base": -300.00,
+  "imagen_url": "https://example.com/silla-ergonomica.jpg",
+  "disponible": true
+}
+
+### Borrar Producto
+DELETE {{baseUrl}}/productos/{{idProducto}}
+
+### Borrar Producto Inexistente
+DELETE {{baseUrl}}/productos/99
+
+### Asignar categoría
+PUT {{baseUrl}}/productos/{{idProducto}}/categorias/{{idCategoria}}
+
+### Quitar la categoría
+DELETE {{baseUrl}}/productos/{{idProducto}}/categorias/{{idCategoria}}
