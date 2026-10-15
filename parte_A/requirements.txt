@@ -1,7 +1,0 @@
-fastapi[standard]
-
-sqlmodel
-
-psycopg[binary]
-
-sqlalchemy
