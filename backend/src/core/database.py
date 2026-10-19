@@ -2,10 +2,9 @@ from typing import Annotated, Generator
 
 from fastapi.params import Depends
 from sqlmodel import SQLModel, Session, create_engine
+from .config import settings
 
-DATABASE_URL="postgresql://user:password@localhost:5432/tienda"
-
-engine = create_engine(DATABASE_URL, echo=True)
+engine = create_engine(settings.DATABASE_URL, echo=True)
 
 def get_session() -> Generator[Session, None, None]:
     with Session(engine) as session:
