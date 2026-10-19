@@ -1,6 +1,6 @@
 @baseUrl = http://127.0.0.1:8000
 @idProducto = 2
-@idCategoria = 2
+@idCategoria = 1
 
 ### Crear Producto
 POST {{baseUrl}}/productos/
@@ -10,7 +10,7 @@ Content-Type: application/json
   "nombre": "Silla Ergonómica",
   "descripcion": "Silla ergonómica con soporte lumbar y ajuste de altura",
   "precio_base": 250.00,
-  "imagen_url": "https://example.com/silla-ergonomica.jpg",
+  "imagen_urls": ["https://example.com/silla-ergonomica.jpg"],
   "disponible": true
 }
 
@@ -31,7 +31,7 @@ Content-Type: application/json
   "nombre": "Silla Ergonómica Super Facha",
   "descripcion": "Silla ergonómica con soporte lumbar y ajuste de altura",
   "precio_base": 300.00,
-  "imagen_url": "https://example.com/silla-ergonomica.jpg",
+  "imagen_urls": ["https://example.com/silla-ergonomica.jpg"],
   "disponible": true
 }
 
@@ -49,7 +49,7 @@ Content-Type: application/json
   "nombre": "Silla Ergonómica Super Facha",
   "descripcion": "Silla ergonómica con soporte lumbar y ajuste de altura",
   "precio_base": -300.00,
-  "imagen_url": "https://example.com/silla-ergonomica.jpg",
+  "imagen_urls": [3],
   "disponible": true
 }
 

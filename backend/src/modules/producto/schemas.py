@@ -8,7 +8,7 @@ class ProductoBase(BaseModel):
     nombre: str = Field(..., min_length=1, example="Silla de Oficina")
     descripcion: str = Field(..., min_length=1, example="Silla ergonómica con soporte lumbar")
     precio_base: float = Field(gt=0, example=150.50)
-    imagen_url: str = Field(..., min_length=1, example="https://example.com/silla.jpg")
+    imagen_urls: list[str] = Field(..., min_length=1, example=["https://example.com/silla.jpg"])
     disponible: bool = Field(default=True, example=True)
 
 
@@ -20,7 +20,7 @@ class ProductoUpdate(BaseModel):
     nombre: Optional[str] = None
     descripcion: Optional[str] = None
     precio_base: Optional[float] = Field(None, gt=0)
-    imagen_url: Optional[str] = None
+    imagen_urls: Optional[list[str]] = None
     disponible: Optional[bool] = None
 
 
