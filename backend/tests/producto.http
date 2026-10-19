@@ -17,6 +17,9 @@ Content-Type: application/json
 ### Listar Productos
 GET {{baseUrl}}/productos/?skip=0&limit=5
 
+### Listar Productos por nombre
+GET {{baseUrl}}/productos/?search=silla
+
 ### Detalle Producto
 GET {{baseUrl}}/productos/{{idProducto}}
 

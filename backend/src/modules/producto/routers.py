@@ -1,36 +1,51 @@
-from fastapi import APIRouter, Path, Query, status
-from typing import List
-from . import schemas, services
+from typing import Annotated, List, Optional
+
+from fastapi import APIRouter, Depends, Path, Query, status
+
 from src.core.database import SessionDep
+from . import schemas, services
 
 router = APIRouter(prefix="/productos", tags=["Productos"])
+
+
+def get_producto_service(session: SessionDep) -> services.ProductoService:
+    return services.ProductoService(session)
+
+
+ProductoServiceDep = Annotated[services.ProductoService, Depends(get_producto_service)]
+
 
 @router.post(
     "/", response_model=schemas.ProductoRead, status_code=status.HTTP_201_CREATED
 )
-def alta_producto(session: SessionDep,producto: schemas.ProductoCreate):
-    return services.crear(session, producto)
+def alta_producto(producto: schemas.ProductoCreate, svc: ProductoServiceDep):
+    return svc.crear(producto)
 
 
 @router.get(
     "/", response_model=List[schemas.ProductoReadConCategorias], status_code=status.HTTP_200_OK
 )
-def listar_productos(session: SessionDep, skip: int = Query(0, ge=0), limit: int = Query(10, le=50)):
-    return services.obtener_todos(session, skip, limit)
+def listar_productos(
+    svc: ProductoServiceDep,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(10, le=50),
+    search: Optional[str] = Query(None, description="Busca productos por nombre"),
+):
+    return svc.obtener_todos(skip, limit, search)
 
 
 @router.get(
     "/{id}", response_model=schemas.ProductoReadConCategorias, status_code=status.HTTP_200_OK
 )
-def detalle_producto(session: SessionDep, id: int = Path(..., gt=0)):
-    return services.obtener_por_id(session, id)
+def detalle_producto(svc: ProductoServiceDep, id: int = Path(..., gt=0)):
+    return svc.obtener_por_id(id)
 
 
 @router.put(
     "/{id}", response_model=schemas.ProductoRead, status_code=status.HTTP_200_OK
 )
-def actualizar_producto(session: SessionDep, producto: schemas.ProductoCreate, id: int = Path(..., gt=0)):
-    return services.actualizar_total(session, id, producto)
+def actualizar_producto(svc: ProductoServiceDep, producto: schemas.ProductoCreate, id: int = Path(..., gt=0)):
+    return svc.actualizar_total(id, producto)
 
 
 @router.put(
@@ -38,29 +53,35 @@ def actualizar_producto(session: SessionDep, producto: schemas.ProductoCreate, i
     response_model=schemas.ProductoRead,
     status_code=status.HTTP_200_OK,
 )
-def deshabilitar_producto(session: SessionDep, id: int = Path(..., gt=0)):
-    return services.deshabilitar(session, id)
+def deshabilitar_producto(svc: ProductoServiceDep, id: int = Path(..., gt=0)):
+    return svc.deshabilitar(id)
 
 
 @router.delete(
     "/{id}",
     status_code=status.HTTP_204_NO_CONTENT,
 )
-def borrar_producto(session: SessionDep, id: int = Path(..., gt=0)):
-    return services.borrar(session, id)
+def borrar_producto(svc: ProductoServiceDep, id: int = Path(..., gt=0)):
+    return svc.borrar(id)
+
 
 @router.put(
     "/{producto_id}/categorias/{categoria_id}",
     response_model=schemas.ProductoReadConCategorias,
     status_code=status.HTTP_200_OK,
 )
-def asignar_categoria_a_producto(session: SessionDep, producto_id: int= Path(..., gt=0), categoria_id: int= Path(..., gt=0)):
-    return services.asignar_categoria(session, producto_id, categoria_id)
+def asignar_categoria_a_producto(
+    svc: ProductoServiceDep, producto_id: int = Path(..., gt=0), categoria_id: int = Path(..., gt=0)
+):
+    return svc.asignar_categoria(producto_id, categoria_id)
+
 
 @router.delete(
     "/{producto_id}/categorias/{categoria_id}",
     response_model=schemas.ProductoReadConCategorias,
     status_code=status.HTTP_200_OK,
 )
-def remover_categoria_de_producto(session: SessionDep, producto_id: int= Path(..., gt=0), categoria_id: int= Path(..., gt=0)):
-    return services.quitar_categoria(session, producto_id, categoria_id)
+def remover_categoria_de_producto(
+    svc: ProductoServiceDep, producto_id: int = Path(..., gt=0), categoria_id: int = Path(..., gt=0)
+):
+    return svc.quitar_categoria(producto_id, categoria_id)
