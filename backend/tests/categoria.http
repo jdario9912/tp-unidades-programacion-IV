@@ -9,8 +9,7 @@ POST {{baseUrl}}/categorias/
 Content-Type: application/json
 
 {
-  "nombre": "cocina",
-  "descripcion": "elementos de cocina"
+  "nombre": "cocina"
 }
 
 ### Detalle de Categoría Exitoso

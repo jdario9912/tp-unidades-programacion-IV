@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from .unit_of_work import CategoriaUnitOfWork
 
-from .errors import CategoriaNoEncontradaError, CategoriaDuplicadaError
+from .errors import CategoriaNoEncontradaError, CategoriaDuplicadaError, CategoriaAsociadaAProducto
 from .schemas import CategoriaCreate, CategoriaRead, CategoriaUpdate
 from .models import Categoria
 
@@ -64,6 +64,9 @@ class CategoriaService:
             categoria = uow.categorias.get_by_id(id)
             if not categoria:
                 raise CategoriaNoEncontradaError(id)
+
+            if categoria.productos:
+                raise CategoriaAsociadaAProducto(id)
 
             resultado = CategoriaRead.model_validate(categoria)
             uow.categorias.delete(categoria)

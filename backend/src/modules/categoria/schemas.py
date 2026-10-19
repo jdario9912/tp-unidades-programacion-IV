@@ -4,8 +4,8 @@ from typing import Optional
 class CategoriaBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    nombre: str = Field(..., example="Electrodomésticos")
-    descripcion: str = Field(..., min_length=3, example="Categoría de productos electrónicos y electrodomésticos para el hogar.")
+    nombre: str = Field(..., min_length=1, example="Electrodomésticos")
+    descripcion: str = Field("", example="Categoría de productos electrónicos y electrodomésticos para el hogar.")
 
 
 class CategoriaCreate(CategoriaBase):
