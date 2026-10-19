@@ -4,6 +4,9 @@
 ### Listar Categorías
 GET {{baseUrl}}/categorias/
 
+### Listar Categorías por nombre
+GET {{baseUrl}}/categorias/?search=coci
+
 ### Crear Categoría
 POST {{baseUrl}}/categorias/
 Content-Type: application/json

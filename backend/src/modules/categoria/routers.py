@@ -1,4 +1,4 @@
-from typing import Annotated, List
+from typing import Annotated, List, Optional
 
 from fastapi import APIRouter, Depends, Path, Query, status
 
@@ -25,8 +25,13 @@ def alta_categoria(categoria: schemas.CategoriaCreate, svc: CategoriaServiceDep)
 @router.get(
     "/", response_model=List[schemas.CategoriaRead], status_code=status.HTTP_200_OK
 )
-def listar_categorias(svc: CategoriaServiceDep, skip: int = Query(0, ge=0), limit: int = Query(10, le=50)):
-    return svc.obtener_todas(skip, limit)
+def listar_categorias(
+    svc: CategoriaServiceDep,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(10, le=50),
+    search: Optional[str] = Query(None, description="Busca categorías por nombre"),
+):
+    return svc.obtener_todas(skip, limit, search)
 
 
 @router.get(

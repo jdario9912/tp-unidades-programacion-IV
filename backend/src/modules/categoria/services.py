@@ -1,4 +1,4 @@
-from sqlmodel import Session, select
+from sqlmodel import Session, func, select
 from typing import List, Optional
 
 from .unit_of_work import CategoriaUnitOfWork
@@ -22,14 +22,14 @@ class CategoriaService:
             resultado = CategoriaRead.model_validate(categoria)
         return resultado
 
-    def obtener_todas(self, skip: int = 0, limit: int = 10) -> List[CategoriaRead]:
+    def obtener_todas(self, skip: int = 0, limit: int = 10, search: Optional[str] = None) -> List[CategoriaRead]:
         with CategoriaUnitOfWork(self._session) as uow:
-            statement = (
-                select(Categoria)
-                .order_by(Categoria.id)
-                .offset(skip)
-                .limit(limit)
-            )
+            statement = select(Categoria).order_by(Categoria.id)
+
+            if search:
+                statement = statement.where(func.lower(Categoria.nombre).contains(search.strip().lower()))
+
+            statement = statement.offset(skip).limit(limit)
             categorias = uow.categorias.session.exec(statement).all()
             return [CategoriaRead.model_validate(c) for c in categorias]
 
