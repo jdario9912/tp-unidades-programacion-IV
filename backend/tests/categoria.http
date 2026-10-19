@@ -1,5 +1,5 @@
 @baseUrl = http://127.0.0.1:8000
-@idCategoria = 1
+@idCategoria = 15
 
 ### Listar Categorías
 GET {{baseUrl}}/categorias/
@@ -9,8 +9,8 @@ POST {{baseUrl}}/categorias/
 Content-Type: application/json
 
 {
-  "nombre": "hogar",
-  "descripcion": "domesticos y muebles para el hogar"
+  "nombre": "cocina",
+  "descripcion": "elementos de cocina"
 }
 
 ### Detalle de Categoría Exitoso

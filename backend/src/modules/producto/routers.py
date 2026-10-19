@@ -13,7 +13,7 @@ def alta_producto(session: SessionDep,producto: schemas.ProductoCreate):
 
 
 @router.get(
-    "/", response_model=List[schemas.ProductoRead], status_code=status.HTTP_200_OK
+    "/", response_model=List[schemas.ProductoReadConCategorias], status_code=status.HTTP_200_OK
 )
 def listar_productos(session: SessionDep, skip: int = Query(0, ge=0), limit: int = Query(10, le=50)):
     return services.obtener_todos(session, skip, limit)

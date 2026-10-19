@@ -28,15 +28,19 @@ def crear(session: Session, data: ProductoCreate) -> ProductoRead:
     return ProductoRead(**nuevo_producto.model_dump())
 
 
-def obtener_todos(session: Session, skip: int, limit: int) -> List[ProductoRead]:
+def obtener_todos(session: Session, skip: int, limit: int) -> List[ProductoReadConCategorias]:
     statement = (
         select(Producto)
         .order_by(Producto.id)
         .offset(skip)
         .limit(limit)
+        .options(selectinload(Producto.categorias))
     )
 
-    return [ProductoRead(**p.model_dump()) for p in session.exec(statement).all()]
+    return [
+        ProductoReadConCategorias.model_validate(p, from_attributes=True)
+        for p in session.exec(statement).all()
+    ]
 
 def obtener_por_id(session: Session, id: int) -> ProductoReadConCategorias:
     statement = select(Producto).where(Producto.id == id).options(selectinload(Producto.categorias))

@@ -1,7 +1,9 @@
-from typing import Generic, Type, Sequence
-from sqlmodel import Session, select
+from typing import Generic, Type, Sequence, TypeVar
+from sqlmodel import Session, select, SQLModel
 
-class RepositoryBase(Generic([ModelT])):
+ModelT = TypeVar("ModelT", bound=SQLModel)
+
+class RepositoryBase(Generic[ModelT]):
     def __init__(self, session: Session, model: Type[ModelT]):
         self.session = session
         self.model = model

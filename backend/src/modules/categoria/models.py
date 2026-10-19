@@ -3,7 +3,7 @@ from src.modules.producto.links import ProductoCategoria
 from sqlmodel import SQLModel, Field, Relationship
 
 if TYPE_CHECKING:
-    from producto.models import Producto
+    from src.modules.producto.models import Producto
 
 class Categoria(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)

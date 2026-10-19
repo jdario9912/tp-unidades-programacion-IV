@@ -1,7 +1,5 @@
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
-from src.modules.producto.schemas import ProductoRead
-
 
 class CategoriaBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -21,6 +19,3 @@ class CategoriaUpdate(BaseModel):
 
 class CategoriaRead(CategoriaBase):
     id: int
-
-class CategoriaReadConProductos(CategoriaRead):
-    productos: list[ProductoRead] = []
