@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
 
 from src.modules.categoria.schemas import CategoriaRead
@@ -25,6 +25,8 @@ class ProductoUpdate(BaseModel):
 
 
 class ProductoRead(ProductoBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
 
 class ProductoReadConCategorias(ProductoRead):
