@@ -18,6 +18,9 @@ Content-Type: application/json
 ### Detalle de Categoría Exitoso
 GET {{baseUrl}}/categorias/{{idCategoria}}
 
+### Detalle de Categoría Inexistente
+GET {{baseUrl}}/categorias/9876
+
 ### Actualizar Categoría
 PUT {{baseUrl}}/categorias/{{idCategoria}}
 Content-Type: application/json

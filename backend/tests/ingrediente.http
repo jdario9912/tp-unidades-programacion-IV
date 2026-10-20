@@ -1,0 +1,97 @@
+@baseUrl = http://127.0.0.1:8000
+@idIngrediente = 2
+
+### Crear Ingrediente
+POST {{baseUrl}}/ingredientes/
+Content-Type: application/json
+
+{
+  "nombre": "Harina"
+}
+
+### Crear Otro Ingrediente
+POST {{baseUrl}}/ingredientes/
+Content-Type: application/json
+
+{
+  "nombre": "Azúcar"
+}
+
+### Crear Ingrediente Duplicado (Prueba: Error 409)
+POST {{baseUrl}}/ingredientes/
+Content-Type: application/json
+
+{
+  "nombre": "Harina"
+}
+
+### Crear Ingrediente con nombre vacío (Prueba: Error 422)
+POST {{baseUrl}}/ingredientes/
+Content-Type: application/json
+
+{
+  "nombre": ""
+}
+
+### Crear Ingrediente sin nombre (Prueba: Error 422)
+POST {{baseUrl}}/ingredientes/
+Content-Type: application/json
+
+{
+}
+
+### Listar Ingredientes
+GET {{baseUrl}}/ingredientes/
+
+### Listar Ingredientes por nombre
+GET {{baseUrl}}/ingredientes/?search=harina
+
+### Detalle de Ingrediente
+GET {{baseUrl}}/ingredientes/{{idIngrediente}}
+
+### Detalle de Ingrediente Inexistente (Prueba: Error 404)
+GET {{baseUrl}}/ingredientes/9999
+
+### Detalle de Ingrediente con id inválido (Prueba: Error 422)
+GET {{baseUrl}}/ingredientes/0
+
+### Actualizar Ingrediente
+PUT {{baseUrl}}/ingredientes/{{idIngrediente}}
+Content-Type: application/json
+
+{
+  "nombre": "Harina 0000"
+}
+
+### Actualizar Ingrediente Inexistente (Prueba: Error 404)
+PUT {{baseUrl}}/ingredientes/9999
+Content-Type: application/json
+
+{
+  "nombre": "Ingrediente Inexistente"
+}
+
+### Actualizar Ingrediente con nombre vacío (Prueba: Error 422)
+PUT {{baseUrl}}/ingredientes/{{idIngrediente}}
+Content-Type: application/json
+
+{
+  "nombre": ""
+}
+
+### Actualizar Ingrediente con nombre duplicado (Prueba: Error 409)
+PUT {{baseUrl}}/ingredientes/{{idIngrediente}}
+Content-Type: application/json
+
+{
+  "nombre": "Azúcar"
+}
+
+### Borrar Ingrediente
+DELETE {{baseUrl}}/ingredientes/{{idIngrediente}}
+
+### Borrar Ingrediente Inexistente (Prueba: Error 404)
+DELETE {{baseUrl}}/ingredientes/9999
+
+### Borrar Ingrediente con id inválido (Prueba: Error 422)
+DELETE {{baseUrl}}/ingredientes/0
