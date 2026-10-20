@@ -14,7 +14,7 @@ class IngredienteService:
 
     def crear(self, data: IngredienteCreate) -> IngredienteRead:
         with IngredienteUnitOfWork(self._session) as uow:
-            if uow.categorias.get_by_nombre(data.nombre):
+            if uow.ingredientes.get_by_nombre(data.nombre):
                 raise IngredienteDuplicadoError(data.nombre)
 
             ingrediente = Ingrediente.model_validate(data)
@@ -44,13 +44,8 @@ class IngredienteService:
     def actualizar(self, id: int, data: IngredienteUpdate) -> IngredienteRead:
         with IngredienteUnitOfWork(self._session) as uow:
             ingrediente = uow.ingredientes.get_by_id(id)
-            if not Ingrediente:
+            if not ingrediente:
                 raise IngredienteNoEncontradoError(id)
-
-            data.nombre = self._normalizar(data.nombre)
-
-            if data.nombre != ingrediente.nombre and self._nombre_existe(uow.ingredientes.session, data.nombre):
-                raise IngredienteDuplicadoError(data.nombre)
 
             for key, value in data.model_dump().items():
                 setattr(ingrediente, key, value)

@@ -11,3 +11,10 @@ class IngredienteRepository(RepositoryBase[Ingrediente]):
     def get_by_nombre(self, nombre: str) -> Optional[Ingrediente]:
         statement = select(Ingrediente).where(func.lower(Ingrediente.nombre) == nombre.lower())
         return self.session.exec(statement).first()
+
+    def get_by_id(self, id: int) -> Optional[Ingrediente]:
+            statement = (
+                select(Ingrediente)
+                .where(Ingrediente.id == id)
+            )
+            return self.session.exec(statement).first()
