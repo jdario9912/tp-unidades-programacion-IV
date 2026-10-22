@@ -21,6 +21,9 @@ GET {{baseUrl}}/categorias/{{idCategoria}}
 ### Detalle de Categoría Inexistente
 GET {{baseUrl}}/categorias/9876
 
+### Listar productos de la categoría
+GET {{baseUrl}}/categorias/{{idCategoria}}/productos
+
 ### Actualizar Categoría
 PUT {{baseUrl}}/categorias/{{idCategoria}}
 Content-Type: application/json

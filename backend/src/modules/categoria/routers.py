@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Path, Query, status
 
 from src.core.database import SessionDep
 from src.core.schemas import error_responses
+from src.modules.producto.schemas import ProductoRead
 from . import schemas, services
 
 router = APIRouter(prefix="/categorias", tags=["Categorías"])
@@ -54,6 +55,18 @@ def listar_categorias(
 )
 def detalle_categoria(svc: CategoriaServiceDep, id: int = Path(..., gt=0, description="Id de la categoría")):
     return svc.obtener_por_id(id)
+
+
+@router.get(
+    "/{id}/productos",
+    response_model=List[ProductoRead],
+    status_code=status.HTTP_200_OK,
+    summary="Listar productos de una categoría",
+    description="Devuelve los productos activos asociados a la categoría.",
+    responses=error_responses(404),
+)
+def listar_productos_de_categoria(svc: CategoriaServiceDep, id: int = Path(..., gt=0, description="Id de la categoría")):
+    return svc.listar_productos(id)
 
 
 @router.put(

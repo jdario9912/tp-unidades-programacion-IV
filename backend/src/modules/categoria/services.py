@@ -6,6 +6,7 @@ from .unit_of_work import CategoriaUnitOfWork
 from .errors import CategoriaNoEncontradaError, CategoriaDuplicadaError, CategoriaAsociadaAProducto
 from .schemas import CategoriaCreate, CategoriaRead, CategoriaUpdate
 from .models import Categoria
+from src.modules.producto.schemas import ProductoRead
 
 
 class CategoriaService:
@@ -64,6 +65,14 @@ class CategoriaService:
                 raise CategoriaAsociadaAProducto(id)
 
             uow.categorias.delete(categoria)
+
+    def listar_productos(self, id: int) -> List[ProductoRead]:
+        with CategoriaUnitOfWork(self._session) as uow:
+            if not uow.categorias.get_by_id(id):
+                raise CategoriaNoEncontradaError(id)
+
+            productos = uow.asociaciones.productos_de_categoria(id)
+            return [ProductoRead.model_validate(p) for p in productos]
 
     @staticmethod
     def _normalizar(nombre: str) -> str:
