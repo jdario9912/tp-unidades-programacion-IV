@@ -2,7 +2,6 @@ from typing import List, Optional
 
 from sqlmodel import Session
 
-from src.modules.categoria.models import Categoria
 from .errors import (
     CategoriaNoEncontradaError,
     ProductoDuplicadoError,
@@ -76,6 +75,9 @@ class ProductoService:
             if not producto:
                 raise ProductoNoEncontradoError(id)
 
+            # Se quitan las asociaciones para que una categoría no quede
+            # vinculada a un producto eliminado.
+            producto.categorias.clear()
             uow.productos.delete(producto)
 
     def asignar_categoria(self, producto_id: int, categoria_id: int) -> ProductoReadConCategorias:
@@ -84,7 +86,7 @@ class ProductoService:
             if not producto:
                 raise ProductoNoEncontradoError(producto_id)
 
-            categoria = uow.productos.session.get(Categoria, categoria_id)
+            categoria = uow.categorias.get_by_id(categoria_id)
             if not categoria:
                 raise CategoriaNoEncontradaError(categoria_id)
 
@@ -101,7 +103,7 @@ class ProductoService:
             if not producto:
                 raise ProductoNoEncontradoError(producto_id)
 
-            categoria = uow.productos.session.get(Categoria, categoria_id)
+            categoria = uow.categorias.get_by_id(categoria_id)
             if not categoria:
                 raise CategoriaNoEncontradaError(categoria_id)
 

@@ -1,7 +1,7 @@
 from typing import Optional, Sequence
 
 from sqlalchemy.orm import selectinload
-from sqlmodel import Session, func, select
+from sqlmodel import Session, func
 
 from src.core.repository import RepositoryBase
 from .models import Producto
@@ -12,12 +12,12 @@ class ProductoRepository(RepositoryBase[Producto]):
         super().__init__(session, Producto)
 
     def get_by_nombre(self, nombre: str) -> Optional[Producto]:
-        statement = select(Producto).where(func.lower(Producto.nombre) == nombre.lower())
+        statement = self.activos().where(func.lower(Producto.nombre) == nombre.lower())
         return self.session.exec(statement).first()
 
     def get_by_id_con_categorias(self, id: int) -> Optional[Producto]:
         statement = (
-            select(Producto)
+            self.activos()
             .where(Producto.id == id)
             .options(selectinload(Producto.categorias))
         )
@@ -27,7 +27,7 @@ class ProductoRepository(RepositoryBase[Producto]):
         self, skip: int = 0, limit: int = 10, search: Optional[str] = None
     ) -> Sequence[Producto]:
         statement = (
-            select(Producto)
+            self.activos()
             .order_by(Producto.id)
             .options(selectinload(Producto.categorias))
         )

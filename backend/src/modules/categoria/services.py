@@ -1,4 +1,4 @@
-from sqlmodel import Session, func, select
+from sqlmodel import Session
 from typing import List, Optional
 
 from .unit_of_work import CategoriaUnitOfWork
@@ -24,13 +24,7 @@ class CategoriaService:
 
     def obtener_todas(self, skip: int = 0, limit: int = 10, search: Optional[str] = None) -> List[CategoriaRead]:
         with CategoriaUnitOfWork(self._session) as uow:
-            statement = select(Categoria).order_by(Categoria.id)
-
-            if search:
-                statement = statement.where(func.lower(Categoria.nombre).contains(search.strip().lower()))
-
-            statement = statement.offset(skip).limit(limit)
-            categorias = uow.categorias.session.exec(statement).all()
+            categorias = uow.categorias.listar(skip, limit, search)
             return [CategoriaRead.model_validate(c) for c in categorias]
 
     def obtener_por_id(self, id: int) -> CategoriaRead:
@@ -49,7 +43,8 @@ class CategoriaService:
 
             data.nombre = self._normalizar(data.nombre)
 
-            if data.nombre != categoria.nombre and self._nombre_existe(uow.categorias.session, data.nombre):
+            existente = uow.categorias.get_by_nombre(data.nombre)
+            if existente and existente.id != categoria.id:
                 raise CategoriaDuplicadaError(data.nombre)
 
             for key, value in data.model_dump().items():
@@ -59,24 +54,17 @@ class CategoriaService:
             resultado = CategoriaRead.model_validate(categoria)
         return resultado
 
-    def borrar(self, id: int) -> CategoriaRead:
+    def borrar(self, id: int) -> None:
         with CategoriaUnitOfWork(self._session) as uow:
             categoria = uow.categorias.get_by_id(id)
             if not categoria:
                 raise CategoriaNoEncontradaError(id)
 
-            if categoria.productos:
+            if any(p.deleted_at is None for p in categoria.productos):
                 raise CategoriaAsociadaAProducto(id)
 
-            resultado = CategoriaRead.model_validate(categoria)
             uow.categorias.delete(categoria)
-        return resultado
 
     @staticmethod
     def _normalizar(nombre: str) -> str:
         return nombre.strip().lower()
-
-    @staticmethod
-    def _nombre_existe(session: Session, nombre: str) -> bool:
-        statement = select(Categoria).where(Categoria.nombre == nombre)
-        return session.exec(statement).first() is not None
