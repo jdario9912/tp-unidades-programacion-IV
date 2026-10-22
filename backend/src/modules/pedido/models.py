@@ -27,22 +27,16 @@ class FormaPago(SQLModel, table=True):
 
 
 class Pedido(TimestampMixin, table=True):
-    __table_args__ = (
-        CheckConstraint("total >= 0", name="ck_pedido_total_no_negativo"),
-    )
-
     id: Optional[int] = Field(default=None, primary_key=True, sa_type=BigInteger)
     estado_codigo: str = Field(foreign_key="estadopedido.codigo", max_length=20)
     forma_pago_codigo: str = Field(foreign_key="formapago.codigo", max_length=30)
-    subtotal: Decimal = Field(max_digits=10, decimal_places=2)
+    # subtotal y total no se guardan: se calculan a partir de los detalles (ver PedidoRead).
     descuento: Decimal = Field(
         default=Decimal("0"), max_digits=10, decimal_places=2, sa_column_kwargs={"server_default": "0"}
     )
     costo_envio: Decimal = Field(
         default=Decimal("0"), max_digits=10, decimal_places=2, sa_column_kwargs={"server_default": "0"}
     )
-    total: Decimal = Field(max_digits=10, decimal_places=2)
-
     notas: Optional[str] = Field(default=None, sa_type=Text)
 
     detalles: list["DetallePedido"] = Relationship(back_populates="pedido")
