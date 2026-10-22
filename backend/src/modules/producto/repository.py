@@ -1,9 +1,11 @@
 from typing import Optional, Sequence
 
 from sqlalchemy.orm import selectinload
-from sqlmodel import Session, func
+from sqlmodel import Session, func, select
 
 from src.core.repository import RepositoryBase
+from src.modules.categoria.models import Categoria
+from .links import ProductoCategoria
 from .models import Producto
 
 
@@ -36,4 +38,42 @@ class ProductoRepository(RepositoryBase[Producto]):
             statement = statement.where(func.lower(Producto.nombre).contains(search.strip().lower()))
 
         statement = statement.offset(skip).limit(limit)
+        return self.session.exec(statement).all()
+
+
+class ProductoCategoriaRepository:
+    """Acceso a la tabla de asociación. PK compuesta y borrado físico."""
+
+    def __init__(self, session: Session) -> None:
+        self.session = session
+
+    def get(self, producto_id: int, categoria_id: int) -> Optional[ProductoCategoria]:
+        return self.session.get(ProductoCategoria, (producto_id, categoria_id))
+
+    def add(self, link: ProductoCategoria) -> ProductoCategoria:
+        self.session.add(link)
+        self.session.flush()
+        self.session.refresh(link)
+        return link
+
+    def delete(self, link: ProductoCategoria) -> None:
+        self.session.delete(link)
+        self.session.flush()
+
+    def categorias_de_producto(self, producto_id: int) -> Sequence[tuple[Categoria, bool]]:
+        statement = (
+            select(Categoria, ProductoCategoria.es_principal)
+            .join(ProductoCategoria, ProductoCategoria.categoria_id == Categoria.id)
+            .where(ProductoCategoria.producto_id == producto_id, Categoria.deleted_at.is_(None))
+            .order_by(Categoria.id)
+        )
+        return self.session.exec(statement).all()
+
+    def productos_de_categoria(self, categoria_id: int) -> Sequence[Producto]:
+        statement = (
+            select(Producto)
+            .join(ProductoCategoria, ProductoCategoria.producto_id == Producto.id)
+            .where(ProductoCategoria.categoria_id == categoria_id, Producto.deleted_at.is_(None))
+            .order_by(Producto.id)
+        )
         return self.session.exec(statement).all()
