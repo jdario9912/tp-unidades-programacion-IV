@@ -2,14 +2,19 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.core.database import crear_tablas
+from sqlmodel import Session
+
+from src.core.database import crear_tablas, engine
 from src.modules.producto.routers import router as producto_router
 from src.modules.categoria.routers import router as categoria_router
+from src.modules.pedido.seed import cargar_estados
 from .exceptions_handler import register_exception_handlers
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     crear_tablas()
+    with Session(engine) as session:
+        cargar_estados(session)
     yield
 
 tags_metadata = [
