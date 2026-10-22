@@ -12,11 +12,23 @@ async def lifespan(app: FastAPI):
     crear_tablas()
     yield
 
+tags_metadata = [
+    {"name": "Productos", "description": "Alta, baja, modificación y consulta de productos y sus categorías."},
+    {"name": "Categorías", "description": "Alta, baja, modificación y consulta de categorías."},
+]
+
 def create_app() -> FastAPI:
     app = FastAPI(
         title="API Integradora - Unidad 1",
-        description="Conceptos: Path, Query, Body, Pydantic, Errores.",
+        description=(
+            "Conceptos: Path, Query, Body, Pydantic, Errores.\n\n"
+            "Todos los recursos registran `created_at` y `updated_at`. "
+            "Las eliminaciones son lógicas (soft delete): el registro queda con "
+            "`deleted_at` completo, deja de aparecer en los listados y al "
+            "consultarlo por id se responde **404**."
+        ),
         version="1.0.0",
+        openapi_tags=tags_metadata,
         lifespan=lifespan
     )
 
