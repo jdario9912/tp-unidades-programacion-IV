@@ -109,8 +109,10 @@ erDiagram
         BIGINT direccion_id FK "SET NULL"
         VARCHAR(20) estado_codigo FK "NN"
         VARCHAR(30) forma_pago_codigo FK "NN"
+        DECIMAL subtotal "(10,2) NN, snap"
         DECIMAL descuento "(10,2) NN, DEFAULT 0, snap"
         DECIMAL costo_envio "(10,2) NN, DEFAULT 0, snap"
+        DECIMAL total "(10,2) NN, CHECK >= 0, snap"
         TEXT notas
         TIMESTAMPTZ created_at "NN"
         TIMESTAMPTZ updated_at "NN"
