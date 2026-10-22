@@ -11,7 +11,9 @@ class Producto(TimestampMixin, table=True):
     nombre: str
     descripcion: str
     precio_base: float
-    imagen_urls: list[str] = Field(default_factory=list, sa_column=Column(ARRAY(String)))
+    imagenes_url: list[str] = Field(
+        default_factory=list, sa_column=Column(ARRAY(String), nullable=False)
+    )
     disponible: bool = True
 
     categorias: list["Categoria"] = Relationship(

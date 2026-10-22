@@ -10,7 +10,7 @@ Content-Type: application/json
   "nombre": "Silla Ergonómica",
   "descripcion": "Silla ergonómica con soporte lumbar y ajuste de altura",
   "precio_base": 250.00,
-  "imagen_urls": ["https://example.com/silla-ergonomica.jpg"],
+  "imagenes_url": ["https://example.com/silla-ergonomica.jpg"],
   "disponible": true
 }
 
@@ -31,7 +31,7 @@ Content-Type: application/json
   "nombre": "Silla Ergonómica Super Facha",
   "descripcion": "Silla ergonómica con soporte lumbar y ajuste de altura",
   "precio_base": 300.00,
-  "imagen_urls": ["https://example.com/silla-ergonomica.jpg"],
+  "imagenes_url": ["https://example.com/silla-ergonomica.jpg"],
   "disponible": true
 }
 
@@ -49,7 +49,7 @@ Content-Type: application/json
   "nombre": "Silla Ergonómica Super Facha",
   "descripcion": "Silla ergonómica con soporte lumbar y ajuste de altura",
   "precio_base": -300.00,
-  "imagen_urls": [3],
+  "imagenes_url": [3],
   "disponible": true
 }
 
