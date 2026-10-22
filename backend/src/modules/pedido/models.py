@@ -27,16 +27,25 @@ class FormaPago(SQLModel, table=True):
 
 
 class Pedido(TimestampMixin, table=True):
+    __table_args__ = (
+        CheckConstraint("total >= 0", name="ck_pedido_total_no_negativo"),
+    )
+
+    # usuario_id y direccion_id (UML) se agregan cuando existan Usuario y DireccionEntrega.
     id: Optional[int] = Field(default=None, primary_key=True, sa_type=BigInteger)
     estado_codigo: str = Field(foreign_key="estadopedido.codigo", max_length=20)
     forma_pago_codigo: str = Field(foreign_key="formapago.codigo", max_length=30)
-    # subtotal y total no se guardan: se calculan a partir de los detalles (ver PedidoRead).
+
+    # Snapshot monetario: lo calcula el backend al crear el pedido.
+    subtotal: Decimal = Field(max_digits=10, decimal_places=2)
     descuento: Decimal = Field(
         default=Decimal("0"), max_digits=10, decimal_places=2, sa_column_kwargs={"server_default": "0"}
     )
     costo_envio: Decimal = Field(
         default=Decimal("0"), max_digits=10, decimal_places=2, sa_column_kwargs={"server_default": "0"}
     )
+    total: Decimal = Field(max_digits=10, decimal_places=2)
+
     notas: Optional[str] = Field(default=None, sa_type=Text)
 
     detalles: list["DetallePedido"] = Relationship(back_populates="pedido")
@@ -70,3 +79,24 @@ class DetallePedido(SQLModel, table=True):
     )
 
     pedido: Optional[Pedido] = Relationship(back_populates="detalles")
+
+
+class HistorialEstadoPedido(SQLModel, table=True):
+    """
+    Append-only: solo INSERT, nunca UPDATE ni DELETE.
+    estado_desde = NULL indica la transición inicial.
+    """
+
+    # usuario_id (UML) se agrega cuando exista Usuario.
+    id: Optional[int] = Field(default=None, primary_key=True, sa_type=BigInteger)
+    pedido_id: int = Field(foreign_key="pedido.id", ondelete="CASCADE", sa_type=BigInteger)
+    estado_desde: Optional[str] = Field(default=None, foreign_key="estadopedido.codigo", max_length=20)
+    estado_hacia: str = Field(foreign_key="estadopedido.codigo", max_length=20)
+    motivo: Optional[str] = Field(default=None, sa_type=Text)
+
+    created_at: datetime = Field(
+        default_factory=utc_now,
+        sa_type=DateTime(timezone=True),
+        nullable=False,
+        sa_column_kwargs={"server_default": func.now()},
+    )
