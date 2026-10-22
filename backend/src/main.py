@@ -5,8 +5,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.core.database import crear_tablas
 from src.modules.producto.routers import router as producto_router
 from src.modules.categoria.routers import router as categoria_router
-from src.modules.proveedor.routers import router as proveedor_router
-from src.modules.ingrediente.routers import router as ingrediente_router
 from .exceptions_handler import register_exception_handlers
 
 @asynccontextmanager
@@ -32,8 +30,6 @@ def create_app() -> FastAPI:
     
     app.include_router(producto_router)
     app.include_router(categoria_router)
-    app.include_router(proveedor_router)
-    app.include_router(ingrediente_router)
     register_exception_handlers(app)
     return app
 
