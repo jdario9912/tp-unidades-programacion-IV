@@ -1,11 +1,12 @@
 from typing import TYPE_CHECKING, Optional
+from src.core.models import TimestampMixin
 from .links import ProductoCategoria
-from sqlmodel import SQLModel, Field, Relationship, Column, ARRAY, String
+from sqlmodel import Field, Relationship, Column, ARRAY, String
 
 if TYPE_CHECKING:
-    from categoria.models import Categoria
+    from src.modules.categoria.models import Categoria
 
-class Producto(SQLModel, table=True):
+class Producto(TimestampMixin, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     nombre: str
     descripcion: str
