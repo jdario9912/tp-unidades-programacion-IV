@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
 
+from src.core.schemas import TimestampRead
 from src.modules.categoria.schemas import CategoriaRead
 
 
@@ -24,7 +25,7 @@ class ProductoUpdate(BaseModel):
     disponible: Optional[bool] = None
 
 
-class ProductoRead(ProductoBase):
+class ProductoRead(TimestampRead, ProductoBase):
     model_config = ConfigDict(from_attributes=True)
 
     id: int

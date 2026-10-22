@@ -1,6 +1,8 @@
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
 
+from src.core.schemas import TimestampRead
+
 class CategoriaBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -17,5 +19,5 @@ class CategoriaUpdate(BaseModel):
     descripcion: Optional[str] = Field(None, min_length=3)
 
 
-class CategoriaRead(CategoriaBase):
+class CategoriaRead(TimestampRead, CategoriaBase):
     id: int
