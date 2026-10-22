@@ -2,7 +2,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import Any, Optional
 
-from pydantic import BaseModel, Field, ConfigDict, computed_field, field_validator
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 
 from src.core.schemas import TimestampRead
 
@@ -31,13 +31,10 @@ class DetallePedidoRead(BaseModel):
 
 class PedidoCreate(BaseModel):
     """
-    Datos que envía el cliente. El subtotal y el total no se guardan:
-    se calculan a partir de los detalles al leer el pedido.
+    Datos que envía el cliente. El estado inicial (PENDIENTE), el subtotal
+    y el total los define el backend.
     """
 
-    estado_codigo: str = Field(
-        ..., min_length=1, max_length=20, description="Código del estado (EstadoPedido)", examples=["PENDIENTE", "CONFIRMADO", "EN_PREP", "EN_CAMINO", "ENTREGADO", "CANCELADO"]
-    )
     forma_pago_codigo: str = Field(
         ..., min_length=1, max_length=30, description="Código de la forma de pago", examples=["EFECTIVO"]
     )
@@ -60,7 +57,6 @@ class PedidoCreate(BaseModel):
 
 
 class PedidoUpdate(BaseModel):
-    estado_codigo: Optional[str] = Field(None, min_length=1, max_length=20, examples=["CONFIRMADO"])
     forma_pago_codigo: Optional[str] = Field(None, min_length=1, max_length=30, examples=["TARJETA"])
     notas: Optional[str] = None
 
@@ -71,17 +67,9 @@ class PedidoRead(TimestampRead):
     id: int = Field(..., description="Identificador del pedido", examples=[1])
     estado_codigo: str = Field(..., description="Código del estado actual", examples=["PENDIENTE"])
     forma_pago_codigo: str = Field(..., description="Código de la forma de pago", examples=["EFECTIVO"])
+    subtotal: Decimal = Field(..., description="Suma de los subtotales de los ítems", examples=["1500.00"])
     descuento: Decimal = Field(..., description="Descuento aplicado", examples=["0.00"])
     costo_envio: Decimal = Field(..., description="Costo de envío", examples=["300.00"])
+    total: Decimal = Field(..., ge=0, description="subtotal - descuento + costo_envio", examples=["1800.00"])
     notas: Optional[str] = Field(None, description="Notas del pedido")
     detalles: list[DetallePedidoRead] = Field(default=[], description="Ítems del pedido")
-
-    @computed_field(description="Suma de los subtotales de los ítems", examples=["1500.00"])
-    @property
-    def subtotal(self) -> Decimal:
-        return sum((d.subtotal_snap for d in self.detalles), Decimal("0.00"))
-
-    @computed_field(description="subtotal - descuento + costo_envio", examples=["1800.00"])
-    @property
-    def total(self) -> Decimal:
-        return self.subtotal - self.descuento + self.costo_envio
