@@ -98,33 +98,47 @@ def borrar_producto(svc: ProductoServiceDep, id: int = Path(..., gt=0, descripti
     svc.borrar(id)
 
 
-@router.put(
-    "/{producto_id}/categorias/{categoria_id}",
-    response_model=schemas.ProductoReadConCategorias,
+@router.post(
+    "/{id}/categorias",
+    response_model=schemas.ProductoCategoriaRead,
+    status_code=status.HTTP_201_CREATED,
+    summary="Asociar categoría a producto",
+    description=(
+        "Asocia una categoría al producto. El par (producto, categoría) es único: "
+        "si ya están asociados responde 409."
+    ),
+    responses=error_responses(404, 409),
+)
+def asociar_categoria(
+    svc: ProductoServiceDep,
+    data: schemas.ProductoCategoriaCreate,
+    id: int = Path(..., gt=0, description="Id del producto"),
+):
+    return svc.asignar_categoria(id, data)
+
+
+@router.get(
+    "/{id}/categorias",
+    response_model=List[schemas.CategoriaAsignadaRead],
     status_code=status.HTTP_200_OK,
-    summary="Asignar categoría a producto",
-    description="Asocia una categoría al producto. Si ya estaba asociada no hace nada.",
+    summary="Listar categorías de un producto",
+    description="Devuelve las categorías activas asociadas al producto.",
     responses=error_responses(404),
 )
-def asignar_categoria_a_producto(
-    svc: ProductoServiceDep,
-    producto_id: int = Path(..., gt=0, description="Id del producto"),
-    categoria_id: int = Path(..., gt=0, description="Id de la categoría"),
-):
-    return svc.asignar_categoria(producto_id, categoria_id)
+def listar_categorias_de_producto(svc: ProductoServiceDep, id: int = Path(..., gt=0, description="Id del producto")):
+    return svc.listar_categorias(id)
 
 
 @router.delete(
-    "/{producto_id}/categorias/{categoria_id}",
-    response_model=schemas.ProductoReadConCategorias,
-    status_code=status.HTTP_200_OK,
-    summary="Quitar categoría de producto",
-    description="Quita la asociación entre el producto y la categoría. Si no estaba asociada no hace nada.",
+    "/{id}/categorias/{categoria_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Desasociar categoría de producto",
+    description="Quita la asociación entre el producto y la categoría. Si no estaban asociados responde 404.",
     responses=error_responses(404),
 )
-def remover_categoria_de_producto(
+def desasociar_categoria(
     svc: ProductoServiceDep,
-    producto_id: int = Path(..., gt=0, description="Id del producto"),
+    id: int = Path(..., gt=0, description="Id del producto"),
     categoria_id: int = Path(..., gt=0, description="Id de la categoría"),
 ):
-    return svc.quitar_categoria(producto_id, categoria_id)
+    svc.quitar_categoria(id, categoria_id)

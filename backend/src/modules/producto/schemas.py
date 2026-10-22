@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
 
@@ -40,3 +42,21 @@ class ProductoRead(TimestampRead, ProductoBase):
 
 class ProductoReadConCategorias(ProductoRead):
     categorias: list[CategoriaRead] = Field(default=[], description="Categorías asignadas al producto")
+
+
+class ProductoCategoriaCreate(BaseModel):
+    categoria_id: int = Field(..., gt=0, description="Id de la categoría a asociar", examples=[1])
+    es_principal: bool = Field(default=False, description="Marca la categoría como principal del producto")
+
+
+class ProductoCategoriaRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    producto_id: int = Field(..., examples=[1])
+    categoria_id: int = Field(..., examples=[1])
+    es_principal: bool
+    created_at: datetime = Field(..., description="Fecha de la asociación")
+
+
+class CategoriaAsignadaRead(CategoriaRead):
+    es_principal: bool = Field(..., description="Si es la categoría principal del producto")

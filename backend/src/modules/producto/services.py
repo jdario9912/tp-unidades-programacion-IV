@@ -4,12 +4,23 @@ from sqlmodel import Session
 
 from .errors import (
     CategoriaNoEncontradaError,
+    ProductoCategoriaDuplicadaError,
+    ProductoCategoriaNoEncontradaError,
     ProductoDuplicadoError,
     ProductoNoEncontradoError,
     ProductoYaInactivoError,
 )
+from src.modules.categoria.schemas import CategoriaRead
+from .links import ProductoCategoria
 from .models import Producto
-from .schemas import ProductoCreate, ProductoRead, ProductoReadConCategorias
+from .schemas import (
+    CategoriaAsignadaRead,
+    ProductoCategoriaCreate,
+    ProductoCategoriaRead,
+    ProductoCreate,
+    ProductoRead,
+    ProductoReadConCategorias,
+)
 from .unit_of_work import ProductoUnitOfWork
 
 
@@ -80,36 +91,49 @@ class ProductoService:
             producto.categorias.clear()
             uow.productos.delete(producto)
 
-    def asignar_categoria(self, producto_id: int, categoria_id: int) -> ProductoReadConCategorias:
+    def asignar_categoria(self, producto_id: int, data: ProductoCategoriaCreate) -> ProductoCategoriaRead:
         with ProductoUnitOfWork(self._session) as uow:
-            producto = uow.productos.get_by_id_con_categorias(producto_id)
-            if not producto:
+            if not uow.productos.get_by_id(producto_id):
                 raise ProductoNoEncontradoError(producto_id)
 
-            categoria = uow.categorias.get_by_id(categoria_id)
-            if not categoria:
-                raise CategoriaNoEncontradaError(categoria_id)
+            if not uow.categorias.get_by_id(data.categoria_id):
+                raise CategoriaNoEncontradaError(data.categoria_id)
 
-            if categoria not in producto.categorias:
-                producto.categorias.append(categoria)
-                producto = uow.productos.add(producto)
+            if uow.asociaciones.get(producto_id, data.categoria_id):
+                raise ProductoCategoriaDuplicadaError(producto_id, data.categoria_id)
 
-            resultado = ProductoReadConCategorias.model_validate(producto)
+            link = ProductoCategoria(
+                producto_id=producto_id,
+                categoria_id=data.categoria_id,
+                es_principal=data.es_principal,
+            )
+            uow.asociaciones.add(link)
+            resultado = ProductoCategoriaRead.model_validate(link)
         return resultado
 
-    def quitar_categoria(self, producto_id: int, categoria_id: int) -> ProductoReadConCategorias:
+    def quitar_categoria(self, producto_id: int, categoria_id: int) -> None:
         with ProductoUnitOfWork(self._session) as uow:
-            producto = uow.productos.get_by_id_con_categorias(producto_id)
-            if not producto:
+            if not uow.productos.get_by_id(producto_id):
                 raise ProductoNoEncontradoError(producto_id)
 
-            categoria = uow.categorias.get_by_id(categoria_id)
-            if not categoria:
+            if not uow.categorias.get_by_id(categoria_id):
                 raise CategoriaNoEncontradaError(categoria_id)
 
-            if categoria in producto.categorias:
-                producto.categorias.remove(categoria)
-                producto = uow.productos.add(producto)
+            link = uow.asociaciones.get(producto_id, categoria_id)
+            if not link:
+                raise ProductoCategoriaNoEncontradaError(producto_id, categoria_id)
 
-            resultado = ProductoReadConCategorias.model_validate(producto)
-        return resultado
+            uow.asociaciones.delete(link)
+
+    def listar_categorias(self, producto_id: int) -> List[CategoriaAsignadaRead]:
+        with ProductoUnitOfWork(self._session) as uow:
+            if not uow.productos.get_by_id(producto_id):
+                raise ProductoNoEncontradoError(producto_id)
+
+            return [
+                CategoriaAsignadaRead(
+                    **CategoriaRead.model_validate(categoria).model_dump(),
+                    es_principal=es_principal,
+                )
+                for categoria, es_principal in uow.asociaciones.categorias_de_producto(producto_id)
+            ]

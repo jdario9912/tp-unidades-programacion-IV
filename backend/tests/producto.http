@@ -59,8 +59,36 @@ DELETE {{baseUrl}}/productos/{{idProducto}}
 ### Borrar Producto Inexistente
 DELETE {{baseUrl}}/productos/99
 
-### Asignar categoría
-PUT {{baseUrl}}/productos/{{idProducto}}/categorias/{{idCategoria}}
+### Asociar categoría (201)
+POST {{baseUrl}}/productos/{{idProducto}}/categorias
+Content-Type: application/json
 
-### Quitar la categoría
+{
+  "categoria_id": {{idCategoria}},
+  "es_principal": true
+}
+
+### Asociar categoría repetida (409)
+POST {{baseUrl}}/productos/{{idProducto}}/categorias
+Content-Type: application/json
+
+{
+  "categoria_id": {{idCategoria}}
+}
+
+### Asociar categoría inexistente (404)
+POST {{baseUrl}}/productos/{{idProducto}}/categorias
+Content-Type: application/json
+
+{
+  "categoria_id": 9876
+}
+
+### Listar categorías del producto
+GET {{baseUrl}}/productos/{{idProducto}}/categorias
+
+### Desasociar categoría (204)
+DELETE {{baseUrl}}/productos/{{idProducto}}/categorias/{{idCategoria}}
+
+### Desasociar categoría no asociada (404)
 DELETE {{baseUrl}}/productos/{{idProducto}}/categorias/{{idCategoria}}
