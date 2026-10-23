@@ -47,7 +47,7 @@ PATCH {{baseUrl}}/pedidos/{{idPedido}}/estado
 Content-Type: application/json
 
 {
-  "estado_codigo": "CONFIRMADO",
+  "estado_hacia": "CONFIRMADO",
   "motivo": "Pago verificado"
 }
 
@@ -56,7 +56,7 @@ PATCH {{baseUrl}}/pedidos/{{idPedido}}/estado
 Content-Type: application/json
 
 {
-  "estado_codigo": "PENDIENTE"
+  "estado_hacia": "PENDIENTE"
 }
 
 ### Historial de estados
