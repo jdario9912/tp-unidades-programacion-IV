@@ -1,18 +1,22 @@
+import LinkButton from "./ui/link-button";
+
 const Navbar = () => {
   return (
-    <nav>
-      <ul className="flex space-x-4 py-4">
-        <li>
-          <a href="/">Inicio</a>
-        </li>
-        <li>
-          <a href="/#">Productos</a>
-        </li>
-        <li>
-          <a href="/categorias">Categorias</a>
-        </li>
-      </ul>
-    </nav>
+    <header className="flex justify-between p-4 border-b border-divider">
+      <div>
+        <h1 className="font-semibold">Food Store</h1>
+      </div>
+      <nav>
+        <ul className="flex">
+          <li>
+            <LinkButton to="/productos">Productos</LinkButton>
+          </li>
+          <li>
+            <LinkButton to="/categorias">Categorias</LinkButton>
+          </li>
+        </ul>
+      </nav>
+    </header>
   );
 };
 
