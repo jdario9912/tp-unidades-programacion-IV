@@ -7,6 +7,7 @@ from sqlmodel import Session
 from src.core.database import crear_tablas, engine
 from src.modules.producto.routers import router as producto_router
 from src.modules.categoria.routers import router as categoria_router
+from src.modules.pedido.routers import router as pedido_router
 from src.modules.pedido.seed import cargar_estados
 from .exceptions_handler import register_exception_handlers
 
@@ -20,6 +21,7 @@ async def lifespan(app: FastAPI):
 tags_metadata = [
     {"name": "Productos", "description": "Alta, baja, modificación y consulta de productos y sus categorías."},
     {"name": "Categorías", "description": "Alta, baja, modificación y consulta de categorías."},
+    {"name": "Pedidos", "description": "Creación, consulta, modificación, cambios de estado e historial de pedidos."},
 ]
 
 def create_app() -> FastAPI:
@@ -47,6 +49,7 @@ def create_app() -> FastAPI:
     
     app.include_router(producto_router)
     app.include_router(categoria_router)
+    app.include_router(pedido_router)
     register_exception_handlers(app)
     return app
 
