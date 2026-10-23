@@ -2,8 +2,6 @@
 @idPedido = 1
 @idProducto = 1
 
-# Requiere al menos una forma de pago cargada en la tabla formapago (ej. EFECTIVO).
-
 ### Crear Pedido
 POST {{baseUrl}}/pedidos/
 Content-Type: application/json
