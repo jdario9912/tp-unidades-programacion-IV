@@ -1,0 +1,7 @@
+@baseUrl = http://127.0.0.1:8000
+
+### Listar estados de pedido
+GET {{baseUrl}}/catalogos/estados-pedido
+
+### Listar formas de pago activas
+GET {{baseUrl}}/catalogos/formas-pago
