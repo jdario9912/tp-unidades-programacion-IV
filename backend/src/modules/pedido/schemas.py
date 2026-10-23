@@ -76,7 +76,7 @@ class PedidoRead(TimestampRead):
 
 
 class PedidoEstadoUpdate(BaseModel):
-    estado_codigo: str = Field(
+    estado_hacia: str = Field(
         ..., min_length=1, max_length=20, description="Estado al que pasa el pedido", examples=["CONFIRMADO"]
     )
     motivo: Optional[str] = Field(None, description="Motivo del cambio", examples=["Pago verificado"])

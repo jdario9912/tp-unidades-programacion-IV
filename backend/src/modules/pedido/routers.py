@@ -90,7 +90,7 @@ def actualizar_pedido(
     description=(
         "Pasa el pedido a otro estado y registra la transición en el historial.\n\n"
         "Transiciones permitidas: PENDIENTE → CONFIRMADO → EN_PREP → EN_CAMINO → ENTREGADO, "
-        "y CANCELADO desde PENDIENTE, CONFIRMADO o EN_PREP. ENTREGADO y CANCELADO son terminales.\n\n"
+        "y CANCELADO desde PENDIENTE, CONFIRMADO, EN_PREP o EN_CAMINO. ENTREGADO y CANCELADO son terminales.\n\n"
         "- **404**: el pedido o el estado no existen.\n"
         "- **409**: la transición no está permitida."
     ),

@@ -30,12 +30,14 @@ from .models import DetallePedido, HistorialEstadoPedido, Pedido
 ESTADO_INICIAL = "PENDIENTE"
 CENTAVOS = Decimal("0.01")
 
-# Transiciones permitidas. Los estados terminales (ENTREGADO, CANCELADO) no tienen salida.
+# Transiciones permitidas. ENTREGADO y CANCELADO son terminales: no tienen salida.
 TRANSICIONES = {
     "PENDIENTE": {"CONFIRMADO", "CANCELADO"},
     "CONFIRMADO": {"EN_PREP", "CANCELADO"},
     "EN_PREP": {"EN_CAMINO", "CANCELADO"},
-    "EN_CAMINO": {"ENTREGADO"},
+    "EN_CAMINO": {"ENTREGADO", "CANCELADO"},
+    "ENTREGADO": set(),
+    "CANCELADO": set(),
 }
 
 
@@ -150,20 +152,20 @@ class PedidoService:
             if not pedido:
                 raise PedidoNoEncontradoError(id)
 
-            if not uow.estados.get_by_codigo(data.estado_codigo):
-                raise EstadoNoEncontradoError(data.estado_codigo)
+            if not uow.estados.get_by_codigo(data.estado_hacia):
+                raise EstadoNoEncontradoError(data.estado_hacia)
 
-            actual = uow.estados.get_by_codigo(pedido.estado_codigo)
-            if actual.es_terminal or data.estado_codigo not in TRANSICIONES.get(actual.codigo, set()):
-                raise TransicionInvalidaError(actual.codigo, data.estado_codigo)
+            desde = pedido.estado_codigo
+            if data.estado_hacia not in TRANSICIONES.get(desde, set()):
+                raise TransicionInvalidaError(desde, data.estado_hacia)
 
-            pedido.estado_codigo = data.estado_codigo
+            pedido.estado_codigo = data.estado_hacia
             uow.pedidos.add(pedido)
             uow.historial.add(
                 HistorialEstadoPedido(
                     pedido_id=pedido.id,
-                    estado_desde=actual.codigo,
-                    estado_hacia=data.estado_codigo,
+                    estado_desde=desde,
+                    estado_hacia=data.estado_hacia,
                     motivo=data.motivo,
                 )
             )
