@@ -1,11 +1,22 @@
 import { Link, type LinkProps } from "react-router-dom";
-import { cn } from "../../utils/cn";
+import { cn, type Variants } from "../../utils/cn";
 
-type Props = LinkProps;
+type Props = LinkProps & {
+  variant: Variants;
+};
 
-const LinkButton = ({ to, className, children, ...rest }: Props) => {
+const LinkButton = ({ to, className, children, variant, ...rest }: Props) => {
   return (
-    <Link to={to} className={cn("", className)} {...rest}>
+    <Link
+      to={to}
+      className={cn(
+        variant === "primary" && "bg-primary",
+        variant === "secondary" && "bg-secondary",
+        variant === "outline" && "bg-transparent",
+        className,
+      )}
+      {...rest}
+    >
       {children}
     </Link>
   );
