@@ -4,6 +4,7 @@ import {
   type ComponentPropsWithoutRef,
   type ReactNode,
 } from "react";
+import { cn } from "../../utils/cn";
 
 type ModalProps = {
   abierto: boolean;
@@ -11,7 +12,13 @@ type ModalProps = {
   children: ReactNode;
 } & ComponentPropsWithoutRef<"dialog">;
 
-export const Modal = ({ abierto, onCerrar, children }: ModalProps) => {
+export const Modal = ({
+  abierto,
+  onCerrar,
+  children,
+  className,
+  ...rest
+}: ModalProps) => {
   const ref = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -29,7 +36,11 @@ export const Modal = ({ abierto, onCerrar, children }: ModalProps) => {
       onClick={(e) => {
         if (e.target === e.currentTarget) onCerrar();
       }}
-      className="m-auto rounded bg-white shadow border border-gray-300"
+      className={cn(
+        "m-auto rounded bg-white shadow border border-gray-300",
+        className,
+      )}
+      {...rest}
     >
       {children}
     </dialog>
