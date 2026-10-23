@@ -31,12 +31,10 @@ class Pedido(TimestampMixin, table=True):
         CheckConstraint("total >= 0", name="ck_pedido_total_no_negativo"),
     )
 
-    # usuario_id y direccion_id (UML) se agregan cuando existan Usuario y DireccionEntrega.
     id: Optional[int] = Field(default=None, primary_key=True, sa_type=BigInteger)
     estado_codigo: str = Field(foreign_key="estadopedido.codigo", max_length=20)
     forma_pago_codigo: str = Field(foreign_key="formapago.codigo", max_length=30)
 
-    # Snapshot monetario: lo calcula el backend al crear el pedido.
     subtotal: Decimal = Field(max_digits=10, decimal_places=2)
     descuento: Decimal = Field(
         default=Decimal("0"), max_digits=10, decimal_places=2, sa_column_kwargs={"server_default": "0"}
@@ -87,7 +85,6 @@ class HistorialEstadoPedido(SQLModel, table=True):
     estado_desde = NULL indica la transición inicial.
     """
 
-    # usuario_id (UML) se agrega cuando exista Usuario.
     id: Optional[int] = Field(default=None, primary_key=True, sa_type=BigInteger)
     pedido_id: int = Field(foreign_key="pedido.id", ondelete="CASCADE", sa_type=BigInteger)
     estado_desde: Optional[str] = Field(default=None, foreign_key="estadopedido.codigo", max_length=20)
