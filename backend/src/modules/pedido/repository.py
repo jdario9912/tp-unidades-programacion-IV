@@ -3,7 +3,7 @@ from typing import Optional, Sequence
 from sqlalchemy.orm import selectinload
 from sqlmodel import Session, select
 
-from .models import EstadoPedido, FormaPago, HistorialEstadoPedido, Pedido
+from .models import HistorialEstadoPedido, Pedido
 from src.core.repository import RepositoryBase
 
 class PedidoRepository(RepositoryBase[Pedido]):
@@ -28,22 +28,6 @@ class PedidoRepository(RepositoryBase[Pedido]):
 
         statement = statement.order_by(Pedido.created_at.desc()).offset(skip).limit(limit)
         return self.session.exec(statement).all()
-
-
-class EstadoPedidoRepository:
-    def __init__(self, session: Session) -> None:
-        self.session = session
-
-    def get_by_codigo(self, codigo: str) -> Optional[EstadoPedido]:
-        return self.session.get(EstadoPedido, codigo)
-
-
-class FormaPagoRepository:
-    def __init__(self, session: Session) -> None:
-        self.session = session
-
-    def get_by_codigo(self, codigo: str) -> Optional[FormaPago]:
-        return self.session.get(FormaPago, codigo)
 
 
 class HistorialEstadoPedidoRepository:
