@@ -3,13 +3,15 @@ from typing import List, Optional
 
 from sqlmodel import Session
 
+from src.modules.catalogos.errors import (
+    EstadoNoEncontradoError,
+    FormaPagoInactivaError,
+    FormaPagoNoEncontradaError,
+)
 from src.modules.producto.errors import ProductoNoEncontradoError
 from .unit_of_work import PedidoUnitOfWork
 
 from .errors import (
-    EstadoNoEncontradoError,
-    FormaPagoInactivaError,
-    FormaPagoNoEncontradaError,
     PedidoNoEncontradoError,
     PedidoNoModificableError,
     ProductoNoDisponibleError,
