@@ -5,3 +5,35 @@ GET {{baseUrl}}/catalogos/estados-pedido
 
 ### Listar formas de pago activas
 GET {{baseUrl}}/catalogos/formas-pago
+
+### Listar todas las formas de pago (incluye inactivas)
+GET {{baseUrl}}/catalogos/formas-pago?incluir_inactivas=true
+
+### Detalle forma de pago
+GET {{baseUrl}}/catalogos/formas-pago/EFECTIVO
+
+### Crear forma de pago
+POST {{baseUrl}}/catalogos/formas-pago
+Content-Type: application/json
+
+{
+  "codigo": "TARJETA_CREDITO",
+  "descripcion": "Tarjeta de crédito"
+}
+
+### Actualizar descripción
+PATCH {{baseUrl}}/catalogos/formas-pago/TARJETA_CREDITO
+Content-Type: application/json
+
+{
+  "descripcion": "Tarjeta de crédito o débito"
+}
+
+### Desactivar forma de pago
+PUT {{baseUrl}}/catalogos/formas-pago/TARJETA_CREDITO/desactivar
+
+### Activar forma de pago
+PUT {{baseUrl}}/catalogos/formas-pago/TARJETA_CREDITO/activar
+
+### Eliminar forma de pago (409 si algún pedido la usa)
+DELETE {{baseUrl}}/catalogos/formas-pago/TARJETA_CREDITO
