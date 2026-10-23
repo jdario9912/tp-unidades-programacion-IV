@@ -30,3 +30,23 @@ class TotalNegativoError(ConflictError):
     def __init__(self, total: Decimal):
         self.total = total
         super().__init__(f"El total del pedido no puede ser negativo ({total})")
+
+
+class EstadoNoEncontradoError(NotFoundError):
+    def __init__(self, codigo: str):
+        self.codigo = codigo
+        super().__init__(f"No existe el estado '{codigo}'")
+
+
+class TransicionInvalidaError(ConflictError):
+    def __init__(self, desde: str, hacia: str):
+        self.desde = desde
+        self.hacia = hacia
+        super().__init__(f"No se puede pasar el pedido de {desde} a {hacia}")
+
+
+class PedidoNoModificableError(ConflictError):
+    def __init__(self, id: int, estado: str):
+        self.id = id
+        self.estado = estado
+        super().__init__(f"El pedido {id} está en estado {estado} y ya no puede modificarse")
