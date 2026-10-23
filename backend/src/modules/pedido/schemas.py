@@ -73,3 +73,20 @@ class PedidoRead(TimestampRead):
     total: Decimal = Field(..., ge=0, description="subtotal - descuento + costo_envio", examples=["1800.00"])
     notas: Optional[str] = Field(None, description="Notas del pedido")
     detalles: list[DetallePedidoRead] = Field(default=[], description="Ítems del pedido")
+
+
+class PedidoEstadoUpdate(BaseModel):
+    estado_codigo: str = Field(
+        ..., min_length=1, max_length=20, description="Estado al que pasa el pedido", examples=["CONFIRMADO"]
+    )
+    motivo: Optional[str] = Field(None, description="Motivo del cambio", examples=["Pago verificado"])
+
+
+class HistorialEstadoPedidoRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int = Field(..., examples=[1])
+    estado_desde: Optional[str] = Field(None, description="Estado anterior; NULL en la transición inicial")
+    estado_hacia: str = Field(..., examples=["PENDIENTE"])
+    motivo: Optional[str] = None
+    created_at: datetime
