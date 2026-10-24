@@ -2,8 +2,16 @@
 
 @theme {
   --color-primary: oklch(0.546 0.245 262.881);
+  --color-primary-hover: oklch(0.488 0.243 264.376);
+
   --color-secondary: oklch(0.554 0.046 257.417);
+  --color-secondary-hover: oklch(0.446 0.043 257.281);
+
   --color-destructive: oklch(0.628 0.258 29.23);
+  --color-destructive-hover: oklch(0.577 0.245 27.325);
+
+  --color-hover-muted: oklch(0.968 0.007 247.896);
+
   --color-success: oklch(0.627 0.194 149.214);
   --color-divider: oklch(0.929 0.013 255.508);
   --color-off-white: oklch(0.97 0.001 106.424);

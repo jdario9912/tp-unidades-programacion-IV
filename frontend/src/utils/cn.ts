@@ -5,4 +5,4 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export type Variants = "primary" | "secondary" | "outline";
+export type Variants = "primary" | "secondary" | "outline" | "destructive";

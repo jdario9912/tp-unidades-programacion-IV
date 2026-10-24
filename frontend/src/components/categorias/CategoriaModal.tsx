@@ -69,12 +69,7 @@ const CategoriaModal = ({ categoria }: Props) => {
 
   return (
     <>
-      <ActionButton
-        onClick={abrir}
-        className={
-          categoria ? "text-blue-500 underline" : "bg-blue-500 text-white"
-        }
-      >
+      <ActionButton onClick={abrir}>
         {categoria ? "Editar" : "+ Añadir Categoría"}
       </ActionButton>
 
@@ -84,7 +79,9 @@ const CategoriaModal = ({ categoria }: Props) => {
             {categoria ? "Editar Categoría" : "Añadir Categoría"}
           </h2>
 
-          <ActionButton onClick={cerrar}>X</ActionButton>
+          <ActionButton onClick={cerrar} variant="outline">
+            X
+          </ActionButton>
         </div>
         <form className="p-4" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-y-4 mb-4">
@@ -121,16 +118,12 @@ const CategoriaModal = ({ categoria }: Props) => {
             </div>
           </div>
           <div className="flex gap-x-2 justify-end">
-            <ActionButton
-              onClick={handleCancel}
-              className="bg-gray-400 text-white"
-            >
+            <ActionButton onClick={handleCancel} variant="secondary">
               Cancelar
             </ActionButton>
             <Input
               type="submit"
               value={categoria ? "Actualizar" : "Guardar"}
-              className="p-2 px-4 bg-blue-500 text-white outline-none border-none"
               disabled={loading}
             />
           </div>
