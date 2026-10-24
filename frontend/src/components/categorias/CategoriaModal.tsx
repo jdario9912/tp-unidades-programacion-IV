@@ -1,10 +1,6 @@
-import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import { useModal } from "../../hooks/modal";
-import type { Categoria, CategoriaInput } from "../../types/categoria";
-import Input from "../ui/input";
-import Label from "../ui/label";
+import type { Categoria } from "../../types/categoria";
 import { Modal } from "../ui/modal";
-import { useCreateCategoria, useUpdateCategoria } from "../../hooks/categorias";
 import ActionButton from "../ui/action-button";
 import CategoriaForm from "./CategoriaForm";
 
