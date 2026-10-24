@@ -16,7 +16,7 @@ const Input = ({ className, type, value, variant, ...rest }: Props) => {
           "bg-primary text-off-white px-4 border-none hover:bg-primary-hover",
         type === "submit" &&
           variant === "destructive" &&
-          "bg-destructive text-off-white hover:bg-destructive-hover",
+          "px-4 py-2 bg-destructive text-off-white hover:bg-destructive-hover focus:outline-destructive/60",
         className,
       )}
       value={value ?? ""}

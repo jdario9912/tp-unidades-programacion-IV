@@ -79,7 +79,7 @@ const CategoriaModal = ({ categoria }: Props) => {
             {categoria ? "Editar Categoría" : "Añadir Categoría"}
           </h2>
 
-          <ActionButton onClick={cerrar} variant="outline">
+          <ActionButton onClick={cerrar} variant="ghost">
             X
           </ActionButton>
         </div>

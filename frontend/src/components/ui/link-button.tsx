@@ -5,17 +5,25 @@ type Props = LinkProps & {
   variant?: Variants;
 };
 
-const LinkButton = ({ to, className, children, variant, ...rest }: Props) => {
+const LinkButton = ({
+  to,
+  className,
+  children,
+  variant = "ghost",
+  ...rest
+}: Props) => {
   return (
     <Link
       to={to}
       className={cn(
-        "px-4 py-2 rounded hover:underline focus:outline-none",
+        "px-4 py-2 rounded hover:underline focus:outline-4",
         variant === "primary" &&
-          "bg-primary text-off-white hover:bg-primary-hover focus:border-primary/80 focus:outline-primary/80",
+          "bg-primary text-off-white hover:bg-primary-hover focus:outline-primary/60",
         variant === "secondary" &&
-          "bg-secondary text-off-white hover:bg-secondary-hover focus:border-secondary/80 focus:outline-secondary/80",
-        variant === "outline" && "bg-transparent hover:bg-hover-muted",
+          "bg-secondary text-off-white hover:bg-secondary-hover focus:outline-secondary/60",
+        variant === "ghost" && "bg-transparent focus:outline-hover-muted/60",
+        variant === "destructive" &&
+          "bg-destructive text-off-white hover:bg-destructive-hover focus:outline-destructive/60",
         className,
       )}
       {...rest}
