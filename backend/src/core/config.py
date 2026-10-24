@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     postgres_password: str = "password"
     postgres_db: str = "tienda"
     postgres_host: str = "localhost"
-    postgres_port: int = 5432
+    postgres_port: int = 5433
 
     @computed_field
     @property
