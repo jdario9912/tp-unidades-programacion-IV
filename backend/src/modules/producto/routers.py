@@ -18,7 +18,7 @@ ProductoServiceDep = Annotated[services.ProductoService, Depends(get_producto_se
 
 @router.post(
     "/",
-    response_model=schemas.ProductoRead,
+    response_model=schemas.ProductoReadConCategorias,
     status_code=status.HTTP_201_CREATED,
     summary="Crear producto",
     description="Crea un nuevo producto. El nombre no puede repetirse entre los productos activos.",
@@ -58,7 +58,7 @@ def detalle_producto(svc: ProductoServiceDep, id: int = Path(..., gt=0, descript
 
 @router.put(
     "/{id}",
-    response_model=schemas.ProductoRead,
+    response_model=schemas.ProductoReadConCategorias,
     status_code=status.HTTP_200_OK,
     summary="Actualizar producto",
     description="Reemplaza todos los datos de un producto.",
@@ -74,7 +74,7 @@ def actualizar_producto(
 
 @router.put(
     "/{id}/deshabilitar",
-    response_model=schemas.ProductoRead,
+    response_model=schemas.ProductoReadConCategorias,
     status_code=status.HTTP_200_OK,
     summary="Deshabilitar producto",
     description="Marca el producto como no disponible. Responde 409 si ya estaba deshabilitado.",

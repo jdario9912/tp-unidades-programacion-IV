@@ -28,14 +28,14 @@ class ProductoService:
     def __init__(self, session: Session) -> None:
         self._session = session
 
-    def crear(self, data: ProductoCreate) -> ProductoRead:
+    def crear(self, data: ProductoCreate) -> ProductoReadConCategorias:
         with ProductoUnitOfWork(self._session) as uow:
             if uow.productos.get_by_nombre(data.nombre):
                 raise ProductoDuplicadoError(data.nombre)
 
             producto = Producto.model_validate(data)
             uow.productos.add(producto)
-            resultado = ProductoRead.model_validate(producto)
+            resultado = ProductoReadConCategorias.model_validate(producto)
         return resultado
 
     def obtener_todos(
@@ -53,7 +53,7 @@ class ProductoService:
 
             return ProductoReadConCategorias.model_validate(producto)
 
-    def actualizar_total(self, id: int, data: ProductoCreate) -> ProductoRead:
+    def actualizar_total(self, id: int, data: ProductoCreate) -> ProductoReadConCategorias:
         with ProductoUnitOfWork(self._session) as uow:
             producto = uow.productos.get_by_id(id)
             if not producto:
@@ -63,10 +63,10 @@ class ProductoService:
                 setattr(producto, key, value)
 
             producto = uow.productos.add(producto)
-            resultado = ProductoRead.model_validate(producto)
+            resultado = ProductoReadConCategorias.model_validate(producto)
         return resultado
 
-    def deshabilitar(self, id: int) -> ProductoRead:
+    def deshabilitar(self, id: int) -> ProductoReadConCategorias:
         with ProductoUnitOfWork(self._session) as uow:
             producto = uow.productos.get_by_id(id)
             if not producto:
@@ -77,7 +77,7 @@ class ProductoService:
 
             producto.disponible = False
             producto = uow.productos.add(producto)
-            resultado = ProductoRead.model_validate(producto)
+            resultado = ProductoReadConCategorias.model_validate(producto)
         return resultado
 
     def borrar(self, id: int) -> None:
