@@ -1,6 +1,6 @@
-import type { Producto } from "../../types/producto";
-import ProductoForm from "./ProductoForm";
-import ProductoList from "./ProductoList";
+import type { Producto } from "../types/producto";
+import ProductoForm from "../components/productos/ProductoForm";
+import ProductoList from "../components/productos/ProductoList";
 
 const productos: Producto[] = [
   {
