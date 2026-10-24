@@ -1,9 +1,13 @@
+import type { Categoria } from "./categoria";
+
 export interface Producto {
   id: number;
   nombre: string;
-  categoria: string;
-  precio: number;
-  stock: number;
-  stock_minimo: number;
-  activo: boolean;
+  descripcion: string;
+  precio_base: number;
+  disponible: boolean;
+  imagenes_url: string[];
+  created_at: Date;
+  updated_at: Date;
+  categorias: Categoria[];
 }
