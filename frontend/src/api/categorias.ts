@@ -43,7 +43,10 @@ export const handleActualizarCategoria = async (categoria: Categoria) => {
       },
     );
   } catch (error) {
-    console.error(`Error al actualizar categoría con ID ${id}:`, error);
+    console.error(
+      `Error al actualizar categoría con ID ${categoria.id}:`,
+      error,
+    );
     throw error;
   }
 };

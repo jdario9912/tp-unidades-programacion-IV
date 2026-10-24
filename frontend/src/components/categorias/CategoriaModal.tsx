@@ -53,8 +53,8 @@ const CategoriaModal = ({ categoria }: Props) => {
   const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (categoria) handleUpdate(categoria.id);
-    else handleCreate;
+    if (categoria) await handleUpdate(categoria.id);
+    else await handleCreate();
 
     cerrar();
     setCategoriaInput(initialValues);
