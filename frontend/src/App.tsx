@@ -1,24 +1,22 @@
-import { Route, Routes } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
-import Categorias from "./pages/Categorias";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import MainLayout from "./components/MainLayout";
+import RoutesApp from "./components/RoutesApp";
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
-    <div className="bg-gray-100 min-h-screen text-gray-700">
-      <main className="container mx-auto p-4">
-        <QueryClientProvider client={queryClient}>
-          <Navbar />
-          <Routes>
-            <Route path="/categorias" element={<Categorias />} />
-          </Routes>
-          <Footer />
-        </QueryClientProvider>
-      </main>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <div className="text-letters">
+        <Navbar />
+        <MainLayout>
+          <RoutesApp />
+        </MainLayout>
+        <Footer />
+      </div>
+    </QueryClientProvider>
   );
 }
 

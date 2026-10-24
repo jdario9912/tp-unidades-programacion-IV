@@ -21,7 +21,7 @@ const CategoriaEliminar = ({ idCategoria }: Props) => {
 
   return (
     <>
-      <ActionButton onClick={abrir} className="text-red-500">
+      <ActionButton onClick={abrir} className="text-destructive">
         Eliminar
       </ActionButton>
 
@@ -36,13 +36,13 @@ const CategoriaEliminar = ({ idCategoria }: Props) => {
         </div>
         <form className="p-4" onSubmit={handleSubmit}>
           <div className="flex gap-x-2 justify-end">
-            <ActionButton onClick={cerrar} className="bg-gray-400 text-white">
+            <ActionButton onClick={cerrar} variant="secondary">
               Cancelar
             </ActionButton>
             <Input
               type="submit"
               value="Eliminar"
-              className="p-2 px-4 bg-red-500 text-white outline-none border-none"
+              className="p-2 px-4 bg-destructive text-off-white outline-none border-none"
               disabled={loading}
             />
           </div>

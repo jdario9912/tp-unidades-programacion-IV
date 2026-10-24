@@ -2,10 +2,12 @@ import LinkButton from "./ui/link-button";
 
 const Navbar = () => {
   return (
-    <header className="flex justify-between p-4 border-b border-divider">
-      <div>
-        <h1 className="font-semibold">Food Store</h1>
-      </div>
+    <header className="flex justify-between items-center border-b border-divider">
+      <LinkButton to="/" className="p-0">
+        <div className="p-4">
+          <h1 className="font-semibold">Food Store</h1>
+        </div>
+      </LinkButton>
       <nav>
         <ul className="flex">
           <li>

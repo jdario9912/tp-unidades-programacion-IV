@@ -45,7 +45,7 @@ const Productos = () => {
   return (
     <>
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-blue-500">TP Productos</h1>
+        <h2 className="text-3xl font-bold text-blue-500">TP Productos</h2>
         <p className="text-xs">Demo: Eventos - Formularios - .map()</p>
       </div>
 
