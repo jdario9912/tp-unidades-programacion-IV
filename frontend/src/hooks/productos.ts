@@ -13,7 +13,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 const PRODUCTOS_QUERY_KEY = "productos";
 
 export const useGetProductos = () => {
-  const { data, isLoading, isError } = useQuery<Producto[]>({
+  const { data, isLoading, isFetching, isError } = useQuery<Producto[]>({
     queryKey: [PRODUCTOS_QUERY_KEY],
     queryFn: handleGetProductos,
   });
@@ -21,6 +21,7 @@ export const useGetProductos = () => {
   return {
     productos: data,
     loading: isLoading,
+    fetching: isFetching,
     error: isError,
   };
 };

@@ -13,7 +13,7 @@ const CATEGORIAS_QUERY_KEY = "categorias";
 const CATEGORIA_QUERY_KEY = "categoria";
 
 export const useGetCategorias = () => {
-  const { data, isLoading, isError } = useQuery<Categoria[]>({
+  const { data, isLoading, isFetching, isError } = useQuery<Categoria[]>({
     queryKey: [CATEGORIAS_QUERY_KEY],
     queryFn: handleGetCategorias,
   });
@@ -21,6 +21,7 @@ export const useGetCategorias = () => {
   return {
     categorias: data,
     loading: isLoading,
+    fetching: isFetching,
     error: isError,
   };
 };
