@@ -21,7 +21,7 @@ const Categorias = () => {
           Categorías
           {fetching && !loading && <Spinner />}
         </h2>
-        <div className="order-last flex w-full justify-center sm:order-none sm:w-auto sm:flex-1">
+        <div className="order-last flex w-full justify-center sm:order-0 sm:w-auto sm:flex-1">
           <Label htmlFor="busqueda" className="sr-only">
             Buscar categorías
           </Label>
