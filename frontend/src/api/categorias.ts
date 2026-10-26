@@ -3,9 +3,12 @@ import { get, post, put, remove } from "./client";
 
 const URL_CATEGORIAS = "/categorias";
 
-export const handleGetCategorias = async () => {
+export const handleGetCategorias = async (search = "") => {
+  const params = new URLSearchParams({ limit: "50" });
+  if (search) params.set("search", search);
+
   try {
-    return await get<Categoria[]>(`${URL_CATEGORIAS}`);
+    return await get<Categoria[]>(`${URL_CATEGORIAS}?${params}`);
   } catch (error) {
     console.error("Error al obtener categorías:", error);
     throw error;

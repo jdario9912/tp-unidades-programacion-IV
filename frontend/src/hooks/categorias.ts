@@ -7,15 +7,24 @@ import {
   handleEliminarCategoria,
 } from "../api/categorias";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 const CATEGORIAS_QUERY_KEY = "categorias";
 const CATEGORIA_QUERY_KEY = "categoria";
 
-export const useGetCategorias = () => {
+export const useGetCategorias = (search = "") => {
   const { data, isLoading, isFetching, isError } = useQuery<Categoria[]>({
-    queryKey: [CATEGORIAS_QUERY_KEY],
-    queryFn: handleGetCategorias,
+    // el search en la key separa la caché de cada búsqueda; las
+    // invalidaciones con [CATEGORIAS_QUERY_KEY] siguen alcanzando a todas
+    queryKey: [CATEGORIAS_QUERY_KEY, search],
+    queryFn: () => handleGetCategorias(search),
+    // mantiene la tabla anterior mientras llega el resultado de la búsqueda
+    placeholderData: keepPreviousData,
   });
 
   return {

@@ -8,14 +8,23 @@ import {
   handleQuitarCategoria,
 } from "../api/productos";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 const PRODUCTOS_QUERY_KEY = "productos";
 
-export const useGetProductos = () => {
+export const useGetProductos = (search = "") => {
   const { data, isLoading, isFetching, isError } = useQuery<Producto[]>({
-    queryKey: [PRODUCTOS_QUERY_KEY],
-    queryFn: handleGetProductos,
+    // el search en la key separa la caché de cada búsqueda; las
+    // invalidaciones con [PRODUCTOS_QUERY_KEY] siguen alcanzando a todas
+    queryKey: [PRODUCTOS_QUERY_KEY, search],
+    queryFn: () => handleGetProductos(search),
+    // mantiene la tabla anterior mientras llega el resultado de la búsqueda
+    placeholderData: keepPreviousData,
   });
 
   return {

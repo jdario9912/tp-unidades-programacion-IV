@@ -3,9 +3,12 @@ import { get, post, put, remove } from "./client";
 
 const URL_PRODUCTOS = "/productos";
 
-export const handleGetProductos = async () => {
+export const handleGetProductos = async (search = "") => {
+  const params = new URLSearchParams({ limit: "50" });
+  if (search) params.set("search", search);
+
   try {
-    return await get<Producto[]>(`${URL_PRODUCTOS}?limit=50`);
+    return await get<Producto[]>(`${URL_PRODUCTOS}?${params}`);
   } catch (error) {
     console.error("Error al obtener productos:", error);
     throw error;
