@@ -49,12 +49,6 @@ const validarPrecio = ({ value }: { value: string }) => {
   return undefined;
 };
 
-const validarCategorias = ({ value }: { value: number[] }) => {
-  if (value.length === 0) return "Seleccioná al menos una categoría";
-
-  return undefined;
-};
-
 const ProductoForm = ({ producto, cerrar }: Props) => {
   const initialValues: ProductoFormValues = {
     nombre: producto ? producto.nombre : "",
@@ -187,10 +181,7 @@ const ProductoForm = ({ producto, cerrar }: Props) => {
         </div>
 
         <div>
-          <form.Field
-            name="categorias_ids"
-            validators={{ onDynamic: validarCategorias }}
-          >
+          <form.Field name="categorias_ids">
             {(f) => (
               <fieldset>
                 <legend className="text-xs mb-1">Categorías</legend>
@@ -227,11 +218,6 @@ const ProductoForm = ({ producto, cerrar }: Props) => {
                     ))}
                   </div>
                 )}
-                {f.state.meta.errors.map((err) => (
-                  <FieldError key={String(err)} className="mt-1.5">
-                    {String(err)}
-                  </FieldError>
-                ))}
               </fieldset>
             )}
           </form.Field>
