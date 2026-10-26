@@ -7,6 +7,7 @@ import Input from "../ui/input";
 import ActionButton from "../ui/action-button";
 import FieldError from "../ui/field-error";
 import CardError from "../ui/card-error";
+import Spinner from "../ui/spinner";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
 
 type Props = {
@@ -194,7 +195,10 @@ const ProductoForm = ({ producto, cerrar }: Props) => {
               <fieldset>
                 <legend className="text-xs mb-1">Categorías</legend>
                 {loadingCategorias ? (
-                  <p className="text-xs">Cargando categorías...</p>
+                  <p className="flex items-center gap-x-2 text-xs">
+                    <Spinner className="size-3" />
+                    Cargando categorías...
+                  </p>
                 ) : (
                   <div className="grid grid-cols-2 gap-1">
                     {(categorias ?? []).map((categoria) => (
@@ -262,7 +266,13 @@ const ProductoForm = ({ producto, cerrar }: Props) => {
           {([canSubmit, isSubmitting]) => (
             <Input
               type="submit"
-              value={producto ? "Actualizar" : "Guardar"}
+              value={
+                isSubmitting
+                  ? "Guardando…"
+                  : producto
+                    ? "Actualizar"
+                    : "Guardar"
+              }
               disabled={!canSubmit || isSubmitting}
             />
           )}

@@ -137,7 +137,13 @@ const CategoriaForm = ({ categoria, cerrar }: Props) => {
           {([canSubmit, isSubmitting]) => (
             <Input
               type="submit"
-              value={categoria ? "Actualizar" : "Guardar"}
+              value={
+                isSubmitting
+                  ? "Guardando…"
+                  : categoria
+                    ? "Actualizar"
+                    : "Guardar"
+              }
               disabled={!canSubmit || isSubmitting}
             />
           )}
