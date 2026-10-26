@@ -27,7 +27,6 @@ const ProductoModal = ({ producto }: Props) => {
             X
           </ActionButton>
         </div>
-        {/* se monta sólo abierto para que cada apertura arranque sin errores */}
         {abierto && <ProductoForm producto={producto} cerrar={cerrar} />}
       </Modal>
     </>
