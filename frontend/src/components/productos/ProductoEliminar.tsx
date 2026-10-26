@@ -3,6 +3,7 @@ import { useModal } from "../../hooks/modal";
 import ActionButton from "../ui/action-button";
 import Input from "../ui/input";
 import { Modal } from "../ui/modal";
+import CardError from "../ui/card-error";
 import { useDeleteProducto } from "../../hooks/productos";
 
 type Props = {
@@ -60,7 +61,7 @@ const ProductoEliminar = ({ idProducto }: Props) => {
             />
           </form>
         </div>
-        {error && <p className="text-destructive text-sm px-4 pb-4">{error}</p>}
+        {error && <CardError className="mx-4 mb-4">{error}</CardError>}
       </Modal>
     </>
   );
