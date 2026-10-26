@@ -5,6 +5,7 @@ import Label from "../ui/label";
 import Input from "../ui/input";
 import ActionButton from "../ui/action-button";
 import FieldError from "../ui/field-error";
+import CardError from "../ui/card-error";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
 
 type Props = {
@@ -142,9 +143,7 @@ const CategoriaForm = ({ categoria, cerrar }: Props) => {
           )}
         </form.Subscribe>
       </div>
-      {serverError && (
-        <p className="text-destructive text-sm mt-2">{serverError}</p>
-      )}
+      {serverError && <CardError className="mt-2">{serverError}</CardError>}
     </form>
   );
 };
