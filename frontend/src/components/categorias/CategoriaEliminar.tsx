@@ -44,7 +44,7 @@ const CategoriaEliminar = ({ idCategoria }: Props) => {
           <form onSubmit={handleSubmit}>
             <Input
               type="submit"
-              value="Eliminar"
+              value={loading ? "Eliminando…" : "Eliminar"}
               disabled={loading}
               variant="destructive"
             />
