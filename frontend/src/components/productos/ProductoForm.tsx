@@ -115,7 +115,11 @@ const ProductoForm = ({ producto, cerrar }: Props) => {
                     f.handleChange(e.target.value)
                   }
                 />
-                <FieldError errors={f.state.meta.errors} />
+                {f.state.meta.errors.map((err) => (
+                  <FieldError key={String(err)} className="mt-1.5">
+                    {String(err)}
+                  </FieldError>
+                ))}
               </>
             )}
           </form.Field>
@@ -139,7 +143,11 @@ const ProductoForm = ({ producto, cerrar }: Props) => {
                     f.handleChange(e.target.value)
                   }
                 />
-                <FieldError errors={f.state.meta.errors} />
+                {f.state.meta.errors.map((err) => (
+                  <FieldError key={String(err)} className="mt-1.5">
+                    {String(err)}
+                  </FieldError>
+                ))}
               </>
             )}
           </form.Field>
@@ -166,7 +174,11 @@ const ProductoForm = ({ producto, cerrar }: Props) => {
                     f.handleChange(e.target.value)
                   }
                 />
-                <FieldError errors={f.state.meta.errors} />
+                {f.state.meta.errors.map((err) => (
+                  <FieldError key={String(err)} className="mt-1.5">
+                    {String(err)}
+                  </FieldError>
+                ))}
               </>
             )}
           </form.Field>
@@ -210,7 +222,11 @@ const ProductoForm = ({ producto, cerrar }: Props) => {
                     ))}
                   </div>
                 )}
-                <FieldError errors={f.state.meta.errors} />
+                {f.state.meta.errors.map((err) => (
+                  <FieldError key={String(err)} className="mt-1.5">
+                    {String(err)}
+                  </FieldError>
+                ))}
               </fieldset>
             )}
           </form.Field>

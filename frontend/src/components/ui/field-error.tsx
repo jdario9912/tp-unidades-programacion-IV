@@ -1,12 +1,14 @@
-type Props = {
-  errors: unknown[];
-};
+import { type ComponentPropsWithoutRef } from "react";
+import { cn } from "../../utils/cn";
 
-const FieldError = ({ errors }: Props) =>
-  errors.map((err) => (
-    <p key={String(err)} className="text-destructive text-xs mt-1.5">
-      {String(err)}
+type Props = ComponentPropsWithoutRef<"p">;
+
+const FieldError = ({ className, children, ...rest }: Props) => {
+  return (
+    <p className={cn("text-destructive text-xs", className)} {...rest}>
+      {children}
     </p>
-  ));
+  );
+};
 
 export default FieldError;

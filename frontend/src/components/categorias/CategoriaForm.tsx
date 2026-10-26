@@ -88,7 +88,11 @@ const CategoriaForm = ({ categoria, cerrar }: Props) => {
                     f.handleChange(e.target.value)
                   }
                 />
-                <FieldError errors={f.state.meta.errors} />
+                {f.state.meta.errors.map((err) => (
+                  <FieldError key={String(err)} className="mt-1.5">
+                    {String(err)}
+                  </FieldError>
+                ))}
               </>
             )}
           </form.Field>
@@ -112,7 +116,11 @@ const CategoriaForm = ({ categoria, cerrar }: Props) => {
                     f.handleChange(e.target.value)
                   }
                 />
-                <FieldError errors={f.state.meta.errors} />
+                {f.state.meta.errors.map((err) => (
+                  <FieldError key={String(err)} className="mt-1.5">
+                    {String(err)}
+                  </FieldError>
+                ))}
               </>
             )}
           </form.Field>
