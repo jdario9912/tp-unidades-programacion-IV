@@ -14,7 +14,14 @@ const ProductoModal = ({ producto }: Props) => {
   return (
     <>
       <ActionButton onClick={abrir}>
-        {producto ? "Ver" : "+ Añadir Producto"}
+        {producto ? (
+          "Ver"
+        ) : (
+          <>
+            + <span className="hidden sm:inline">Añadir </span>
+            Producto
+          </>
+        )}
       </ActionButton>
 
       <Modal abierto={abierto} onCerrar={cerrar}>

@@ -14,7 +14,14 @@ const CategoriaModal = ({ categoria }: Props) => {
   return (
     <>
       <ActionButton onClick={abrir}>
-        {categoria ? "Editar" : "+ Añadir Categoría"}
+        {categoria ? (
+          "Editar"
+        ) : (
+          <>
+            + <span className="hidden sm:inline">Añadir </span>
+            Categoría
+          </>
+        )}
       </ActionButton>
 
       <Modal abierto={abierto} onCerrar={cerrar}>
