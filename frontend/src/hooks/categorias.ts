@@ -97,7 +97,7 @@ export const useDeleteCategoria = () => {
 
   return {
     loading: mutation.isPending,
-    error: mutation.isError,
+    error: mutation.error?.message,
     submit,
     reset: mutation.reset,
   };

@@ -3,6 +3,7 @@ import { useModal } from "../../hooks/modal";
 import ActionButton from "../ui/action-button";
 import Input from "../ui/input";
 import { Modal } from "../ui/modal";
+import CardError from "../ui/card-error";
 import { useDeleteCategoria } from "../../hooks/categorias";
 
 type Props = {
@@ -49,7 +50,7 @@ const CategoriaEliminar = ({ idCategoria }: Props) => {
             />
           </form>
         </div>
-        {error && <span>{error}</span>}
+        {error && <CardError className="mx-4 mb-4">{error}</CardError>}
       </Modal>
     </>
   );
