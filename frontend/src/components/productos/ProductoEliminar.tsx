@@ -38,7 +38,7 @@ const ProductoEliminar = ({ idProducto }: Props) => {
       </ActionButton>
 
       <Modal abierto={abierto} onCerrar={handleCerrar}>
-        <div className="flex justify-between p-2 px-4 min-w-xl">
+        <div className="flex justify-between p-2 px-4">
           <h2 className="font-bold">Eliminar producto</h2>
 
           <ActionButton onClick={handleCerrar} variant="ghost">

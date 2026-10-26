@@ -27,7 +27,7 @@ const CategoriaEliminar = ({ idCategoria }: Props) => {
       </ActionButton>
 
       <Modal abierto={abierto} onCerrar={cerrar}>
-        <div className="flex justify-between p-2 px-4 min-w-xl">
+        <div className="flex justify-between p-2 px-4">
           <h2 className="font-bold">Eliminar categoria</h2>
 
           <ActionButton onClick={cerrar} variant="ghost">

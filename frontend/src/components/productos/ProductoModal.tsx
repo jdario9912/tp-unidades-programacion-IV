@@ -25,7 +25,7 @@ const ProductoModal = ({ producto }: Props) => {
       </ActionButton>
 
       <Modal abierto={abierto} onCerrar={cerrar}>
-        <div className="flex justify-between p-2 px-4 min-w-xl">
+        <div className="flex justify-between p-2 px-4">
           <h2 className="font-bold">
             {producto ? "Ver Producto" : "Añadir Producto"}
           </h2>
