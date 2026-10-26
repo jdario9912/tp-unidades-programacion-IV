@@ -52,7 +52,11 @@ const columns: Array<ColumnDef<typeof features, Categoria>> = [
     header: "Descripción",
     enableSorting: false,
     cell: (info) => (
-      <div className="px-4 py-2 text-left first-letter:capitalize">
+      // en mobile se corta a una línea; el texto completo queda en el title
+      <div
+        title={info.getValue<string>()}
+        className="max-w-48 truncate px-4 py-2 text-left first-letter:capitalize sm:max-w-none sm:whitespace-normal"
+      >
         {info.getValue<string>()}
       </div>
     ),
