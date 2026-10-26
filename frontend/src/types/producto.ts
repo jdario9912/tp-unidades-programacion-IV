@@ -21,6 +21,7 @@ export type ProductoFormValues = {
   nombre: string;
   descripcion: string;
   precio_base: string;
+  imagenes_url: string[];
   disponible: boolean;
   categorias_ids: number[];
 };

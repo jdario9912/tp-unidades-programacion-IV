@@ -8,6 +8,8 @@ import ActionButton from "../ui/action-button";
 import FieldError from "../ui/field-error";
 import CardError from "../ui/card-error";
 import Spinner from "../ui/spinner";
+import ImagenPreview from "./ImagenPreview";
+import { esUrlValida } from "../../utils/url";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
 
 type Props = {
@@ -49,11 +51,21 @@ const validarPrecio = ({ value }: { value: string }) => {
   return undefined;
 };
 
+const validarUrl = ({ value }: { value: string }) => {
+  const url = value.trim();
+
+  if (!url) return undefined;
+  if (!esUrlValida(url)) return "Ingresá una URL válida";
+
+  return undefined;
+};
+
 const ProductoForm = ({ producto, cerrar }: Props) => {
   const initialValues: ProductoFormValues = {
     nombre: producto ? producto.nombre : "",
     descripcion: producto ? producto.descripcion : "",
     precio_base: producto ? String(producto.precio_base) : "",
+    imagenes_url: producto?.imagenes_url.length ? producto.imagenes_url : [""],
     disponible: producto ? producto.disponible : true,
     categorias_ids: producto ? producto.categorias.map((c) => c.id) : [],
   };
@@ -73,7 +85,9 @@ const ProductoForm = ({ producto, cerrar }: Props) => {
         descripcion: value.descripcion.trim(),
         precio_base: Number(value.precio_base),
         disponible: value.disponible,
-        imagenes_url: producto ? producto.imagenes_url : [],
+        imagenes_url: value.imagenes_url
+          .map((url) => url.trim())
+          .filter(Boolean),
       };
 
       try {
@@ -176,6 +190,72 @@ const ProductoForm = ({ producto, cerrar }: Props) => {
                   </FieldError>
                 ))}
               </>
+            )}
+          </form.Field>
+        </div>
+
+        <div>
+          <form.Field name="imagenes_url" mode="array">
+            {(field) => (
+              <fieldset>
+                <legend className="text-xs mb-1">Imágenes (URL)</legend>
+                {field.state.value.map((_, i) => (
+                  <form.Field
+                    key={i}
+                    name={`imagenes_url[${i}]`}
+                    validators={{ onDynamic: validarUrl }}
+                  >
+                    {(f) => (
+                      <div className="flex items-start gap-x-2 mb-2">
+                        <div className="flex-1">
+                          <Input
+                            id={f.name}
+                            name={f.name}
+                            type="url"
+                            placeholder="https://..."
+                            aria-label={`URL de la imagen ${i + 1}`}
+                            className="w-full"
+                            value={f.state.value}
+                            onBlur={f.handleBlur}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                              f.handleChange(e.target.value)
+                            }
+                          />
+                          {f.state.meta.errors.map((err) => (
+                            <FieldError key={String(err)} className="mt-1.5">
+                              {String(err)}
+                            </FieldError>
+                          ))}
+                        </div>
+                        <ImagenPreview
+                          key={f.state.value}
+                          url={f.state.value}
+                        />
+                        <ActionButton
+                          type="button"
+                          variant="ghost"
+                          aria-label={`Quitar imagen ${i + 1}`}
+                          onClick={() =>
+                            field.state.value.length > 1
+                              ? field.removeValue(i)
+                              : field.handleChange([""])
+                          }
+                        >
+                          X
+                        </ActionButton>
+                      </div>
+                    )}
+                  </form.Field>
+                ))}
+                <ActionButton
+                  type="button"
+                  variant="outline"
+                  className="py-1 text-sm"
+                  onClick={() => field.pushValue("")}
+                >
+                  + Agregar imagen
+                </ActionButton>
+              </fieldset>
             )}
           </form.Field>
         </div>
