@@ -127,15 +127,23 @@ const CategoriaList = ({ categorias }: Props) => {
         ))}
       </thead>
       <tbody>
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
-            {row.getAllCells().map((cell) => (
-              <td key={cell.id}>
-                <table.FlexRender cell={cell} />
-              </td>
-            ))}
+        {categorias.length === 0 ? (
+          <tr>
+            <td colSpan={columns.length} className="px-4 py-2 text-center">
+              No hay categorías disponibles.
+            </td>
           </tr>
-        ))}
+        ) : (
+          table.getRowModel().rows.map((row) => (
+            <tr key={row.id}>
+              {row.getAllCells().map((cell) => (
+                <td key={cell.id}>
+                  <table.FlexRender cell={cell} />
+                </td>
+              ))}
+            </tr>
+          ))
+        )}
       </tbody>
     </table>
   );
