@@ -1,13 +1,15 @@
 import CategoriaList from "../components/categorias/CategoriaList";
 import CategoriaModal from "../components/categorias/CategoriaModal";
 import { useGetCategorias } from "../hooks/categorias";
+import CardError from "../components/ui/card-error";
 
 const Categorias = () => {
   const { categorias, error, loading } = useGetCategorias();
 
   if (loading) return <p>Cargando categorías...</p>;
 
-  if (error) return <p>Error al cargar categorías: {error}</p>;
+  if (error)
+    return <CardError className="m-4">Error al cargar categorías.</CardError>;
 
   return (
     <>
