@@ -4,6 +4,7 @@ import type { Categoria } from "../../types/categoria";
 import Label from "../ui/label";
 import Input from "../ui/input";
 import ActionButton from "../ui/action-button";
+import FieldError from "../ui/field-error";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
 
 type Props = {
@@ -31,13 +32,6 @@ const validarDescripcion = ({ value }: { value: string }) => {
 
   return undefined;
 };
-
-const FieldError = ({ errors }: { errors: unknown[] }) =>
-  errors.map((err) => (
-    <p key={String(err)} className="text-destructive text-xs mt-1.5">
-      {String(err)}
-    </p>
-  ));
 
 const CategoriaForm = ({ categoria, cerrar }: Props) => {
   const initialValues = {
