@@ -39,7 +39,7 @@ const Categorias = () => {
         <CategoriaModal />
       </div>
       {loading ? (
-        <TableSkeleton />
+        <TableSkeleton className="px-4 sm:px-0" />
       ) : error ? (
         <CardError className="m-4">Error al cargar categorías.</CardError>
       ) : (

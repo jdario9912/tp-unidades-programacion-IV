@@ -84,68 +84,74 @@ const CategoriaList = ({ categorias }: Props) => {
   });
 
   return (
-    <table className="min-w-full border rounded-lg overflow-hidden">
-      <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id} className="bg-gray-200">
-            {headerGroup.headers.map((header) => {
-              if (header.isPlaceholder) return <th key={header.id} />;
+    <div className="overflow-x-auto px-4 sm:px-0">
+      <table className="min-w-full border rounded-lg overflow-hidden">
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id} className="bg-gray-200">
+              {headerGroup.headers.map((header) => {
+                if (header.isPlaceholder) return <th key={header.id} />;
 
-              const { column } = header;
-              const sorted = column.getIsSorted();
+                const { column } = header;
+                const sorted = column.getIsSorted();
 
-              return (
-                <th
-                  key={header.id}
-                  className="py-2"
-                  aria-sort={
-                    sorted === "asc"
-                      ? "ascending"
-                      : sorted === "desc"
-                        ? "descending"
-                        : "none"
-                  }
-                >
-                  {column.getCanSort() ? (
-                    <button
-                      type="button"
-                      onClick={column.getToggleSortingHandler()}
-                      className="inline-flex items-center gap-1 cursor-pointer select-none"
-                    >
+                return (
+                  <th
+                    key={header.id}
+                    className="py-2"
+                    aria-sort={
+                      sorted === "asc"
+                        ? "ascending"
+                        : sorted === "desc"
+                          ? "descending"
+                          : "none"
+                    }
+                  >
+                    {column.getCanSort() ? (
+                      <button
+                        type="button"
+                        onClick={column.getToggleSortingHandler()}
+                        className="inline-flex items-center gap-1 cursor-pointer select-none"
+                      >
+                        <table.FlexRender header={header} />
+                        <span className="text-xs">
+                          {sorted === "asc"
+                            ? "▲"
+                            : sorted === "desc"
+                              ? "▼"
+                              : "↕"}
+                        </span>
+                      </button>
+                    ) : (
                       <table.FlexRender header={header} />
-                      <span className="text-xs">
-                        {sorted === "asc" ? "▲" : sorted === "desc" ? "▼" : "↕"}
-                      </span>
-                    </button>
-                  ) : (
-                    <table.FlexRender header={header} />
-                  )}
-                </th>
-              );
-            })}
-          </tr>
-        ))}
-      </thead>
-      <tbody>
-        {categorias.length === 0 ? (
-          <tr>
-            <td colSpan={columns.length} className="px-4 py-2 text-center">
-              No hay categorías disponibles.
-            </td>
-          </tr>
-        ) : (
-          table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getAllCells().map((cell) => (
-                <td key={cell.id}>
-                  <table.FlexRender cell={cell} />
-                </td>
-              ))}
+                    )}
+                  </th>
+                );
+              })}
             </tr>
-          ))
-        )}
-      </tbody>
-    </table>
+          ))}
+        </thead>
+        <tbody>
+          {categorias.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length} className="px-4 py-2 text-center">
+                No hay categorías disponibles.
+              </td>
+            </tr>
+          ) : (
+            table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getAllCells().map((cell) => (
+                  <td key={cell.id}>
+                    <table.FlexRender cell={cell} />
+                  </td>
+                ))}
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
