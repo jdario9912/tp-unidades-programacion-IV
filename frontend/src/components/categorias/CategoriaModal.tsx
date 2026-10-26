@@ -27,7 +27,8 @@ const CategoriaModal = ({ categoria }: Props) => {
             X
           </ActionButton>
         </div>
-        <CategoriaForm categoria={categoria} cerrar={cerrar} />
+        {/* se monta sólo abierto para que cada apertura arranque sin errores */}
+        {abierto && <CategoriaForm categoria={categoria} cerrar={cerrar} />}
       </Modal>
     </>
   );

@@ -44,7 +44,7 @@ export const useUpdateCategoria = () => {
   });
 
   const submit = async (id: number, categoria: CategoriaInput) => {
-    mutation.mutate({
+    return mutation.mutateAsync({
       id,
       nombre: categoria.nombre,
       descripcion: categoria.descripcion,
@@ -56,6 +56,7 @@ export const useUpdateCategoria = () => {
     loading: mutation.isPending,
     error: mutation.error?.message,
     submit,
+    reset: mutation.reset,
   };
 };
 
@@ -69,7 +70,7 @@ export const useCreateCategoria = () => {
   });
 
   const submit = async (categoria: CategoriaInput) => {
-    mutation.mutate(categoria);
+    return mutation.mutateAsync(categoria);
   };
 
   return {
@@ -77,6 +78,7 @@ export const useCreateCategoria = () => {
     loading: mutation.isPending,
     error: mutation.error?.message,
     submit,
+    reset: mutation.reset,
   };
 };
 
@@ -93,5 +95,10 @@ export const useDeleteCategoria = () => {
     mutation.mutate(id);
   };
 
-  return { loading: mutation.isPending, error: mutation.isError, submit };
+  return {
+    loading: mutation.isPending,
+    error: mutation.isError,
+    submit,
+    reset: mutation.reset,
+  };
 };
