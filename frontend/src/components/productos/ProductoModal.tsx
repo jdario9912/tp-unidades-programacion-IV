@@ -15,7 +15,7 @@ const ProductoModal = ({ producto }: Props) => {
     <>
       <ActionButton onClick={abrir}>
         {producto ? (
-          "Ver"
+          "Editar"
         ) : (
           <>
             + <span className="hidden sm:inline">Añadir </span>

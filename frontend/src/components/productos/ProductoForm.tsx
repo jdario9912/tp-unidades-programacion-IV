@@ -264,7 +264,7 @@ const ProductoForm = ({ producto, cerrar }: Props) => {
           <form.Field name="categorias_ids">
             {(f) => (
               <fieldset>
-                <legend className="text-xs mb-1">Categorías</legend>
+                <legend className="mb-1">Categorías</legend>
                 {loadingCategorias ? (
                   <p className="flex items-center gap-x-2 text-xs">
                     <Spinner className="size-3" />
