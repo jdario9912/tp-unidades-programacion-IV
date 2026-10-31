@@ -95,3 +95,15 @@ DELETE {{baseUrl}}/ingredientes/9999
 
 ### Borrar Ingrediente con id inválido (Prueba: Error 422)
 DELETE {{baseUrl}}/ingredientes/0
+
+
+### Detalle de Ingrediente borrado (Prueba: Error 404)
+GET {{baseUrl}}/ingredientes/{{idIngrediente}}
+
+### Recrear Ingrediente con el nombre de uno borrado (Prueba: 201)
+POST {{baseUrl}}/ingredientes/
+Content-Type: application/json
+
+{
+  "nombre": "Harina 0000"
+}
