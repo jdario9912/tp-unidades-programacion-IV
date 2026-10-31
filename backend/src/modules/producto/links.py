@@ -24,3 +24,19 @@ class ProductoCategoria(SQLModel, table=True):
         nullable=False,
         sa_column_kwargs={"server_default": func.now()},
     )
+
+
+class ProductoIngrediente(SQLModel, table=True):
+    producto_id: int | None = Field(
+        default=None, foreign_key="producto.id", primary_key=True, ondelete="CASCADE"
+    )
+    ingrediente_id: int | None = Field(
+        default=None, foreign_key="ingrediente.id", primary_key=True, ondelete="CASCADE"
+    )
+    # Igual que ProductoCategoria: solo created_at y borrado físico.
+    created_at: datetime = Field(
+        default_factory=utc_now,
+        sa_type=DateTime(timezone=True),
+        nullable=False,
+        sa_column_kwargs={"server_default": func.now()},
+    )

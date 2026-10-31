@@ -89,6 +89,20 @@ erDiagram
         TIMESTAMPTZ created_at "NN"
     }
 
+    Ingrediente {
+        BIGSERIAL id PK
+        VARCHAR(100) nombre "NN"
+        TIMESTAMPTZ created_at "NN"
+        TIMESTAMPTZ updated_at "NN"
+        TIMESTAMPTZ deleted_at
+    }
+
+    ProductoIngrediente {
+        BIGINT producto_id PK, FK
+        BIGINT ingrediente_id PK, FK
+        TIMESTAMPTZ created_at "NN"
+    }
+
     %% ═══ Ventas & Transacciones ═══
     FormaPago {
         VARCHAR(30) codigo PK
@@ -149,6 +163,8 @@ erDiagram
     %% ═══ Relaciones: Catálogo ═══
     Producto ||--|{ ProductoCategoria : clasifica
     Categoria ||..o{ ProductoCategoria : agrupa
+    Producto ||--o{ ProductoIngrediente : contiene
+    Ingrediente ||..o{ ProductoIngrediente : compone
 
     %% ═══ Relaciones: Ventas ═══
     Usuario ||..o{ Pedido : realiza
@@ -170,12 +186,16 @@ erDiagram
 | Dominio                | Tablas                                                                                                                      |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | Identidad & Acceso     | `Usuario` (Table), `Rol` (Catalog), `UsuarioRol` (Link), `DireccionEntrega` (Table)                                         |
-| Catálogo de Productos  | `Categoria` (Table), `Producto` (Table), `ProductoCategoria` (Link)                                                         |
+| Catálogo de Productos  | `Categoria` (Table), `Producto` (Table), `ProductoCategoria` (Link), `Ingrediente` (Table), `ProductoIngrediente` (Link)    |
 | Ventas & Transacciones | `FormaPago` (Catalog), `EstadoPedido` (Catalog), `Pedido` (Table), `DetallePedido` (Table), `HistorialEstadoPedido` (Table) |
 
 ## Notas
 
 **Producto**: stock excluido, pertenece al dominio INVENTARIO (SRP).
+
+**Ingrediente**: el nombre es único entre los ingredientes activos (se valida en el servicio, no en la DB, por el soft delete). No se puede eliminar mientras esté asociado a un producto activo.
+
+**ProductoIngrediente**: tabla pivot N:M sin `updated_at`. Al quitar un ingrediente de un producto la fila se borra físicamente.
 
 **EstadoPedido**: valores del catálogo.
 

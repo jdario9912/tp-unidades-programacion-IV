@@ -5,7 +5,8 @@ from sqlmodel import Session, func, select
 
 from src.core.repository import RepositoryBase
 from src.modules.categoria.models import Categoria
-from .links import ProductoCategoria
+from src.modules.ingrediente.models import Ingrediente
+from .links import ProductoCategoria, ProductoIngrediente
 from .models import Producto
 
 
@@ -21,7 +22,7 @@ class ProductoRepository(RepositoryBase[Producto]):
         statement = (
             self.activos()
             .where(Producto.id == id)
-            .options(selectinload(Producto.categorias))
+            .options(selectinload(Producto.categorias), selectinload(Producto.ingredientes))
         )
         return self.session.exec(statement).first()
 
@@ -31,7 +32,7 @@ class ProductoRepository(RepositoryBase[Producto]):
         statement = (
             self.activos()
             .order_by(Producto.id)
-            .options(selectinload(Producto.categorias))
+            .options(selectinload(Producto.categorias), selectinload(Producto.ingredientes))
         )
 
         if search:
@@ -75,5 +76,34 @@ class ProductoCategoriaRepository:
             .join(ProductoCategoria, ProductoCategoria.producto_id == Producto.id)
             .where(ProductoCategoria.categoria_id == categoria_id, Producto.deleted_at.is_(None))
             .order_by(Producto.id)
+        )
+        return self.session.exec(statement).all()
+
+
+class ProductoIngredienteRepository:
+    """Acceso a la tabla de asociación producto-ingrediente. PK compuesta y borrado físico."""
+
+    def __init__(self, session: Session) -> None:
+        self.session = session
+
+    def get(self, producto_id: int, ingrediente_id: int) -> Optional[ProductoIngrediente]:
+        return self.session.get(ProductoIngrediente, (producto_id, ingrediente_id))
+
+    def add(self, link: ProductoIngrediente) -> ProductoIngrediente:
+        self.session.add(link)
+        self.session.flush()
+        self.session.refresh(link)
+        return link
+
+    def delete(self, link: ProductoIngrediente) -> None:
+        self.session.delete(link)
+        self.session.flush()
+
+    def ingredientes_de_producto(self, producto_id: int) -> Sequence[Ingrediente]:
+        statement = (
+            select(Ingrediente)
+            .join(ProductoIngrediente, ProductoIngrediente.ingrediente_id == Ingrediente.id)
+            .where(ProductoIngrediente.producto_id == producto_id, Ingrediente.deleted_at.is_(None))
+            .order_by(Ingrediente.id)
         )
         return self.session.exec(statement).all()

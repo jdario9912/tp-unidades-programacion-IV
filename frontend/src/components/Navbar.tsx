@@ -4,6 +4,7 @@ import LinkButton from "./ui/link-button";
 const Navbar = () => {
   const enProductos = useMatch("/productos/*");
   const enCategorias = useMatch("/categorias/*");
+  const enIngredientes = useMatch("/ingredientes/*");
 
   return (
     <header className="flex justify-between items-center border-b border-divider px-4 md:px-6 lg:px-8">
@@ -28,6 +29,14 @@ const Navbar = () => {
               variant={enCategorias ? "outline" : "ghost"}
             >
               Categorias
+            </LinkButton>
+          </li>
+          <li>
+            <LinkButton
+              to="/ingredientes"
+              variant={enIngredientes ? "outline" : "ghost"}
+            >
+              Ingredientes
             </LinkButton>
           </li>
         </ul>

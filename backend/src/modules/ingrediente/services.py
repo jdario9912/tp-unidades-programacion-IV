@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from .unit_of_work import IngredienteUnitOfWork
 
-from .errors import IngredienteNoEncontradoError, IngredienteDuplicadoError
+from .errors import IngredienteNoEncontradoError, IngredienteDuplicadoError, IngredienteAsociadoAProducto
 from .schemas import IngredienteCreate, IngredienteRead, IngredienteUpdate
 from .models import Ingrediente
 
@@ -57,5 +57,8 @@ class IngredienteService:
             ingrediente = uow.ingredientes.get_by_id(id)
             if not ingrediente:
                 raise IngredienteNoEncontradoError(id)
+
+            if any(p.deleted_at is None for p in ingrediente.productos):
+                raise IngredienteAsociadoAProducto(id)
 
             uow.ingredientes.delete(ingrediente)

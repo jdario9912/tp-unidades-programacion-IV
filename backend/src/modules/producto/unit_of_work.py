@@ -2,7 +2,8 @@ from sqlmodel import Session
 
 from src.core.unit_of_work import UnitOfWork
 from src.modules.categoria.repository import CategoriaRepository
-from .repository import ProductoCategoriaRepository, ProductoRepository
+from src.modules.ingrediente.repository import IngredienteRepository
+from .repository import ProductoCategoriaRepository, ProductoIngredienteRepository, ProductoRepository
 
 
 class ProductoUnitOfWork(UnitOfWork):
@@ -11,3 +12,5 @@ class ProductoUnitOfWork(UnitOfWork):
         self.productos = ProductoRepository(session)
         self.categorias = CategoriaRepository(session)
         self.asociaciones = ProductoCategoriaRepository(session)
+        self.ingredientes = IngredienteRepository(session)
+        self.asociaciones_ingredientes = ProductoIngredienteRepository(session)

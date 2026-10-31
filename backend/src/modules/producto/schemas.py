@@ -5,6 +5,7 @@ from typing import Optional
 
 from src.core.schemas import TimestampRead
 from src.modules.categoria.schemas import CategoriaRead
+from src.modules.ingrediente.schemas import IngredienteRead
 
 
 class ProductoBase(BaseModel):
@@ -42,6 +43,7 @@ class ProductoRead(TimestampRead, ProductoBase):
 
 class ProductoReadConCategorias(ProductoRead):
     categorias: list[CategoriaRead] = Field(default=[], description="Categorías asignadas al producto")
+    ingredientes: list[IngredienteRead] = Field(default=[], description="Ingredientes del producto")
 
 
 class ProductoCategoriaCreate(BaseModel):
@@ -60,3 +62,15 @@ class ProductoCategoriaRead(BaseModel):
 
 class CategoriaAsignadaRead(CategoriaRead):
     es_principal: bool = Field(..., description="Si es la categoría principal del producto")
+
+
+class ProductoIngredienteCreate(BaseModel):
+    ingrediente_id: int = Field(..., gt=0, description="Id del ingrediente a asociar", examples=[1])
+
+
+class ProductoIngredienteRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    producto_id: int = Field(..., examples=[1])
+    ingrediente_id: int = Field(..., examples=[1])
+    created_at: datetime = Field(..., description="Fecha de la asociación")

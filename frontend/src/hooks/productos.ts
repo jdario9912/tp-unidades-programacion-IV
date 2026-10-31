@@ -2,10 +2,12 @@ import type { Producto, ProductoInput } from "../types/producto";
 import {
   handleActualizarProducto,
   handleAsignarCategoria,
+  handleAsignarIngrediente,
   handleCrearProducto,
   handleEliminarProducto,
   handleGetProductos,
   handleQuitarCategoria,
+  handleQuitarIngrediente,
 } from "../api/productos";
 
 import {
@@ -38,6 +40,7 @@ export const useGetProductos = (search = "") => {
 type CrearProductoArgs = {
   input: ProductoInput;
   categoriasIds: number[];
+  ingredientesIds: number[];
 };
 
 export const useCreateProducto = () => {
@@ -46,18 +49,25 @@ export const useCreateProducto = () => {
     queryClient.invalidateQueries({ queryKey: [PRODUCTOS_QUERY_KEY] });
 
   const mutation = useMutation({
-    mutationFn: async ({ input, categoriasIds }: CrearProductoArgs) => {
+    mutationFn: async ({
+      input,
+      categoriasIds,
+      ingredientesIds,
+    }: CrearProductoArgs) => {
       const producto = await handleCrearProducto(input);
 
-      // las categorías se asocian en un endpoint aparte
+      // las categorías y los ingredientes se asocian en endpoints aparte
       try {
-        await Promise.all(
-          categoriasIds.map((id) => handleAsignarCategoria(producto.id, id)),
-        );
+        await Promise.all([
+          ...categoriasIds.map((id) => handleAsignarCategoria(producto.id, id)),
+          ...ingredientesIds.map((id) =>
+            handleAsignarIngrediente(producto.id, id),
+          ),
+        ]);
       } catch (error) {
         const mensaje = error instanceof Error ? error.message : String(error);
         throw new Error(
-          `El producto se creó, pero no se pudieron asignar las categorías: ${mensaje}. Editalo para asignarlas.`,
+          `El producto se creó, pero no se pudieron asignar las categorías o ingredientes: ${mensaje}. Editalo para asignarlos.`,
           { cause: error },
         );
       }
@@ -69,8 +79,12 @@ export const useCreateProducto = () => {
     onError: invalidar,
   });
 
-  const submit = async (input: ProductoInput, categoriasIds: number[]) => {
-    return mutation.mutateAsync({ input, categoriasIds });
+  const submit = async (
+    input: ProductoInput,
+    categoriasIds: number[],
+    ingredientesIds: number[],
+  ) => {
+    return mutation.mutateAsync({ input, categoriasIds, ingredientesIds });
   };
 
   return {
@@ -86,6 +100,7 @@ type ActualizarProductoArgs = {
   producto: Producto;
   input: ProductoInput;
   categoriasIds: number[];
+  ingredientesIds: number[];
 };
 
 export const useUpdateProducto = () => {
@@ -98,6 +113,7 @@ export const useUpdateProducto = () => {
       producto,
       input,
       categoriasIds,
+      ingredientesIds,
     }: ActualizarProductoArgs) => {
       const actualizado = await handleActualizarProducto(producto.id, input);
 
@@ -105,9 +121,23 @@ export const useUpdateProducto = () => {
       const agregar = categoriasIds.filter((id) => !actuales.includes(id));
       const quitar = actuales.filter((id) => !categoriasIds.includes(id));
 
+      const ingredientesActuales = producto.ingredientes.map((i) => i.id);
+      const agregarIngredientes = ingredientesIds.filter(
+        (id) => !ingredientesActuales.includes(id),
+      );
+      const quitarIngredientes = ingredientesActuales.filter(
+        (id) => !ingredientesIds.includes(id),
+      );
+
       await Promise.all([
         ...agregar.map((id) => handleAsignarCategoria(producto.id, id)),
         ...quitar.map((id) => handleQuitarCategoria(producto.id, id)),
+        ...agregarIngredientes.map((id) =>
+          handleAsignarIngrediente(producto.id, id),
+        ),
+        ...quitarIngredientes.map((id) =>
+          handleQuitarIngrediente(producto.id, id),
+        ),
       ]);
 
       return actualizado;
@@ -120,8 +150,14 @@ export const useUpdateProducto = () => {
     producto: Producto,
     input: ProductoInput,
     categoriasIds: number[],
+    ingredientesIds: number[],
   ) => {
-    return mutation.mutateAsync({ producto, input, categoriasIds });
+    return mutation.mutateAsync({
+      producto,
+      input,
+      categoriasIds,
+      ingredientesIds,
+    });
   };
 
   return {

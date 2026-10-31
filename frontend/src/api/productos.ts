@@ -72,6 +72,40 @@ export const handleQuitarCategoria = async (
   }
 };
 
+export const handleAsignarIngrediente = async (
+  productoId: number,
+  ingredienteId: number,
+) => {
+  try {
+    await post(`${URL_PRODUCTOS}/${productoId}/ingredientes`, {
+      ingrediente_id: ingredienteId,
+    });
+  } catch (error) {
+    console.error(
+      `Error al asignar ingrediente ${ingredienteId} al producto ${productoId}:`,
+      error,
+    );
+    throw error;
+  }
+};
+
+export const handleQuitarIngrediente = async (
+  productoId: number,
+  ingredienteId: number,
+) => {
+  try {
+    await remove(
+      `${URL_PRODUCTOS}/${productoId}/ingredientes/${ingredienteId}`,
+    );
+  } catch (error) {
+    console.error(
+      `Error al quitar ingrediente ${ingredienteId} del producto ${productoId}:`,
+      error,
+    );
+    throw error;
+  }
+};
+
 export const handleEliminarProducto = async (id: number) => {
   try {
     await remove(`${URL_PRODUCTOS}/${id}`);

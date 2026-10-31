@@ -1,6 +1,7 @@
 import type { ChangeEvent, SyntheticEvent } from "react";
 import { useCreateProducto, useUpdateProducto } from "../../hooks/productos";
 import { useGetCategorias } from "../../hooks/categorias";
+import { useGetIngredientes } from "../../hooks/ingredientes";
 import type { Producto, ProductoFormValues } from "../../types/producto";
 import Label from "../ui/label";
 import Input from "../ui/input";
@@ -68,9 +69,11 @@ const ProductoForm = ({ producto, cerrar }: Props) => {
     imagenes_url: producto?.imagenes_url.length ? producto.imagenes_url : [""],
     disponible: producto ? producto.disponible : true,
     categorias_ids: producto ? producto.categorias.map((c) => c.id) : [],
+    ingredientes_ids: producto ? producto.ingredientes.map((i) => i.id) : [],
   };
 
   const { categorias, loading: loadingCategorias } = useGetCategorias();
+  const { ingredientes, loading: loadingIngredientes } = useGetIngredientes();
   const { submit: submitCreate, error: errorCreate } = useCreateProducto();
   const { submit: submitUpdate, error: errorUpdate } = useUpdateProducto();
 
@@ -91,8 +94,19 @@ const ProductoForm = ({ producto, cerrar }: Props) => {
       };
 
       try {
-        if (producto) await submitUpdate(producto, input, value.categorias_ids);
-        else await submitCreate(input, value.categorias_ids);
+        if (producto)
+          await submitUpdate(
+            producto,
+            input,
+            value.categorias_ids,
+            value.ingredientes_ids,
+          );
+        else
+          await submitCreate(
+            input,
+            value.categorias_ids,
+            value.ingredientes_ids,
+          );
       } catch {
         return;
       }
@@ -293,6 +307,49 @@ const ProductoForm = ({ producto, cerrar }: Props) => {
                         />
                         <span className="first-letter:capitalize">
                           {categoria.nombre}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </fieldset>
+            )}
+          </form.Field>
+        </div>
+
+        <div>
+          <form.Field name="ingredientes_ids">
+            {(f) => (
+              <fieldset>
+                <legend className="mb-1">Ingredientes</legend>
+                {loadingIngredientes ? (
+                  <p className="flex items-center gap-x-2 text-xs">
+                    <Spinner className="size-3" />
+                    Cargando ingredientes...
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-2 gap-1">
+                    {(ingredientes ?? []).map((ingrediente) => (
+                      <label
+                        key={ingrediente.id}
+                        className="flex items-center gap-x-2 text-sm first-letter:capitalize"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={f.state.value.includes(ingrediente.id)}
+                          onBlur={f.handleBlur}
+                          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            f.handleChange(
+                              e.target.checked
+                                ? [...f.state.value, ingrediente.id]
+                                : f.state.value.filter(
+                                    (id) => id !== ingrediente.id,
+                                  ),
+                            )
+                          }
+                        />
+                        <span className="first-letter:capitalize">
+                          {ingrediente.nombre}
                         </span>
                       </label>
                     ))}

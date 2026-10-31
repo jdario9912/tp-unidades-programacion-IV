@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Path, Query, status
 
 from src.core.database import SessionDep
 from src.core.schemas import error_responses
+from src.modules.ingrediente.schemas import IngredienteRead
 from . import schemas, services
 
 router = APIRouter(prefix="/productos", tags=["Productos"])
@@ -141,3 +142,50 @@ def desasociar_categoria(
     categoria_id: int = Path(..., gt=0, description="Id de la categoría"),
 ):
     svc.quitar_categoria(id, categoria_id)
+
+
+
+@router.post(
+    "/{id}/ingredientes",
+    response_model=schemas.ProductoIngredienteRead,
+    status_code=status.HTTP_201_CREATED,
+    summary="Asociar ingrediente a producto",
+    description=(
+        "Asocia un ingrediente al producto. El par (producto, ingrediente) es único: "
+        "si ya están asociados responde 409."
+    ),
+    responses=error_responses(404, 409),
+)
+def asociar_ingrediente(
+    svc: ProductoServiceDep,
+    data: schemas.ProductoIngredienteCreate,
+    id: int = Path(..., gt=0, description="Id del producto"),
+):
+    return svc.asignar_ingrediente(id, data)
+
+
+@router.get(
+    "/{id}/ingredientes",
+    response_model=List[IngredienteRead],
+    status_code=status.HTTP_200_OK,
+    summary="Listar ingredientes de un producto",
+    description="Devuelve los ingredientes activos asociados al producto.",
+    responses=error_responses(404),
+)
+def listar_ingredientes_de_producto(svc: ProductoServiceDep, id: int = Path(..., gt=0, description="Id del producto")):
+    return svc.listar_ingredientes(id)
+
+
+@router.delete(
+    "/{id}/ingredientes/{ingrediente_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Desasociar ingrediente de producto",
+    description="Quita el ingrediente del producto. Si no estaban asociados responde 404.",
+    responses=error_responses(404),
+)
+def desasociar_ingrediente(
+    svc: ProductoServiceDep,
+    id: int = Path(..., gt=0, description="Id del producto"),
+    ingrediente_id: int = Path(..., gt=0, description="Id del ingrediente"),
+):
+    svc.quitar_ingrediente(id, ingrediente_id)

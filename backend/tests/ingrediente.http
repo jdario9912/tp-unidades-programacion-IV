@@ -107,3 +107,7 @@ Content-Type: application/json
 {
   "nombre": "Harina 0000"
 }
+
+### Borrar Ingrediente asociado a un producto (Prueba: Error 409)
+# Antes asociarlo con POST /productos/{id}/ingredientes (ver producto.http)
+DELETE {{baseUrl}}/ingredientes/1

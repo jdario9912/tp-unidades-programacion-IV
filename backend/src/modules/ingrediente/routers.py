@@ -21,7 +21,7 @@ IngredienteServiceDep = Annotated[services.IngredienteService, Depends(get_ingre
     response_model=schemas.IngredienteRead,
     status_code=status.HTTP_201_CREATED,
     summary="Crear ingrediente",
-    description="Crea un nuevo ingrediente. El nombre no puede repetirse entre los ingredientes activos.",
+    description="Crea un nuevo ingrediente. El nombre no puede repetirse.",
     responses=error_responses(409),
 )
 def alta_ingrediente(ingrediente: schemas.IngredienteCreate, svc: IngredienteServiceDep):
@@ -76,8 +76,11 @@ def actualizar_ingrediente(
     "/{id}",
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Eliminar ingrediente",
-    description="Elimina lógicamente el ingrediente (soft delete: se completa `deleted_at`).",
-    responses=error_responses(404),
+    description=(
+        "Elimina lógicamente el ingrediente. "
+        "No se puede eliminar si está asociado a algún producto."
+    ),
+    responses=error_responses(404, 409),
 )
 def borrar(svc: IngredienteServiceDep, id: int = Path(..., gt=0, description="Id del ingrediente")):
     svc.borrar(id)

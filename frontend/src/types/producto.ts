@@ -1,4 +1,5 @@
 import type { Categoria } from "./categoria";
+import type { Ingrediente } from "./ingrediente";
 
 export interface Producto {
   id: number;
@@ -10,11 +11,12 @@ export interface Producto {
   created_at: string;
   updated_at: string;
   categorias: Categoria[];
+  ingredientes: Ingrediente[];
 }
 
 export type ProductoInput = Omit<
   Producto,
-  "id" | "created_at" | "updated_at" | "categorias"
+  "id" | "created_at" | "updated_at" | "categorias" | "ingredientes"
 >;
 
 export type ProductoFormValues = {
@@ -24,4 +26,5 @@ export type ProductoFormValues = {
   imagenes_url: string[];
   disponible: boolean;
   categorias_ids: number[];
+  ingredientes_ids: number[];
 };

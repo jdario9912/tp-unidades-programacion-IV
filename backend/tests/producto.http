@@ -1,6 +1,7 @@
 @baseUrl = http://127.0.0.1:8000
 @idProducto = 2
 @idCategoria = 1
+@idIngrediente = 1
 
 ### Crear Producto
 POST {{baseUrl}}/productos/
@@ -104,3 +105,37 @@ DELETE {{baseUrl}}/productos/{{idProducto}}/categorias/{{idCategoria}}
 
 ### Desasociar categoría no asociada (404)
 DELETE {{baseUrl}}/productos/{{idProducto}}/categorias/{{idCategoria}}
+
+
+### Asociar ingrediente (201)
+POST {{baseUrl}}/productos/{{idProducto}}/ingredientes
+Content-Type: application/json
+
+{
+  "ingrediente_id": {{idIngrediente}}
+}
+
+### Asociar ingrediente repetido (409)
+POST {{baseUrl}}/productos/{{idProducto}}/ingredientes
+Content-Type: application/json
+
+{
+  "ingrediente_id": {{idIngrediente}}
+}
+
+### Asociar ingrediente inexistente (404)
+POST {{baseUrl}}/productos/{{idProducto}}/ingredientes
+Content-Type: application/json
+
+{
+  "ingrediente_id": 9876
+}
+
+### Listar ingredientes del producto
+GET {{baseUrl}}/productos/{{idProducto}}/ingredientes
+
+### Desasociar ingrediente (204)
+DELETE {{baseUrl}}/productos/{{idProducto}}/ingredientes/{{idIngrediente}}
+
+### Desasociar ingrediente no asociado (404)
+DELETE {{baseUrl}}/productos/{{idProducto}}/ingredientes/{{idIngrediente}}

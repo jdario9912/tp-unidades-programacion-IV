@@ -6,17 +6,23 @@ from .errors import (
     CategoriaNoEncontradaError,
     ProductoCategoriaDuplicadaError,
     ProductoCategoriaNoEncontradaError,
+    ProductoIngredienteDuplicadoError,
+    ProductoIngredienteNoEncontradoError,
     ProductoNoEncontradoError,
     ProductoYaInactivoError,
 )
 from src.modules.categoria.schemas import CategoriaRead
-from .links import ProductoCategoria
+from src.modules.ingrediente.errors import IngredienteNoEncontradoError
+from src.modules.ingrediente.schemas import IngredienteRead
+from .links import ProductoCategoria, ProductoIngrediente
 from .models import Producto
 from .schemas import (
     CategoriaAsignadaRead,
     ProductoCategoriaCreate,
     ProductoCategoriaRead,
     ProductoCreate,
+    ProductoIngredienteCreate,
+    ProductoIngredienteRead,
     ProductoRead,
     ProductoReadConCategorias,
 )
@@ -82,9 +88,10 @@ class ProductoService:
             if not producto:
                 raise ProductoNoEncontradoError(id)
 
-            # Se quitan las asociaciones para que una categoría no quede
-            # vinculada a un producto eliminado.
+            # Se quitan las asociaciones para que una categoría o un ingrediente
+            # no queden vinculados a un producto eliminado.
             producto.categorias.clear()
+            producto.ingredientes.clear()
             uow.productos.delete(producto)
 
     def asignar_categoria(self, producto_id: int, data: ProductoCategoriaCreate) -> ProductoCategoriaRead:
@@ -132,4 +139,44 @@ class ProductoService:
                     es_principal=es_principal,
                 )
                 for categoria, es_principal in uow.asociaciones.categorias_de_producto(producto_id)
+            ]
+
+    def asignar_ingrediente(self, producto_id: int, data: ProductoIngredienteCreate) -> ProductoIngredienteRead:
+        with ProductoUnitOfWork(self._session) as uow:
+            if not uow.productos.get_by_id(producto_id):
+                raise ProductoNoEncontradoError(producto_id)
+
+            if not uow.ingredientes.get_by_id(data.ingrediente_id):
+                raise IngredienteNoEncontradoError(data.ingrediente_id)
+
+            if uow.asociaciones_ingredientes.get(producto_id, data.ingrediente_id):
+                raise ProductoIngredienteDuplicadoError(producto_id, data.ingrediente_id)
+
+            link = ProductoIngrediente(producto_id=producto_id, ingrediente_id=data.ingrediente_id)
+            uow.asociaciones_ingredientes.add(link)
+            resultado = ProductoIngredienteRead.model_validate(link)
+        return resultado
+
+    def quitar_ingrediente(self, producto_id: int, ingrediente_id: int) -> None:
+        with ProductoUnitOfWork(self._session) as uow:
+            if not uow.productos.get_by_id(producto_id):
+                raise ProductoNoEncontradoError(producto_id)
+
+            if not uow.ingredientes.get_by_id(ingrediente_id):
+                raise IngredienteNoEncontradoError(ingrediente_id)
+
+            link = uow.asociaciones_ingredientes.get(producto_id, ingrediente_id)
+            if not link:
+                raise ProductoIngredienteNoEncontradoError(producto_id, ingrediente_id)
+
+            uow.asociaciones_ingredientes.delete(link)
+
+    def listar_ingredientes(self, producto_id: int) -> List[IngredienteRead]:
+        with ProductoUnitOfWork(self._session) as uow:
+            if not uow.productos.get_by_id(producto_id):
+                raise ProductoNoEncontradoError(producto_id)
+
+            return [
+                IngredienteRead.model_validate(ingrediente)
+                for ingrediente in uow.asociaciones_ingredientes.ingredientes_de_producto(producto_id)
             ]
