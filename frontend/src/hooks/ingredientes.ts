@@ -87,7 +87,7 @@ export const useDeleteIngrediente = () => {
   });
 
   const submit = async (id: number) => {
-    mutation.mutate(id);
+    return mutation.mutateAsync(id);
   };
 
   return {

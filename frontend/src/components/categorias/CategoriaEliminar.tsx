@@ -12,12 +12,23 @@ type Props = {
 
 const CategoriaEliminar = ({ idCategoria }: Props) => {
   const { abierto, abrir, cerrar } = useModal();
-  const { error, loading, submit } = useDeleteCategoria();
+  const { error, loading, submit, reset } = useDeleteCategoria();
 
   const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await submit(idCategoria);
+    try {
+      await submit(idCategoria);
+    } catch {
+      return;
+    }
+
+    cerrar();
+  };
+
+  const handleCerrar = () => {
+    reset();
+    cerrar();
   };
 
   return (
@@ -26,19 +37,19 @@ const CategoriaEliminar = ({ idCategoria }: Props) => {
         Eliminar
       </ActionButton>
 
-      <Modal abierto={abierto} onCerrar={cerrar}>
+      <Modal abierto={abierto} onCerrar={handleCerrar}>
         <div className="flex justify-between p-2 px-4">
           <h2 className="font-bold">Eliminar categoria</h2>
 
-          <ActionButton onClick={cerrar} variant="ghost">
+          <ActionButton onClick={handleCerrar} variant="ghost">
             X
           </ActionButton>
         </div>
         <div className="p-4">
-          <p>¿Estas seguro de que quieres eliminar esta categoria?</p>
+          <p>¿Estás seguro de que quieres eliminar esta categoria?</p>
         </div>
         <div className="flex gap-x-2 p-4 justify-end">
-          <ActionButton onClick={cerrar} variant="secondary">
+          <ActionButton onClick={handleCerrar} variant="secondary">
             Cancelar
           </ActionButton>
           <form onSubmit={handleSubmit}>

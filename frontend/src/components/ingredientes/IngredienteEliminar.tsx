@@ -12,12 +12,23 @@ type Props = {
 
 const IngredienteEliminar = ({ idIngrediente }: Props) => {
   const { abierto, abrir, cerrar } = useModal();
-  const { error, loading, submit } = useDeleteIngrediente();
+  const { error, loading, submit, reset } = useDeleteIngrediente();
 
   const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await submit(idIngrediente);
+    try {
+      await submit(idIngrediente);
+    } catch {
+      return;
+    }
+
+    cerrar();
+  };
+
+  const handleCerrar = () => {
+    reset();
+    cerrar();
   };
 
   return (
@@ -26,19 +37,19 @@ const IngredienteEliminar = ({ idIngrediente }: Props) => {
         Eliminar
       </ActionButton>
 
-      <Modal abierto={abierto} onCerrar={cerrar}>
+      <Modal abierto={abierto} onCerrar={handleCerrar}>
         <div className="flex justify-between p-2 px-4">
           <h2 className="font-bold">Eliminar ingrediente</h2>
 
-          <ActionButton onClick={cerrar} variant="ghost">
+          <ActionButton onClick={handleCerrar} variant="ghost">
             X
           </ActionButton>
         </div>
         <div className="p-4">
-          <p>¿Estas seguro de que quieres eliminar este ingrediente?</p>
+          <p>¿Estás seguro de que quieres eliminar este ingrediente?</p>
         </div>
         <div className="flex gap-x-2 p-4 justify-end">
-          <ActionButton onClick={cerrar} variant="secondary">
+          <ActionButton onClick={handleCerrar} variant="secondary">
             Cancelar
           </ActionButton>
           <form onSubmit={handleSubmit}>

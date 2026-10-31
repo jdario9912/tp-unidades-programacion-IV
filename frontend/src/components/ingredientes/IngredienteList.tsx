@@ -67,6 +67,9 @@ const IngredienteList = ({ ingredientes }: Props) => {
     features,
     columns,
     data: ingredientes,
+    // id de la entidad como key: con el índice, al borrar una fila React
+    // reutiliza su componente (y su modal abierto) para la fila siguiente
+    getRowId: (row) => String(row.id),
     initialState: {
       sorting: [{ id: "nombre", desc: false }],
     },
