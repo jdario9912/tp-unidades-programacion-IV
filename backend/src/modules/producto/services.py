@@ -6,7 +6,6 @@ from .errors import (
     CategoriaNoEncontradaError,
     ProductoCategoriaDuplicadaError,
     ProductoCategoriaNoEncontradaError,
-    ProductoDuplicadoError,
     ProductoNoEncontradoError,
     ProductoYaInactivoError,
 )
@@ -30,9 +29,6 @@ class ProductoService:
 
     def crear(self, data: ProductoCreate) -> ProductoReadConCategorias:
         with ProductoUnitOfWork(self._session) as uow:
-            if uow.productos.get_by_nombre(data.nombre):
-                raise ProductoDuplicadoError(data.nombre)
-
             producto = Producto.model_validate(data)
             uow.productos.add(producto)
             resultado = ProductoReadConCategorias.model_validate(producto)

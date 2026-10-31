@@ -9,7 +9,7 @@ from src.modules.categoria.schemas import CategoriaRead
 
 class ProductoBase(BaseModel):
     nombre: str = Field(
-        ..., min_length=1, description="Nombre único del producto", examples=["Silla de Oficina"]
+        ..., min_length=1, description="Nombre del producto", examples=["Silla de Oficina"]
     )
     descripcion: str = Field(
         ..., min_length=1, description="Descripción del producto", examples=["Silla ergonómica con soporte lumbar"]

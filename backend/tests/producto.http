@@ -14,6 +14,18 @@ Content-Type: application/json
   "disponible": true
 }
 
+### Crear Producto con nombre repetido (Prueba: 201, el nombre no es único)
+POST {{baseUrl}}/productos/
+Content-Type: application/json
+
+{
+  "nombre": "Silla Ergonómica",
+  "descripcion": "Otra silla con el mismo nombre",
+  "precio_base": 199.99,
+  "imagenes_url": [],
+  "disponible": true
+}
+
 ### Listar Productos
 GET {{baseUrl}}/productos/?skip=0&limit=5
 

@@ -64,3 +64,6 @@ GET {{baseUrl}}/pedidos/{{idPedido}}/historial
 
 ### Eliminar Pedido
 DELETE {{baseUrl}}/pedidos/{{idPedido}}
+
+### Pedido inexistente
+GET {{baseUrl}}/pedidos/99999

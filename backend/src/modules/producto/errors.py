@@ -1,11 +1,5 @@
 from src.modules.errors import ConflictError, NotFoundError
 
-class ProductoDuplicadoError(ConflictError):
-    def __init__(self, nombre: str):
-        self.nombre = nombre
-        super().__init__(f"Ya existe otro producto con el nombre '{nombre}'")
-
-
 class ProductoYaInactivoError(ConflictError):
     def __init__(self, id: int):
         self.id = id

@@ -63,7 +63,7 @@ def detalle_pedido(svc: PedidoServiceDep, id: int = Path(..., gt=0, description=
     return svc.obtener_por_id(id)
 
 
-@router.patch(
+@router.put(
     "/{id}",
     response_model=schemas.PedidoRead,
     status_code=status.HTTP_200_OK,

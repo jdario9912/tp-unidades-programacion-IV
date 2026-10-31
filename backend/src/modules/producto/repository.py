@@ -14,7 +14,7 @@ class ProductoRepository(RepositoryBase[Producto]):
         super().__init__(session, Producto)
 
     def get_by_nombre(self, nombre: str) -> Optional[Producto]:
-        statement = self.activos().where(func.lower(Producto.nombre) == nombre.lower())
+        statement = self.activos().where(func.lower(Producto.nombre) == nombre.strip().lower())
         return self.session.exec(statement).first()
 
     def get_by_id_con_categorias(self, id: int) -> Optional[Producto]:

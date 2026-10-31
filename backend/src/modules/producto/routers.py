@@ -21,8 +21,7 @@ ProductoServiceDep = Annotated[services.ProductoService, Depends(get_producto_se
     response_model=schemas.ProductoReadConCategorias,
     status_code=status.HTTP_201_CREATED,
     summary="Crear producto",
-    description="Crea un nuevo producto. El nombre no puede repetirse entre los productos activos.",
-    responses=error_responses(409),
+    description="Crea un nuevo producto.",
 )
 def alta_producto(producto: schemas.ProductoCreate, svc: ProductoServiceDep):
     return svc.crear(producto)
