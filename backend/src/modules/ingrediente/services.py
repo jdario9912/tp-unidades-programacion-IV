@@ -1,4 +1,4 @@
-from sqlmodel import Session, func, select
+from sqlmodel import Session
 from typing import List, Optional
 
 from .unit_of_work import IngredienteUnitOfWork
@@ -23,16 +23,10 @@ class IngredienteService:
         return resultado
 
     def obtener_todos(self, skip: int = 0, limit: int = 10, search: Optional[str] = None) -> List[IngredienteRead]:
-            with IngredienteUnitOfWork(self._session) as uow:
-                statement = select(Ingrediente).order_by(Ingrediente.id)
-    
-                if search:
-                    statement = statement.where(func.lower(Ingrediente.nombre).contains(search.strip().lower()))
-    
-                statement = statement.offset(skip).limit(limit)
-                ingredientes = uow.ingredientes.session.exec(statement).all()
-                return [IngredienteRead.model_validate(c) for c in ingredientes]
-    
+        with IngredienteUnitOfWork(self._session) as uow:
+            ingredientes = uow.ingredientes.listar(skip, limit, search)
+            return [IngredienteRead.model_validate(i) for i in ingredientes]
+
     def obtener_por_id(self, id: int) -> IngredienteRead:
         with IngredienteUnitOfWork(self._session) as uow:
             ingrediente = uow.ingredientes.get_by_id(id)
@@ -47,6 +41,10 @@ class IngredienteService:
             if not ingrediente:
                 raise IngredienteNoEncontradoError(id)
 
+            existente = uow.ingredientes.get_by_nombre(data.nombre)
+            if existente and existente.id != ingrediente.id:
+                raise IngredienteDuplicadoError(data.nombre)
+
             for key, value in data.model_dump().items():
                 setattr(ingrediente, key, value)
 
@@ -54,12 +52,10 @@ class IngredienteService:
             resultado = IngredienteRead.model_validate(ingrediente)
         return resultado
 
-    def borrar(self, id: int) -> IngredienteRead:
+    def borrar(self, id: int) -> None:
         with IngredienteUnitOfWork(self._session) as uow:
             ingrediente = uow.ingredientes.get_by_id(id)
             if not ingrediente:
                 raise IngredienteNoEncontradoError(id)
 
-            resultado = IngredienteRead.model_validate(ingrediente)
             uow.ingredientes.delete(ingrediente)
-        return resultado
