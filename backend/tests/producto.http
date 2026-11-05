@@ -3,6 +3,12 @@
 @idCategoria = 1
 @idIngrediente = 1
 
+### Iniciar Sesión como Admin (guarda la cookie access_token para los requests siguientes)
+POST {{baseUrl}}/api/v1/auth/token
+Content-Type: application/x-www-form-urlencoded
+
+username=admin@foodstore.com&password=admin1234
+
 ### Crear Producto
 POST {{baseUrl}}/productos/
 Content-Type: application/json
@@ -139,3 +145,9 @@ DELETE {{baseUrl}}/productos/{{idProducto}}/ingredientes/{{idIngrediente}}
 
 ### Desasociar ingrediente no asociado (404)
 DELETE {{baseUrl}}/productos/{{idProducto}}/ingredientes/{{idIngrediente}}
+
+### Cerrar Sesión
+POST {{baseUrl}}/api/v1/auth/logout
+
+### Listar Productos sin Sesión (Prueba: Error 401)
+GET {{baseUrl}}/productos/
