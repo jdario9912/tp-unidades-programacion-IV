@@ -1,0 +1,87 @@
+@baseUrl = http://127.0.0.1:8000/api/v1/auth
+@idUsuario = 2
+
+### Registrar Usuario
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+  "nombre": "Juan",
+  "apellido": "Pérez",
+  "email": "juan@mail.com",
+  "celular": "2615551234",
+  "password": "secreto123"
+}
+
+### Registrar Usuario con Email Duplicado (Prueba: Error 409)
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+  "nombre": "Juan",
+  "apellido": "Otro",
+  "email": "JUAN@mail.com",
+  "password": "secreto123"
+}
+
+### Registrar Usuario con Contraseña Corta (Prueba: Error 422)
+POST {{baseUrl}}/register
+Content-Type: application/json
+
+{
+  "nombre": "Juan",
+  "apellido": "Pérez",
+  "email": "corta@mail.com",
+  "password": "123"
+}
+
+### Iniciar Sesión con Contraseña Incorrecta (Prueba: Error 401)
+POST {{baseUrl}}/token
+Content-Type: application/x-www-form-urlencoded
+
+username=juan@mail.com&password=incorrecta
+
+### Iniciar Sesión como Usuario (guarda la cookie access_token)
+POST {{baseUrl}}/token
+Content-Type: application/x-www-form-urlencoded
+
+username=juan@mail.com&password=secreto123
+
+### Usuario Autenticado
+GET {{baseUrl}}/me
+
+### Listar Usuarios como Usuario Común (Prueba: Error 403)
+GET {{baseUrl}}/admin/usuarios
+
+### Cerrar Sesión
+POST {{baseUrl}}/logout
+
+### Usuario Autenticado sin Sesión (Prueba: Error 401)
+GET {{baseUrl}}/me
+
+### Iniciar Sesión como Admin (admin del seed)
+POST {{baseUrl}}/token
+Content-Type: application/x-www-form-urlencoded
+
+username=admin@foodstore.com&password=admin1234
+
+### Listar Usuarios (admin, incluye desactivados)
+GET {{baseUrl}}/admin/usuarios
+
+### Desactivar Usuario (admin)
+POST {{baseUrl}}/admin/usuarios/{{idUsuario}}/desactivar
+
+### Desactivar Usuario ya Desactivado (Prueba: Error 409)
+POST {{baseUrl}}/admin/usuarios/{{idUsuario}}/desactivar
+
+### Iniciar Sesión con Usuario Desactivado (Prueba: Error 400)
+POST {{baseUrl}}/token
+Content-Type: application/x-www-form-urlencoded
+
+username=juan@mail.com&password=secreto123
+
+### Activar Usuario (admin)
+POST {{baseUrl}}/admin/usuarios/{{idUsuario}}/activar
+
+### Activar Usuario Inexistente (Prueba: Error 404)
+POST {{baseUrl}}/admin/usuarios/999/activar
