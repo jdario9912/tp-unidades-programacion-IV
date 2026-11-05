@@ -13,13 +13,18 @@ class UsuarioRepository(RepositoryBase[Usuario]):
         super().__init__(session, Usuario)
 
     def get_by_email(self, email: str) -> Optional[Usuario]:
-        statement = self.activos().where(func.lower(Usuario.email) == email.strip().lower())
+        """Incluye a los desactivados: el email es único entre todos los usuarios."""
+        statement = select(Usuario).where(func.lower(Usuario.email) == email.strip().lower())
         return self.session.exec(statement).first()
 
-    def listar(
+    def get_by_id_incluyendo_inactivos(self, usuario_id: int) -> Optional[Usuario]:
+        return self.session.get(Usuario, usuario_id)
+
+    def listar_todos(
         self, skip: int = 0, limit: int = 10, search: Optional[str] = None
     ) -> Sequence[Usuario]:
-        statement = self.activos().order_by(Usuario.id)
+        """Incluye a los usuarios desactivados."""
+        statement = select(Usuario).order_by(Usuario.id)
 
         if search:
             texto = search.strip().lower()
@@ -33,6 +38,15 @@ class UsuarioRepository(RepositoryBase[Usuario]):
 
         statement = statement.offset(skip).limit(limit)
         return self.session.exec(statement).all()
+
+    def activar(self, usuario: Usuario) -> Usuario:
+        usuario.deleted_at = None
+        return self.add(usuario)
+
+    def desactivar(self, usuario: Usuario) -> Usuario:
+        self.delete(usuario)
+        self.session.refresh(usuario)
+        return usuario
 
     def nombres_roles_vigentes(self, usuario_id: int) -> List[str]:
         """Roles sin vencimiento o con vencimiento futuro."""
@@ -72,6 +86,3 @@ class RolRepository:
     def get_by_nombre(self, nombre: str) -> Optional[Rol]:
         statement = select(Rol).where(func.upper(Rol.nombre) == nombre.strip().upper())
         return self.session.exec(statement).first()
-
-    def listar(self) -> Sequence[Rol]:
-        return self.session.exec(select(Rol).order_by(Rol.id)).all()

@@ -26,12 +26,5 @@ class UserCreate(UserBase):
 
 class UserPublic(TimestampRead, UserBase):
     id: int = Field(..., description="Identificador del usuario", examples=[1])
-    roles: List[str] = Field(default_factory=list, description="Nombres de los roles vigentes", examples=[["CLIENTE"]])
+    roles: List[str] = Field(default_factory=list, description="Nombres de los roles vigentes", examples=[["user"]])
 
-
-class RolRead(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
-    id: int = Field(..., examples=[1])
-    nombre: str = Field(..., examples=["CLIENTE"])
-    descripcion: Optional[str] = Field(None, examples=["Cliente de la tienda"])
