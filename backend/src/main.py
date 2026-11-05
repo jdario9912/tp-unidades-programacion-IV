@@ -30,9 +30,8 @@ tags_metadata = [
 
 def create_app() -> FastAPI:
     app = FastAPI(
-        title="API Integradora - Unidad 1",
+        title="API Food Store",
         description=(
-            "Conceptos: Path, Query, Body, Pydantic, Errores.\n\n"
             "Todos los recursos registran `created_at` y `updated_at`. "
             "Las eliminaciones son lógicas (soft delete): el registro queda con "
             "`deleted_at` completo, deja de aparecer en los listados y al "
