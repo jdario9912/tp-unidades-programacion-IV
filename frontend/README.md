@@ -1,17 +1,23 @@
 ## Estructura del proyecto
 
 ```text
-parte_B/
+frontend/
 ├── public/                 # Archivos estáticos
 ├── src/
-│   ├── components/         # Componentes de la interfaz
+│   ├── api/                # Llamadas al backend (categorías, ingredientes, productos)
+│   ├── components/
+│   │   ├── categorias/     # Listado, formulario, modal y eliminación de categorías
+│   │   ├── ingredientes/   # Listado, formulario, modal y eliminación de ingredientes
+│   │   ├── productos/      # Listado, formulario, modal, eliminación y preview de imagen
+│   │   ├── ui/             # Componentes reutilizables (botones, inputs, modal, etc.)
 │   │   ├── Footer.tsx
+│   │   ├── MainLayout.tsx
 │   │   ├── Navbar.tsx
-│   │   ├── ProductoCard.tsx
-│   │   ├── ProductoForm.tsx
-│   │   └── ProductoList.tsx
-│   ├── types/
-│   │   └── producto.ts     # Tipo de datos Producto
+│   │   └── RoutesApp.tsx
+│   ├── hooks/              # Hooks de datos y utilidades
+│   ├── pages/              # Páginas de la aplicación
+│   ├── types/              # Tipos de datos
+│   ├── utils/              # Funciones auxiliares
 │   ├── App.tsx
 │   ├── main.tsx
 │   └── styles.css
