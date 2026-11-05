@@ -22,6 +22,18 @@ class Settings(BaseSettings):
     postgres_host: str = "localhost"
     postgres_port: int = 5433
 
+    jwt_secret_key: str = "cambiar-esta-clave-secreta-en-produccion"
+    jwt_algorithm: str = "HS256"
+    access_token_expire_minutes: int = 60
+    # En True solo con HTTPS: el navegador no manda cookies Secure por HTTP.
+    cookie_secure: bool = False
+    # Con cookies no se puede usar "*": el navegador exige el origen exacto.
+    cors_origins: list[str] = ["http://localhost:5173"]
+
+    # Primer administrador, creado al iniciar si no existe.
+    admin_email: str = "admin@foodstore.com"
+    admin_password: str = "admin1234"
+
     @computed_field
     @property
     def DATABASE_URL(self) -> str:
