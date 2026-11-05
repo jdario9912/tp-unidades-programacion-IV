@@ -4,10 +4,12 @@ from fastapi import APIRouter, Depends, Path, Query, status
 
 from src.core.database import SessionDep
 from src.core.schemas import error_responses
+from src.modules.auth.dependencies import requiere_admin, requiere_sesion
 from src.modules.producto.schemas import ProductoRead
 from . import schemas, services
 
-router = APIRouter(prefix="/categorias", tags=["Categorías"])
+# Toda ruta requiere sesión activa; las de escritura además el rol admin.
+router = APIRouter(prefix="/categorias", tags=["Categorías"], dependencies=[requiere_sesion])
 
 
 def get_categoria_service(session: SessionDep) -> services.CategoriaService:
@@ -19,11 +21,12 @@ CategoriaServiceDep = Annotated[services.CategoriaService, Depends(get_categoria
 
 @router.post(
     "/",
+    dependencies=[requiere_admin],
     response_model=schemas.CategoriaRead,
     status_code=status.HTTP_201_CREATED,
     summary="Crear categoría",
     description="Crea una nueva categoría. El nombre no puede repetirse entre las categorías activas.",
-    responses=error_responses(409),
+    responses=error_responses(400, 401, 403, 409),
 )
 def alta_categoria(categoria: schemas.CategoriaCreate, svc: CategoriaServiceDep):
     return svc.crear(categoria)
@@ -35,6 +38,7 @@ def alta_categoria(categoria: schemas.CategoriaCreate, svc: CategoriaServiceDep)
     status_code=status.HTTP_200_OK,
     summary="Listar categorías",
     description="Lista paginada de categorías activas.",
+    responses=error_responses(400, 401),
 )
 def listar_categorias(
     svc: CategoriaServiceDep,
@@ -51,7 +55,7 @@ def listar_categorias(
     status_code=status.HTTP_200_OK,
     summary="Obtener categoría",
     description="Devuelve una categoría por id. Si no existe o fue eliminada responde 404.",
-    responses=error_responses(404),
+    responses=error_responses(400, 401, 404),
 )
 def detalle_categoria(svc: CategoriaServiceDep, id: int = Path(..., gt=0, description="Id de la categoría")):
     return svc.obtener_por_id(id)
@@ -63,7 +67,7 @@ def detalle_categoria(svc: CategoriaServiceDep, id: int = Path(..., gt=0, descri
     status_code=status.HTTP_200_OK,
     summary="Listar productos de una categoría",
     description="Devuelve los productos activos asociados a la categoría.",
-    responses=error_responses(404),
+    responses=error_responses(400, 401, 404),
 )
 def listar_productos_de_categoria(svc: CategoriaServiceDep, id: int = Path(..., gt=0, description="Id de la categoría")):
     return svc.listar_productos(id)
@@ -71,11 +75,12 @@ def listar_productos_de_categoria(svc: CategoriaServiceDep, id: int = Path(..., 
 
 @router.put(
     "/{id}",
+    dependencies=[requiere_admin],
     response_model=schemas.CategoriaRead,
     status_code=status.HTTP_200_OK,
     summary="Actualizar categoría",
     description="Reemplaza los datos de una categoría.",
-    responses=error_responses(404, 409),
+    responses=error_responses(400, 401, 403, 404, 409),
 )
 def actualizar_categoria(
     svc: CategoriaServiceDep,
@@ -87,13 +92,14 @@ def actualizar_categoria(
 
 @router.delete(
     "/{id}",
+    dependencies=[requiere_admin],
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Eliminar categoría",
     description=(
         "Elimina lógicamente la categoría (soft delete: se completa `deleted_at`). "
         "No se puede eliminar si está asociada a algún producto."
     ),
-    responses=error_responses(404, 409),
+    responses=error_responses(400, 401, 403, 404, 409),
 )
 def borrar(svc: CategoriaServiceDep, id: int = Path(..., gt=0, description="Id de la categoría")):
     svc.borrar(id)

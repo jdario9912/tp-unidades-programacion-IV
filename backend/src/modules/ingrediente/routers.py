@@ -4,9 +4,11 @@ from fastapi import APIRouter, Depends, Path, Query, status
 
 from src.core.database import SessionDep
 from src.core.schemas import error_responses
+from src.modules.auth.dependencies import requiere_admin, requiere_sesion
 from . import schemas, services
 
-router = APIRouter(prefix="/ingredientes", tags=["Ingredientes"])
+# Toda ruta requiere sesión activa; las de escritura además el rol admin.
+router = APIRouter(prefix="/ingredientes", tags=["Ingredientes"], dependencies=[requiere_sesion])
 
 
 def get_ingrediente_service(session: SessionDep) -> services.IngredienteService:
@@ -18,11 +20,12 @@ IngredienteServiceDep = Annotated[services.IngredienteService, Depends(get_ingre
 
 @router.post(
     "/",
+    dependencies=[requiere_admin],
     response_model=schemas.IngredienteRead,
     status_code=status.HTTP_201_CREATED,
     summary="Crear ingrediente",
     description="Crea un nuevo ingrediente. El nombre no puede repetirse.",
-    responses=error_responses(409),
+    responses=error_responses(400, 401, 403, 409),
 )
 def alta_ingrediente(ingrediente: schemas.IngredienteCreate, svc: IngredienteServiceDep):
     return svc.crear(ingrediente)
@@ -34,6 +37,7 @@ def alta_ingrediente(ingrediente: schemas.IngredienteCreate, svc: IngredienteSer
     status_code=status.HTTP_200_OK,
     summary="Listar ingredientes",
     description="Lista paginada de ingredientes activos.",
+    responses=error_responses(400, 401),
 )
 def listar_ingredientes(
     svc: IngredienteServiceDep,
@@ -50,7 +54,7 @@ def listar_ingredientes(
     status_code=status.HTTP_200_OK,
     summary="Obtener ingrediente",
     description="Devuelve un ingrediente por id. Si no existe o fue eliminado responde 404.",
-    responses=error_responses(404),
+    responses=error_responses(400, 401, 404),
 )
 def detalle_ingrediente(svc: IngredienteServiceDep, id: int = Path(..., gt=0, description="Id del ingrediente")):
     return svc.obtener_por_id(id)
@@ -58,11 +62,12 @@ def detalle_ingrediente(svc: IngredienteServiceDep, id: int = Path(..., gt=0, de
 
 @router.put(
     "/{id}",
+    dependencies=[requiere_admin],
     response_model=schemas.IngredienteRead,
     status_code=status.HTTP_200_OK,
     summary="Actualizar ingrediente",
     description="Reemplaza los datos de un ingrediente.",
-    responses=error_responses(404, 409),
+    responses=error_responses(400, 401, 403, 404, 409),
 )
 def actualizar_ingrediente(
     svc: IngredienteServiceDep,
@@ -74,13 +79,14 @@ def actualizar_ingrediente(
 
 @router.delete(
     "/{id}",
+    dependencies=[requiere_admin],
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Eliminar ingrediente",
     description=(
         "Elimina lógicamente el ingrediente. "
         "No se puede eliminar si está asociado a algún producto."
     ),
-    responses=error_responses(404, 409),
+    responses=error_responses(400, 401, 403, 404, 409),
 )
 def borrar(svc: IngredienteServiceDep, id: int = Path(..., gt=0, description="Id del ingrediente")):
     svc.borrar(id)

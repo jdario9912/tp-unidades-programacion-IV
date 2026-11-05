@@ -4,10 +4,12 @@ from fastapi import APIRouter, Depends, Path, Query, status
 
 from src.core.database import SessionDep
 from src.core.schemas import error_responses
+from src.modules.auth.dependencies import requiere_admin, requiere_sesion
 from src.modules.ingrediente.schemas import IngredienteRead
 from . import schemas, services
 
-router = APIRouter(prefix="/productos", tags=["Productos"])
+# Toda ruta requiere sesión activa; las de escritura además el rol admin.
+router = APIRouter(prefix="/productos", tags=["Productos"], dependencies=[requiere_sesion])
 
 
 def get_producto_service(session: SessionDep) -> services.ProductoService:
@@ -19,10 +21,12 @@ ProductoServiceDep = Annotated[services.ProductoService, Depends(get_producto_se
 
 @router.post(
     "/",
+    dependencies=[requiere_admin],
     response_model=schemas.ProductoReadConCategorias,
     status_code=status.HTTP_201_CREATED,
     summary="Crear producto",
     description="Crea un nuevo producto.",
+    responses=error_responses(400, 401, 403),
 )
 def alta_producto(producto: schemas.ProductoCreate, svc: ProductoServiceDep):
     return svc.crear(producto)
@@ -34,6 +38,7 @@ def alta_producto(producto: schemas.ProductoCreate, svc: ProductoServiceDep):
     status_code=status.HTTP_200_OK,
     summary="Listar productos",
     description="Lista paginada de productos activos con sus categorías. Los productos eliminados no se incluyen.",
+    responses=error_responses(400, 401),
 )
 def listar_productos(
     svc: ProductoServiceDep,
@@ -50,7 +55,7 @@ def listar_productos(
     status_code=status.HTTP_200_OK,
     summary="Obtener producto",
     description="Devuelve un producto con sus categorías. Si no existe o fue eliminado responde 404.",
-    responses=error_responses(404),
+    responses=error_responses(400, 401, 404),
 )
 def detalle_producto(svc: ProductoServiceDep, id: int = Path(..., gt=0, description="Id del producto")):
     return svc.obtener_por_id(id)
@@ -58,11 +63,12 @@ def detalle_producto(svc: ProductoServiceDep, id: int = Path(..., gt=0, descript
 
 @router.put(
     "/{id}",
+    dependencies=[requiere_admin],
     response_model=schemas.ProductoReadConCategorias,
     status_code=status.HTTP_200_OK,
     summary="Actualizar producto",
     description="Reemplaza todos los datos de un producto.",
-    responses=error_responses(404),
+    responses=error_responses(400, 401, 403, 404),
 )
 def actualizar_producto(
     svc: ProductoServiceDep,
@@ -74,11 +80,12 @@ def actualizar_producto(
 
 @router.put(
     "/{id}/deshabilitar",
+    dependencies=[requiere_admin],
     response_model=schemas.ProductoReadConCategorias,
     status_code=status.HTTP_200_OK,
     summary="Deshabilitar producto",
     description="Marca el producto como no disponible. Responde 409 si ya estaba deshabilitado.",
-    responses=error_responses(404, 409),
+    responses=error_responses(400, 401, 403, 404, 409),
 )
 def deshabilitar_producto(svc: ProductoServiceDep, id: int = Path(..., gt=0, description="Id del producto")):
     return svc.deshabilitar(id)
@@ -86,13 +93,14 @@ def deshabilitar_producto(svc: ProductoServiceDep, id: int = Path(..., gt=0, des
 
 @router.delete(
     "/{id}",
+    dependencies=[requiere_admin],
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Eliminar producto",
     description=(
         "Elimina lógicamente el producto (soft delete: se completa `deleted_at`) "
         "y quita sus asociaciones con categorías."
     ),
-    responses=error_responses(404),
+    responses=error_responses(400, 401, 403, 404),
 )
 def borrar_producto(svc: ProductoServiceDep, id: int = Path(..., gt=0, description="Id del producto")):
     svc.borrar(id)
@@ -100,6 +108,7 @@ def borrar_producto(svc: ProductoServiceDep, id: int = Path(..., gt=0, descripti
 
 @router.post(
     "/{id}/categorias",
+    dependencies=[requiere_admin],
     response_model=schemas.ProductoCategoriaRead,
     status_code=status.HTTP_201_CREATED,
     summary="Asociar categoría a producto",
@@ -107,7 +116,7 @@ def borrar_producto(svc: ProductoServiceDep, id: int = Path(..., gt=0, descripti
         "Asocia una categoría al producto. El par (producto, categoría) es único: "
         "si ya están asociados responde 409."
     ),
-    responses=error_responses(404, 409),
+    responses=error_responses(400, 401, 403, 404, 409),
 )
 def asociar_categoria(
     svc: ProductoServiceDep,
@@ -123,7 +132,7 @@ def asociar_categoria(
     status_code=status.HTTP_200_OK,
     summary="Listar categorías de un producto",
     description="Devuelve las categorías activas asociadas al producto.",
-    responses=error_responses(404),
+    responses=error_responses(400, 401, 404),
 )
 def listar_categorias_de_producto(svc: ProductoServiceDep, id: int = Path(..., gt=0, description="Id del producto")):
     return svc.listar_categorias(id)
@@ -131,10 +140,11 @@ def listar_categorias_de_producto(svc: ProductoServiceDep, id: int = Path(..., g
 
 @router.delete(
     "/{id}/categorias/{categoria_id}",
+    dependencies=[requiere_admin],
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Desasociar categoría de producto",
     description="Quita la asociación entre el producto y la categoría. Si no estaban asociados responde 404.",
-    responses=error_responses(404),
+    responses=error_responses(400, 401, 403, 404),
 )
 def desasociar_categoria(
     svc: ProductoServiceDep,
@@ -147,6 +157,7 @@ def desasociar_categoria(
 
 @router.post(
     "/{id}/ingredientes",
+    dependencies=[requiere_admin],
     response_model=schemas.ProductoIngredienteRead,
     status_code=status.HTTP_201_CREATED,
     summary="Asociar ingrediente a producto",
@@ -154,7 +165,7 @@ def desasociar_categoria(
         "Asocia un ingrediente al producto. El par (producto, ingrediente) es único: "
         "si ya están asociados responde 409."
     ),
-    responses=error_responses(404, 409),
+    responses=error_responses(400, 401, 403, 404, 409),
 )
 def asociar_ingrediente(
     svc: ProductoServiceDep,
@@ -170,7 +181,7 @@ def asociar_ingrediente(
     status_code=status.HTTP_200_OK,
     summary="Listar ingredientes de un producto",
     description="Devuelve los ingredientes activos asociados al producto.",
-    responses=error_responses(404),
+    responses=error_responses(400, 401, 404),
 )
 def listar_ingredientes_de_producto(svc: ProductoServiceDep, id: int = Path(..., gt=0, description="Id del producto")):
     return svc.listar_ingredientes(id)
@@ -178,10 +189,11 @@ def listar_ingredientes_de_producto(svc: ProductoServiceDep, id: int = Path(...,
 
 @router.delete(
     "/{id}/ingredientes/{ingrediente_id}",
+    dependencies=[requiere_admin],
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Desasociar ingrediente de producto",
     description="Quita el ingrediente del producto. Si no estaban asociados responde 404.",
-    responses=error_responses(404),
+    responses=error_responses(400, 401, 403, 404),
 )
 def desasociar_ingrediente(
     svc: ProductoServiceDep,
