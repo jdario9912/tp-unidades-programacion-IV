@@ -1,9 +1,9 @@
 ## Trabajo Práctico FastApi, SQLModel y React
 
-**Ejecutar parte A**
+**Ejecutar el backend**
 
-Ver README.md de la carpeta parte_A
+Ver README.md de la carpeta backend
 
-**Ejecutar parte B**
+**Ejecutar el frontend**
 
-Ver README.md de la carpeta parte_B
+Ver README.md de la carpeta frontend
