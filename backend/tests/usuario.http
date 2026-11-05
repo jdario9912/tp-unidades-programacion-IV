@@ -1,0 +1,79 @@
+@baseUrl = http://127.0.0.1:8000
+@idUsuario = 1
+
+### Registrar Usuario
+POST {{baseUrl}}/usuarios/
+Content-Type: application/json
+
+{
+  "nombre": "Juan",
+  "apellido": "Pérez",
+  "email": "juan@mail.com",
+  "celular": "2615551234",
+  "password": "secreto123"
+}
+
+### Registrar Otro Usuario (sin celular)
+POST {{baseUrl}}/usuarios/
+Content-Type: application/json
+
+{
+  "nombre": "Ana",
+  "apellido": "Gómez",
+  "email": "ana@mail.com",
+  "password": "secreto123"
+}
+
+### Registrar Usuario con Email Duplicado (Prueba: Error 409)
+POST {{baseUrl}}/usuarios/
+Content-Type: application/json
+
+{
+  "nombre": "Juan",
+  "apellido": "Otro",
+  "email": "JUAN@mail.com",
+  "password": "secreto123"
+}
+
+### Registrar Usuario con Email Inválido (Prueba: Error 422)
+POST {{baseUrl}}/usuarios/
+Content-Type: application/json
+
+{
+  "nombre": "Juan",
+  "apellido": "Pérez",
+  "email": "no-es-un-email",
+  "password": "secreto123"
+}
+
+### Registrar Usuario con Contraseña Corta (Prueba: Error 422)
+POST {{baseUrl}}/usuarios/
+Content-Type: application/json
+
+{
+  "nombre": "Juan",
+  "apellido": "Pérez",
+  "email": "corta@mail.com",
+  "password": "123"
+}
+
+### Listar Usuarios
+GET {{baseUrl}}/usuarios/
+
+### Buscar Usuarios
+GET {{baseUrl}}/usuarios/?search=gómez
+
+### Listar Roles
+GET {{baseUrl}}/usuarios/roles
+
+### Obtener Usuario por ID
+GET {{baseUrl}}/usuarios/{{idUsuario}}
+
+### Obtener Usuario Inexistente (Prueba: Error 404)
+GET {{baseUrl}}/usuarios/999
+
+### Eliminar Usuario
+DELETE {{baseUrl}}/usuarios/{{idUsuario}}
+
+### Obtener Usuario Eliminado (Prueba: Error 404)
+GET {{baseUrl}}/usuarios/{{idUsuario}}

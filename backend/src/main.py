@@ -11,6 +11,8 @@ from src.modules.ingrediente.routers import router as ingrediente_router
 from src.modules.pedido.routers import router as pedido_router
 from src.modules.catalogos.routers import router as catalogo_router
 from src.modules.catalogos.seed import cargar_catalogos
+from src.modules.usuario.routers import router as usuario_router
+from src.modules.usuario.seed import cargar_roles
 from .exceptions_handler import register_exception_handlers
 
 @asynccontextmanager
@@ -18,6 +20,7 @@ async def lifespan(app: FastAPI):
     crear_tablas()
     with Session(engine) as session:
         cargar_catalogos(session)
+        cargar_roles(session)
     yield
 
 tags_metadata = [
@@ -25,6 +28,7 @@ tags_metadata = [
     {"name": "Categorías", "description": "Alta, baja, modificación y consulta de categorías."},
     {"name": "Ingredientes", "description": "Alta, baja, modificación y consulta de ingredientes."},
     {"name": "Catálogos", "description": "Estados de pedido y formas de pago."},
+    {"name": "Usuarios", "description": "Registro y consulta de usuarios y catálogo de roles."},
     {"name": "Pedidos", "description": "Creación, consulta, modificación, cambios de estado e historial de pedidos."},
 ]
 
@@ -55,6 +59,7 @@ def create_app() -> FastAPI:
     app.include_router(ingrediente_router)
     app.include_router(pedido_router)
     app.include_router(catalogo_router)
+    app.include_router(usuario_router)
     register_exception_handlers(app)
     return app
 
