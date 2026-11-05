@@ -1,4 +1,4 @@
-from typing import Annotated, Optional
+from typing import Annotated, Callable, Optional
 
 from fastapi import Depends
 from fastapi.security import APIKeyCookie
@@ -7,7 +7,7 @@ from src.core.database import SessionDep
 from src.core.security import decodificar_access_token
 from src.modules.usuario.models import Usuario
 from src.modules.usuario.repository import UsuarioRepository
-from src.modules.usuario.seed import ROL_ADMIN
+from src.modules.usuario.seed import ROL_ADMIN, ROL_POR_DEFECTO
 
 from .errors import CuentaDesactivadaError, NoAutenticadoError, PermisoDenegadoError
 
@@ -20,6 +20,7 @@ cookie_scheme = APIKeyCookie(name=COOKIE_NAME, auto_error=False)
 def get_current_user(
     session: SessionDep, token: Annotated[Optional[str], Depends(cookie_scheme)]
 ) -> Usuario:
+    """Usuario del token, esté activo o no. 401 si no hay sesión válida."""
     usuario_id = decodificar_access_token(token) if token else None
     if usuario_id is None:
         raise NoAutenticadoError()
@@ -28,20 +29,35 @@ def get_current_user(
     if not usuario:
         raise NoAutenticadoError()
 
+    return usuario
+
+
+def get_current_active_user(usuario: Annotated[Usuario, Depends(get_current_user)]) -> Usuario:
     if usuario.deleted_at is not None:
         raise CuentaDesactivadaError()
 
     return usuario
 
 
-CurrentUserDep = Annotated[Usuario, Depends(get_current_user)]
+CurrentUserDep = Annotated[Usuario, Depends(get_current_active_user)]
 
 
-def require_admin(usuario: CurrentUserDep, session: SessionDep) -> Usuario:
-    if ROL_ADMIN not in UsuarioRepository(session).nombres_roles_vigentes(usuario.id):
-        raise PermisoDenegadoError()
+def require_role(roles: list[str]) -> Callable[..., Usuario]:
+    """Exige al menos uno de los roles, entre los vigentes del usuario en UsuarioRol."""
 
-    return usuario
+    def verificar_rol(usuario: CurrentUserDep, session: SessionDep) -> Usuario:
+        vigentes = UsuarioRepository(session).nombres_roles_vigentes(usuario.id)
+        if not set(roles) & set(vigentes):
+            raise PermisoDenegadoError()
+
+        return usuario
+
+    return verificar_rol
 
 
-AdminDep = Annotated[Usuario, Depends(require_admin)]
+AdminDep = Annotated[Usuario, Depends(require_role([ROL_ADMIN]))]
+UserOrAdminDep = Annotated[Usuario, Depends(require_role([ROL_POR_DEFECTO, ROL_ADMIN]))]
+
+# Para usar en `dependencies=[...]` cuando el endpoint no necesita el usuario.
+requiere_sesion = Depends(get_current_active_user)
+requiere_admin = Depends(require_role([ROL_ADMIN]))
