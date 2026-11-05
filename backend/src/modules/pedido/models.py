@@ -9,6 +9,8 @@ from sqlmodel import SQLModel, Field, Relationship
 from src.core.models import TimestampMixin, utc_now
 # Registra las tablas estadopedido y formapago, referenciadas por las FK de este módulo.
 import src.modules.catalogos.models  # noqa: F401
+# Registra la tabla usuario, referenciada por usuario_id.
+import src.modules.usuario.models  # noqa: F401
 
 
 class Pedido(TimestampMixin, table=True):
@@ -17,6 +19,8 @@ class Pedido(TimestampMixin, table=True):
     )
 
     id: Optional[int] = Field(default=None, primary_key=True, sa_type=BigInteger)
+    # Se toma de la sesión, nunca del cuerpo de la petición.
+    usuario_id: int = Field(foreign_key="usuario.id", sa_type=BigInteger)
     estado_codigo: str = Field(foreign_key="estadopedido.codigo", max_length=20)
     forma_pago_codigo: str = Field(foreign_key="formapago.codigo", max_length=30)
 
@@ -74,6 +78,8 @@ class HistorialEstadoPedido(SQLModel, table=True):
     pedido_id: int = Field(foreign_key="pedido.id", ondelete="CASCADE", sa_type=BigInteger)
     estado_desde: Optional[str] = Field(default=None, foreign_key="estadopedido.codigo", max_length=20)
     estado_hacia: str = Field(foreign_key="estadopedido.codigo", max_length=20)
+    # Usuario que hizo la transición.
+    usuario_id: Optional[int] = Field(default=None, foreign_key="usuario.id", sa_type=BigInteger)
     motivo: Optional[str] = Field(default=None, sa_type=Text)
 
     created_at: datetime = Field(

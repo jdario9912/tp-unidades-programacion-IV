@@ -65,6 +65,7 @@ class PedidoRead(TimestampRead):
     model_config = ConfigDict(from_attributes=True)
 
     id: int = Field(..., description="Identificador del pedido", examples=[1])
+    usuario_id: int = Field(..., description="Usuario que hizo el pedido", examples=[2])
     estado_codigo: str = Field(..., description="Código del estado actual", examples=["PENDIENTE"])
     forma_pago_codigo: str = Field(..., description="Código de la forma de pago", examples=["EFECTIVO"])
     subtotal: Decimal = Field(..., description="Suma de los subtotales de los ítems", examples=["1500.00"])
@@ -88,5 +89,6 @@ class HistorialEstadoPedidoRead(BaseModel):
     id: int = Field(..., examples=[1])
     estado_desde: Optional[str] = Field(None, description="Estado anterior; NULL en la transición inicial")
     estado_hacia: str = Field(..., examples=["PENDIENTE"])
+    usuario_id: Optional[int] = Field(None, description="Usuario que hizo la transición", examples=[1])
     motivo: Optional[str] = None
     created_at: datetime

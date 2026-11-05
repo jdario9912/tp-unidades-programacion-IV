@@ -53,7 +53,7 @@ class PedidoService:
         if not forma_pago.activo:
             raise FormaPagoInactivaError(codigo)
 
-    def crear(self, data: PedidoCreate) -> PedidoRead:
+    def crear(self, data: PedidoCreate, usuario_id: int) -> PedidoRead:
         with PedidoUnitOfWork(self._session) as uow:
             self._validar_forma_pago(uow, data.forma_pago_codigo)
 
@@ -67,6 +67,7 @@ class PedidoService:
                 productos[item.producto_id] = producto
 
             pedido = Pedido(
+                usuario_id=usuario_id,
                 estado_codigo=ESTADO_INICIAL,
                 forma_pago_codigo=data.forma_pago_codigo,
                 descuento=data.descuento,
@@ -101,7 +102,9 @@ class PedidoService:
             uow.pedidos.add(pedido)
 
             uow.historial.add(
-                HistorialEstadoPedido(pedido_id=pedido.id, estado_desde=None, estado_hacia=ESTADO_INICIAL)
+                HistorialEstadoPedido(
+                    pedido_id=pedido.id, estado_desde=None, estado_hacia=ESTADO_INICIAL, usuario_id=usuario_id
+                )
             )
 
             resultado = PedidoRead.model_validate(pedido)
@@ -145,7 +148,7 @@ class PedidoService:
             resultado = PedidoRead.model_validate(pedido)
         return resultado
 
-    def cambiar_estado(self, id: int, data: PedidoEstadoUpdate) -> PedidoRead:
+    def cambiar_estado(self, id: int, data: PedidoEstadoUpdate, usuario_id: int) -> PedidoRead:
         """Cambia el estado y registra la transición en el historial, en la misma transacción."""
         with PedidoUnitOfWork(self._session) as uow:
             pedido = uow.pedidos.get_by_id(id)
@@ -166,6 +169,7 @@ class PedidoService:
                     pedido_id=pedido.id,
                     estado_desde=desde,
                     estado_hacia=data.estado_hacia,
+                    usuario_id=usuario_id,
                     motivo=data.motivo,
                 )
             )
