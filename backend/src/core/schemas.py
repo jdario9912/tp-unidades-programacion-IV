@@ -15,6 +15,9 @@ class ErrorResponse(BaseModel):
 def error_responses(*status_codes: int) -> dict[int | str, dict]:
     """Genera el bloque `responses` de Swagger para los códigos de error dados."""
     descripciones = {
+        400: "Solicitud inválida",
+        401: "No autenticado o credenciales inválidas",
+        403: "Permisos insuficientes",
         404: "Recurso no encontrado",
         409: "Conflicto con el estado actual del recurso",
     }
