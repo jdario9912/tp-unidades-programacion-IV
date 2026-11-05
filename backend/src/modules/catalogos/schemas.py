@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class EstadoPedidoRead(BaseModel):
@@ -20,28 +20,9 @@ class FormaPagoRead(BaseModel):
     activo: bool = Field(..., examples=[True])
 
 
-class FormaPagoCreate(BaseModel):
-    codigo: str = Field(
-        ...,
-        min_length=1,
-        max_length=30,
-        pattern=r"^[A-Za-z0-9_]+$",
-        description="Código único; se guarda en mayúsculas. Solo letras, números y guion bajo",
-        examples=["TARJETA_CREDITO"],
-    )
-    descripcion: str = Field(..., min_length=1, max_length=80, examples=["Tarjeta de crédito"])
-    activo: bool = Field(True, description="Si es false no se puede usar en pedidos nuevos", examples=[True])
+class RolRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
 
-    @field_validator("codigo")
-    @classmethod
-    def codigo_en_mayusculas(cls, codigo: str) -> str:
-        return codigo.upper()
-
-
-class FormaPagoUpdate(BaseModel):
-    """
-    El código es la clave primaria y no se modifica.
-    `activo` se cambia con los endpoints de activar/desactivar.
-    """
-
-    descripcion: Optional[str] = Field(None, min_length=1, max_length=80, examples=["Tarjeta de crédito"])
+    id: int = Field(..., examples=[1])
+    nombre: str = Field(..., examples=["user"])
+    descripcion: Optional[str] = Field(None, examples=["Usuario de la tienda"])

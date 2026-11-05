@@ -2,7 +2,6 @@ from typing import Optional, Sequence
 
 from sqlmodel import Session, select
 
-from src.modules.pedido.models import Pedido
 from .models import EstadoPedido, FormaPago
 
 
@@ -29,17 +28,3 @@ class FormaPagoRepository:
         if not incluir_inactivas:
             statement = statement.where(FormaPago.activo)
         return self.session.exec(statement).all()
-
-    def add(self, forma_pago: FormaPago) -> FormaPago:
-        self.session.add(forma_pago)
-        self.session.flush()
-        self.session.refresh(forma_pago)
-        return forma_pago
-
-    def en_uso(self, codigo: str) -> bool:
-        statement = select(Pedido.id).where(Pedido.forma_pago_codigo == codigo).limit(1)
-        return self.session.exec(statement).first() is not None
-
-    def delete(self, forma_pago: FormaPago) -> None:
-        self.session.delete(forma_pago)
-        self.session.flush()

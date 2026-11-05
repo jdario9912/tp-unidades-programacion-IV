@@ -86,3 +86,6 @@ class RolRepository:
     def get_by_nombre(self, nombre: str) -> Optional[Rol]:
         statement = select(Rol).where(func.upper(Rol.nombre) == nombre.strip().upper())
         return self.session.exec(statement).first()
+
+    def listar(self) -> Sequence[Rol]:
+        return self.session.exec(select(Rol).order_by(Rol.id)).all()
