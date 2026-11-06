@@ -1,7 +1,8 @@
 import type { Ingrediente, IngredienteInput } from "../types/ingrediente";
 import { get, post, put, remove } from "./client";
+import { paths } from "./constantes";
 
-const URL_INGREDIENTES = "/ingredientes";
+const URL_INGREDIENTES = `/${paths.ingredientes}`;
 
 export const handleGetIngredientes = async (search = "") => {
   const params = new URLSearchParams({ limit: "50" });

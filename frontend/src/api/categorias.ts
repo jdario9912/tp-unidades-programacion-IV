@@ -1,7 +1,8 @@
 import type { Categoria, CategoriaInput } from "../types/categoria";
 import { get, post, put, remove } from "./client";
+import { paths } from "./constantes";
 
-const URL_CATEGORIAS = "/categorias";
+const URL_CATEGORIAS = `/${paths.categorias}`;
 
 export const handleGetCategorias = async (search = "") => {
   const params = new URLSearchParams({ limit: "50" });

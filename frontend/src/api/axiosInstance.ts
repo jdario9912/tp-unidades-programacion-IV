@@ -1,7 +1,8 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import { handleApiError } from "./handle-errors";
+import { paths } from "./constantes";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const API_URL = paths.apiUrl;
 
 const api = axios.create({
   baseURL: API_URL,
