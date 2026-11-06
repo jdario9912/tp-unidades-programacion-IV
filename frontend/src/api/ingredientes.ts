@@ -11,7 +11,6 @@ export const handleGetIngredientes = async (search = "") => {
   try {
     return await get<Ingrediente[]>(`${URL_INGREDIENTES}?${params}`);
   } catch (error) {
-    console.error("Error al obtener ingredientes:", error);
     throw error;
   }
 };
@@ -23,7 +22,6 @@ export const handleCrearIngrediente = async (ingrediente: IngredienteInput) => {
       ingrediente,
     );
   } catch (error) {
-    console.error("Error al crear ingrediente:", error);
     throw error;
   }
 };
@@ -35,10 +33,6 @@ export const handleActualizarIngrediente = async (ingrediente: Ingrediente) => {
       { nombre: ingrediente.nombre },
     );
   } catch (error) {
-    console.error(
-      `Error al actualizar ingrediente con ID ${ingrediente.id}:`,
-      error,
-    );
     throw error;
   }
 };
@@ -47,7 +41,6 @@ export const handleEliminarIngrediente = async (id: number) => {
   try {
     await remove(`${URL_INGREDIENTES}/${id}`);
   } catch (error) {
-    console.error(`Error al eliminar ingrediente con ID ${id}:`, error);
     throw error;
   }
 };
