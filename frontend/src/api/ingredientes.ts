@@ -1,5 +1,5 @@
 import type { Ingrediente, IngredienteInput } from "../types/ingrediente";
-import { get, post, put, remove } from "./axiosInstance";
+import { get, post, put, remove } from "./client";
 
 const URL_INGREDIENTES = "/ingredientes";
 
