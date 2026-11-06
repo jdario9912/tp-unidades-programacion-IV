@@ -3,5 +3,5 @@ export const paths = {
   categorias: "categorias",
   ingredientes: "ingredientes",
   productos: "productos",
-  auth: "auth",
+  auth: "api/v1/auth",
 } as const;
