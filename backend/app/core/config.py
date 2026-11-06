@@ -1,0 +1,55 @@
+from pydantic import computed_field
+from pydantic_settings import BaseSettings
+
+
+class Settings(BaseSettings):
+    """
+    Configuración cargada desde variables de entorno o archivo .env.
+
+    Acepta las variables individuales de Postgres y construye DATABASE_URL
+    automáticamente con @computed_field, o usa DATABASE_URL directamente
+    si se provee en el entorno.
+
+    Orden de prioridad (pydantic-settings):
+      1. Variables de entorno del sistema
+      2. Archivo .env
+      3. Defaults declarados en la clase
+    """
+
+    postgres_user: str = "user"
+    # Obligatoria: se lee del .env.
+    postgres_password: str
+    postgres_db: str = "tienda"
+    postgres_host: str = "localhost"
+    postgres_port: int = 5433
+
+    # Obligatoria: se lee del .env (SECRET_KEY).
+    secret_key: str
+    jwt_algorithm: str = "HS256"
+    access_token_expire_minutes: int = 60
+    # En True solo con HTTPS: el navegador no manda cookies Secure por HTTP.
+    cookie_secure: bool = False
+    # Con cookies no se puede usar "*": el navegador exige el origen exacto.
+    cors_origins: list[str] = ["http://localhost:5173"]
+
+    # Primer administrador, creado al iniciar si no existe.
+    admin_email: str = "admin@foodstore.com"
+    admin_password: str = "admin1234"
+
+    @computed_field
+    @property
+    def DATABASE_URL(self) -> str:
+        return (
+            f"postgresql://{self.postgres_user}:{self.postgres_password}"
+            f"@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
+        )
+
+    model_config = {
+        "env_file": ".env",
+        "env_file_encoding": "utf-8",
+        # Ignorar variables extra del .env que no sean campos declarados
+        "extra": "ignore",
+    }
+
+
+settings = Settings()

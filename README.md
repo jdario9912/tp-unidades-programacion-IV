@@ -1,4 +1,4 @@
-## Trabajo Práctico FastApi, SQLModel y React
+## Trabajo Práctico: Estado global con Zustand y Autenticación
 
 **Ejecutar el backend**
 
