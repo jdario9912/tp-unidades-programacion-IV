@@ -3,4 +3,5 @@ export const paths = {
   categorias: "categorias",
   ingredientes: "ingredientes",
   productos: "productos",
+  auth: "auth",
 } as const;
