@@ -1,5 +1,5 @@
 import type { Producto, ProductoInput } from "../types/producto";
-import { get, post, put, remove } from "./client";
+import { get, post, put, remove } from "./axiosInstance";
 
 const URL_PRODUCTOS = "/productos";
 

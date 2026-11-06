@@ -1,5 +1,5 @@
 import type { Categoria, CategoriaInput } from "../types/categoria";
-import { get, post, put, remove } from "./client";
+import { get, post, put, remove } from "./axiosInstance";
 
 const URL_CATEGORIAS = "/categorias";
 
