@@ -13,12 +13,13 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import { succeeded } from "../utils/promise";
 
 const CATEGORIAS_QUERY_KEY = "categorias";
 const CATEGORIA_QUERY_KEY = "categoria";
 
 export const useGetCategorias = (search = "") => {
-  const { data, isLoading, isFetching, isError } = useQuery<Categoria[]>({
+  const { data, isLoading, isFetching, error } = useQuery<Categoria[]>({
     // el search en la key separa la caché de cada búsqueda; las
     // invalidaciones con [CATEGORIAS_QUERY_KEY] siguen alcanzando a todas
     queryKey: [CATEGORIAS_QUERY_KEY, search],
@@ -31,17 +32,17 @@ export const useGetCategorias = (search = "") => {
     categorias: data,
     loading: isLoading,
     fetching: isFetching,
-    error: isError,
+    error: error?.message,
   };
 };
 
 export const useGetCategoriaById = (id: number) => {
-  const { data, isLoading, isError } = useQuery<Categoria>({
+  const { data, isLoading, error } = useQuery<Categoria>({
     queryKey: [CATEGORIA_QUERY_KEY, id],
     queryFn: () => handleGetCategoriaById(id),
   });
 
-  return { categoria: data, loading: isLoading, error: isError };
+  return { categoria: data, loading: isLoading, error: error?.message };
 };
 
 export const useUpdateCategoria = () => {
@@ -54,11 +55,13 @@ export const useUpdateCategoria = () => {
   });
 
   const submit = async (id: number, categoria: CategoriaInput) => {
-    return mutation.mutateAsync({
-      id,
-      nombre: categoria.nombre,
-      descripcion: categoria.descripcion,
-    });
+    return succeeded(
+      mutation.mutateAsync({
+        id,
+        nombre: categoria.nombre,
+        descripcion: categoria.descripcion,
+      }),
+    );
   };
 
   return {
@@ -80,7 +83,7 @@ export const useCreateCategoria = () => {
   });
 
   const submit = async (categoria: CategoriaInput) => {
-    return mutation.mutateAsync(categoria);
+    return succeeded(mutation.mutateAsync(categoria));
   };
 
   return {
@@ -102,7 +105,7 @@ export const useDeleteCategoria = () => {
   });
 
   const submit = async (id: number) => {
-    return mutation.mutateAsync(id);
+    return succeeded(mutation.mutateAsync(id));
   };
 
   return {

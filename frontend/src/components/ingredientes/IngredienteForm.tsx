@@ -44,14 +44,11 @@ const IngredienteForm = ({ ingrediente, cerrar }: Props) => {
         nombre: value.nombre.trim(),
       };
 
-      try {
-        if (ingrediente) await submitUpdate(ingrediente.id, input);
-        else await submitCreate(input);
-      } catch {
-        return;
-      }
+      const ok = ingrediente
+        ? await submitUpdate(ingrediente.id, input)
+        : await submitCreate(input);
 
-      cerrar();
+      if (ok) cerrar();
     },
   });
 

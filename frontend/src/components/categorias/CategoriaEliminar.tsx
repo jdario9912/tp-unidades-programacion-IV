@@ -17,13 +17,7 @@ const CategoriaEliminar = ({ idCategoria }: Props) => {
   const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      await submit(idCategoria);
-    } catch {
-      return;
-    }
-
-    cerrar();
+    if (await submit(idCategoria)) cerrar();
   };
 
   const handleCerrar = () => {

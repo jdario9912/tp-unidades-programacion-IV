@@ -41,7 +41,9 @@ const Ingredientes = () => {
       {loading ? (
         <TableSkeleton className="px-4 sm:px-0" />
       ) : error ? (
-        <CardError className="m-4">Error al cargar ingredientes.</CardError>
+        <CardError className="m-4">
+          Error al cargar ingredientes: {error}
+        </CardError>
       ) : (
         <IngredienteList ingredientes={ingredientes ?? []} />
       )}

@@ -41,7 +41,9 @@ const Productos = () => {
       {loading ? (
         <TableSkeleton className="px-4 sm:px-0" />
       ) : error ? (
-        <CardError className="m-4">Error al cargar productos.</CardError>
+        <CardError className="m-4">
+          Error al cargar productos: {error}
+        </CardError>
       ) : (
         <ProductoList productos={productos ?? []} />
       )}

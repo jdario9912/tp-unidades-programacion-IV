@@ -41,7 +41,9 @@ const Categorias = () => {
       {loading ? (
         <TableSkeleton className="px-4 sm:px-0" />
       ) : error ? (
-        <CardError className="m-4">Error al cargar categorías.</CardError>
+        <CardError className="m-4">
+          Error al cargar categorías: {error}
+        </CardError>
       ) : (
         <CategoriaList categorias={categorias ?? []} />
       )}

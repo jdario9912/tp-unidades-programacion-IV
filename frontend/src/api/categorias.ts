@@ -8,50 +8,24 @@ export const handleGetCategorias = async (search = "") => {
   const params = new URLSearchParams({ limit: "50" });
   if (search) params.set("search", search);
 
-  try {
-    return await get<Categoria[]>(`${URL_CATEGORIAS}?${params}`);
-  } catch (error) {
-    throw error;
-  }
+  return get<Categoria[]>(`${URL_CATEGORIAS}?${params}`);
 };
 
 export const handleGetCategoriaById = async (id: number) => {
-  try {
-    return await get<Categoria>(`${URL_CATEGORIAS}/${id}`);
-  } catch (error) {
-    throw error;
-  }
+  return get<Categoria>(`${URL_CATEGORIAS}/${id}`);
 };
 
 export const handleCrearCategoria = async (categoria: CategoriaInput) => {
-  try {
-    return await post<CategoriaInput, Categoria>(
-      `${URL_CATEGORIAS}`,
-      categoria,
-    );
-  } catch (error) {
-    throw error;
-  }
+  return post<CategoriaInput, Categoria>(`${URL_CATEGORIAS}`, categoria);
 };
 
 export const handleActualizarCategoria = async (categoria: Categoria) => {
-  try {
-    return await put<CategoriaInput, Categoria>(
-      `${URL_CATEGORIAS}/${categoria.id}`,
-      {
-        nombre: categoria.nombre,
-        descripcion: categoria.descripcion,
-      },
-    );
-  } catch (error) {
-    throw error;
-  }
+  return put<CategoriaInput, Categoria>(`${URL_CATEGORIAS}/${categoria.id}`, {
+    nombre: categoria.nombre,
+    descripcion: categoria.descripcion,
+  });
 };
 
 export const handleEliminarCategoria = async (id: number) => {
-  try {
-    await remove(`${URL_CATEGORIAS}/${id}`);
-  } catch (error) {
-    throw error;
-  }
+  await remove(`${URL_CATEGORIAS}/${id}`);
 };

@@ -93,25 +93,20 @@ const ProductoForm = ({ producto, cerrar }: Props) => {
           .filter(Boolean),
       };
 
-      try {
-        if (producto)
-          await submitUpdate(
+      const ok = producto
+        ? await submitUpdate(
             producto,
             input,
             value.categorias_ids,
             value.ingredientes_ids,
-          );
-        else
-          await submitCreate(
+          )
+        : await submitCreate(
             input,
             value.categorias_ids,
             value.ingredientes_ids,
           );
-      } catch {
-        return;
-      }
 
-      cerrar();
+      if (ok) cerrar();
     },
   });
 

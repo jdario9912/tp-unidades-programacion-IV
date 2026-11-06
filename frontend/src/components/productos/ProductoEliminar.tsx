@@ -17,13 +17,7 @@ const ProductoEliminar = ({ idProducto }: Props) => {
   const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      await submit(idProducto);
-    } catch {
-      return;
-    }
-
-    cerrar();
+    if (await submit(idProducto)) cerrar();
   };
 
   const handleCerrar = () => {

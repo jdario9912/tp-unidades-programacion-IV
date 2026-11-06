@@ -17,13 +17,7 @@ const IngredienteEliminar = ({ idIngrediente }: Props) => {
   const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    try {
-      await submit(idIngrediente);
-    } catch {
-      return;
-    }
-
-    cerrar();
+    if (await submit(idIngrediente)) cerrar();
   };
 
   const handleCerrar = () => {

@@ -54,14 +54,11 @@ const CategoriaForm = ({ categoria, cerrar }: Props) => {
         descripcion: value.descripcion.trim(),
       };
 
-      try {
-        if (categoria) await submitUpdate(categoria.id, input);
-        else await submitCreate(input);
-      } catch {
-        return;
-      }
+      const ok = categoria
+        ? await submitUpdate(categoria.id, input)
+        : await submitCreate(input);
 
-      cerrar();
+      if (ok) cerrar();
     },
   });
 

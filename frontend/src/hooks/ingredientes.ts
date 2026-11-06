@@ -12,11 +12,12 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import { succeeded } from "../utils/promise";
 
 const INGREDIENTES_QUERY_KEY = "ingredientes";
 
 export const useGetIngredientes = (search = "") => {
-  const { data, isLoading, isFetching, isError } = useQuery<Ingrediente[]>({
+  const { data, isLoading, isFetching, error } = useQuery<Ingrediente[]>({
     // el search en la key separa la caché de cada búsqueda; las
     // invalidaciones con [INGREDIENTES_QUERY_KEY] siguen alcanzando a todas
     queryKey: [INGREDIENTES_QUERY_KEY, search],
@@ -29,7 +30,7 @@ export const useGetIngredientes = (search = "") => {
     ingredientes: data,
     loading: isLoading,
     fetching: isFetching,
-    error: isError,
+    error: error?.message,
   };
 };
 
@@ -43,7 +44,7 @@ export const useUpdateIngrediente = () => {
   });
 
   const submit = async (id: number, ingrediente: IngredienteInput) => {
-    return mutation.mutateAsync({ id, nombre: ingrediente.nombre });
+    return succeeded(mutation.mutateAsync({ id, nombre: ingrediente.nombre }));
   };
 
   return {
@@ -65,7 +66,7 @@ export const useCreateIngrediente = () => {
   });
 
   const submit = async (ingrediente: IngredienteInput) => {
-    return mutation.mutateAsync(ingrediente);
+    return succeeded(mutation.mutateAsync(ingrediente));
   };
 
   return {
@@ -87,7 +88,7 @@ export const useDeleteIngrediente = () => {
   });
 
   const submit = async (id: number) => {
-    return mutation.mutateAsync(id);
+    return succeeded(mutation.mutateAsync(id));
   };
 
   return {

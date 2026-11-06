@@ -8,39 +8,23 @@ export const handleGetIngredientes = async (search = "") => {
   const params = new URLSearchParams({ limit: "50" });
   if (search) params.set("search", search);
 
-  try {
-    return await get<Ingrediente[]>(`${URL_INGREDIENTES}?${params}`);
-  } catch (error) {
-    throw error;
-  }
+  return get<Ingrediente[]>(`${URL_INGREDIENTES}?${params}`);
 };
 
 export const handleCrearIngrediente = async (ingrediente: IngredienteInput) => {
-  try {
-    return await post<IngredienteInput, Ingrediente>(
-      `${URL_INGREDIENTES}`,
-      ingrediente,
-    );
-  } catch (error) {
-    throw error;
-  }
+  return post<IngredienteInput, Ingrediente>(
+    `${URL_INGREDIENTES}`,
+    ingrediente,
+  );
 };
 
 export const handleActualizarIngrediente = async (ingrediente: Ingrediente) => {
-  try {
-    return await put<IngredienteInput, Ingrediente>(
-      `${URL_INGREDIENTES}/${ingrediente.id}`,
-      { nombre: ingrediente.nombre },
-    );
-  } catch (error) {
-    throw error;
-  }
+  return put<IngredienteInput, Ingrediente>(
+    `${URL_INGREDIENTES}/${ingrediente.id}`,
+    { nombre: ingrediente.nombre },
+  );
 };
 
 export const handleEliminarIngrediente = async (id: number) => {
-  try {
-    await remove(`${URL_INGREDIENTES}/${id}`);
-  } catch (error) {
-    throw error;
-  }
+  await remove(`${URL_INGREDIENTES}/${id}`);
 };

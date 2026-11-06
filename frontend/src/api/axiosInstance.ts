@@ -1,5 +1,5 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
-import { handleApiError } from "./handle-errors";
+import { handleApiError, toApiError } from "./handle-errors";
 import { paths } from "./constantes";
 
 const API_URL = paths.apiUrl;
@@ -23,7 +23,8 @@ api.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
     handleApiError(error);
-    return Promise.reject(error);
+    // los consumidores reciben un ApiError con el mensaje ya extraído
+    return Promise.reject(toApiError(error));
   },
 );
 

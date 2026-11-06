@@ -16,11 +16,12 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import { succeeded } from "../utils/promise";
 
 const PRODUCTOS_QUERY_KEY = "productos";
 
 export const useGetProductos = (search = "") => {
-  const { data, isLoading, isFetching, isError } = useQuery<Producto[]>({
+  const { data, isLoading, isFetching, error } = useQuery<Producto[]>({
     // el search en la key separa la caché de cada búsqueda; las
     // invalidaciones con [PRODUCTOS_QUERY_KEY] siguen alcanzando a todas
     queryKey: [PRODUCTOS_QUERY_KEY, search],
@@ -33,7 +34,7 @@ export const useGetProductos = (search = "") => {
     productos: data,
     loading: isLoading,
     fetching: isFetching,
-    error: isError,
+    error: error?.message,
   };
 };
 
@@ -84,7 +85,9 @@ export const useCreateProducto = () => {
     categoriasIds: number[],
     ingredientesIds: number[],
   ) => {
-    return mutation.mutateAsync({ input, categoriasIds, ingredientesIds });
+    return succeeded(
+      mutation.mutateAsync({ input, categoriasIds, ingredientesIds }),
+    );
   };
 
   return {
@@ -152,12 +155,14 @@ export const useUpdateProducto = () => {
     categoriasIds: number[],
     ingredientesIds: number[],
   ) => {
-    return mutation.mutateAsync({
-      producto,
-      input,
-      categoriasIds,
-      ingredientesIds,
-    });
+    return succeeded(
+      mutation.mutateAsync({
+        producto,
+        input,
+        categoriasIds,
+        ingredientesIds,
+      }),
+    );
   };
 
   return {
@@ -179,7 +184,7 @@ export const useDeleteProducto = () => {
   });
 
   const submit = async (id: number) => {
-    return mutation.mutateAsync(id);
+    return succeeded(mutation.mutateAsync(id));
   };
 
   return {
