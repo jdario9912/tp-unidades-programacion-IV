@@ -5,17 +5,7 @@ import Label from "../ui/label";
 import Input from "../ui/input";
 import FieldError from "../ui/field-error";
 import CardError from "../ui/card-error";
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const validarEmail = ({ value }: { value: string }) => {
-  const email = value.trim();
-
-  if (!email) return "El email es obligatorio";
-  if (!EMAIL_REGEX.test(email)) return "El email no es válido";
-
-  return undefined;
-};
+import { validarEmail } from "../../utils/validaciones";
 
 const validarPassword = ({ value }: { value: string }) => {
   if (!value) return "La contraseña es obligatoria";
