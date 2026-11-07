@@ -10,6 +10,6 @@ export type UsuarioRegister = {
   nombre: string;
   apellido: string;
   email: string;
-  celular: string;
+  celular?: string;
   password: string;
 };
