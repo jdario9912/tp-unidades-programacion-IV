@@ -9,6 +9,7 @@ const Navbar = () => {
   const enCategorias = useMatch("/categorias/*");
   const enIngredientes = useMatch("/ingredientes/*");
   const enLogin = useMatch("/login");
+  const enRegister = useMatch("/register");
 
   const usuario = useUsuario();
   const logout = useLogout();
@@ -67,7 +68,8 @@ const Navbar = () => {
           </ActionButton>
         </nav>
       ) : (
-        !enLogin && (
+        !enLogin &&
+        !enRegister && (
           <LinkButton to="/login" variant="outline">
             Iniciar sesión
           </LinkButton>
