@@ -1,10 +1,10 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useAuthStore } from "../../store/authStore";
+import { useAuthLoading, useUsuario } from "../../hooks/auth";
 import Spinner from "../ui/spinner";
 
 const ProtectedRoute = () => {
-  const usuario = useAuthStore((s) => s.usuario);
-  const loading = useAuthStore((s) => s.loading);
+  const usuario = useUsuario();
+  const loading = useAuthLoading();
   const location = useLocation();
 
   // con un usuario persistido se renderiza enseguida mientras checkSession

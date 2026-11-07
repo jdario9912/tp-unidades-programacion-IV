@@ -6,6 +6,7 @@ import MainLayout from "./components/MainLayout";
 import RoutesApp from "./components/RoutesApp";
 import { ApiError, setUnauthorizedHandler } from "./api/handle-errors";
 import { useAuthStore } from "./store/authStore";
+import { useCheckSession } from "./hooks/auth";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,7 +28,7 @@ setUnauthorizedHandler(() => {
 });
 
 function App() {
-  const checkSession = useAuthStore((s) => s.checkSession);
+  const checkSession = useCheckSession();
 
   useEffect(() => {
     checkSession();

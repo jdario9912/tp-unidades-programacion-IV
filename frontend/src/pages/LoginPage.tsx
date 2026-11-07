@@ -1,11 +1,11 @@
 import { Navigate, useLocation } from "react-router-dom";
 import LoginForm from "../components/auth/LoginForm";
-import { useAuthStore } from "../store/authStore";
+import { useUsuario } from "../hooks/auth";
 
 type LocationState = { from?: string } | null;
 
 const LoginPage = () => {
-  const usuario = useAuthStore((s) => s.usuario);
+  const usuario = useUsuario();
   const location = useLocation();
   // ProtectedRoute guarda la ruta que se quiso visitar para volver después del login
   const destino = (location.state as LocationState)?.from ?? "/";

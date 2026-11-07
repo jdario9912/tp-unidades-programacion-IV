@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
-import { useAuthStore } from "../../store/authStore";
+import { useLogin } from "../../hooks/auth";
 import Label from "../ui/label";
 import Input from "../ui/input";
 import FieldError from "../ui/field-error";
@@ -24,7 +24,7 @@ const validarPassword = ({ value }: { value: string }) => {
 };
 
 const LoginForm = () => {
-  const login = useAuthStore((s) => s.login);
+  const login = useLogin();
   // login no es una mutation de react-query, el error del servidor se guarda acá
   const [serverError, setServerError] = useState<string>();
 

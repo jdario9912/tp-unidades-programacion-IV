@@ -1,6 +1,6 @@
 import { useMatch } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { useAuthStore } from "../store/authStore";
+import { useLogout, useUsuario } from "../hooks/auth";
 import ActionButton from "./ui/action-button";
 import LinkButton from "./ui/link-button";
 
@@ -10,8 +10,8 @@ const Navbar = () => {
   const enIngredientes = useMatch("/ingredientes/*");
   const enLogin = useMatch("/login");
 
-  const usuario = useAuthStore((s) => s.usuario);
-  const logout = useAuthStore((s) => s.logout);
+  const usuario = useUsuario();
+  const logout = useLogout();
   const queryClient = useQueryClient();
 
   // ProtectedRoute redirige al login cuando usuario pasa a null
