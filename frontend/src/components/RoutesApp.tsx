@@ -5,12 +5,14 @@ import LoginPage from "../pages/LoginPage";
 import NotFound from "../pages/NotFound";
 import Productos from "../pages/Productos";
 import RegisterPage from "../pages/RegisterPage";
+import UnauthorizedPage from "../pages/UnauthorizedPage";
 import ProtectedRoute from "./auth/ProtectedRoute";
 
 const RoutesApp = () => (
   <Routes>
     <Route path="/login" element={<LoginPage />} />
     <Route path="/register" element={<RegisterPage />} />
+    <Route path="/unauthorized" element={<UnauthorizedPage />} />
     {/* todos los recursos del backend requieren sesión */}
     <Route element={<ProtectedRoute />}>
       <Route path="/" element={<Navigate to="categorias" />} />
