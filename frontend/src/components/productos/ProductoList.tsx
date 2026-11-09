@@ -48,6 +48,22 @@ const columns: Array<ColumnDef<typeof features, Producto>> = [
     ),
   },
   {
+    id: "categorias",
+    accessorFn: (producto) =>
+      producto.categorias.map((categoria) => categoria.nombre).join(", "),
+    header: "Categorías",
+    enableSorting: false,
+    cell: (info) => (
+      // en mobile se corta a una línea; el texto completo queda en el title
+      <div
+        title={info.getValue<string>()}
+        className="max-w-48 truncate px-4 py-2 text-left first-letter:capitalize sm:max-w-none sm:whitespace-normal"
+      >
+        {info.getValue<string>() || "-"}
+      </div>
+    ),
+  },
+  {
     id: "precio_base",
     accessorKey: "precio_base",
     header: "Precio",
