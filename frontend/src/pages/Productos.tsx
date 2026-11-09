@@ -6,6 +6,7 @@ import CardError from "../components/ui/card-error";
 import Input from "../components/ui/input";
 import Label from "../components/ui/label";
 import { useDebounce } from "../hooks/debounce";
+import { useEsAdmin } from "../hooks/auth";
 import Spinner from "../components/ui/spinner";
 import TableSkeleton from "../components/ui/table-skeleton";
 
@@ -13,6 +14,7 @@ const Productos = () => {
   const [busqueda, setBusqueda] = useState("");
   const search = useDebounce(busqueda.trim());
   const { productos, error, loading, fetching } = useGetProductos(search);
+  const esAdmin = useEsAdmin();
 
   return (
     <>
@@ -36,7 +38,7 @@ const Productos = () => {
             }
           />
         </div>
-        <ProductoModal />
+        {esAdmin && <ProductoModal />}
       </div>
       {loading ? (
         <TableSkeleton className="px-4 sm:px-0" />

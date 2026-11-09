@@ -8,6 +8,7 @@ import {
 import type { Categoria } from "../../types/categoria";
 import CategoriaModal from "./CategoriaModal";
 import CategoriaEliminar from "./CategoriaEliminar";
+import { useEsAdmin } from "../../hooks/auth";
 
 type Props = {
   categorias: Categoria[];
@@ -76,11 +77,17 @@ const columns: Array<ColumnDef<typeof features, Categoria>> = [
   },
 ];
 
+// sin rol admin no se muestran editar ni eliminar
+const columnsSinAcciones = columns.filter((c) => c.id !== "acciones");
+
 const CategoriaList = ({ categorias }: Props) => {
+  const esAdmin = useEsAdmin();
+  const columnasVisibles = esAdmin ? columns : columnsSinAcciones;
+
   const table = useTable({
     key: "table-categorias",
     features,
-    columns,
+    columns: columnasVisibles,
     data: categorias,
     // id de la entidad como key: con el índice, al borrar una fila React
     // reutiliza su componente (y su modal abierto) para la fila siguiente
@@ -141,7 +148,10 @@ const CategoriaList = ({ categorias }: Props) => {
         <tbody>
           {categorias.length === 0 ? (
             <tr>
-              <td colSpan={columns.length} className="px-4 py-2 text-center">
+              <td
+                colSpan={columnasVisibles.length}
+                className="px-4 py-2 text-center"
+              >
                 No hay categorías disponibles.
               </td>
             </tr>

@@ -8,6 +8,7 @@ import {
 import type { Ingrediente } from "../../types/ingrediente";
 import IngredienteModal from "./IngredienteModal";
 import IngredienteEliminar from "./IngredienteEliminar";
+import { useEsAdmin } from "../../hooks/auth";
 
 type Props = {
   ingredientes: Ingrediente[];
@@ -61,11 +62,17 @@ const columns: Array<ColumnDef<typeof features, Ingrediente>> = [
   },
 ];
 
+// sin rol admin no se muestran editar ni eliminar
+const columnsSinAcciones = columns.filter((c) => c.id !== "acciones");
+
 const IngredienteList = ({ ingredientes }: Props) => {
+  const esAdmin = useEsAdmin();
+  const columnasVisibles = esAdmin ? columns : columnsSinAcciones;
+
   const table = useTable({
     key: "table-ingredientes",
     features,
-    columns,
+    columns: columnasVisibles,
     data: ingredientes,
     // id de la entidad como key: con el índice, al borrar una fila React
     // reutiliza su componente (y su modal abierto) para la fila siguiente
@@ -126,7 +133,10 @@ const IngredienteList = ({ ingredientes }: Props) => {
         <tbody>
           {ingredientes.length === 0 ? (
             <tr>
-              <td colSpan={columns.length} className="px-4 py-2 text-center">
+              <td
+                colSpan={columnasVisibles.length}
+                className="px-4 py-2 text-center"
+              >
                 No hay ingredientes disponibles.
               </td>
             </tr>
