@@ -5,9 +5,9 @@ import ActionButton from "./ui/action-button";
 import LinkButton from "./ui/link-button";
 
 const Navbar = () => {
-  const enProductos = useMatch("/productos/*");
-  const enCategorias = useMatch("/categorias/*");
-  const enIngredientes = useMatch("/ingredientes/*");
+  const enProductos = useMatch("/products/*");
+  const enCategorias = useMatch("/categories/*");
+  const enIngredientes = useMatch("/ingredients/*");
   const enLogin = useMatch("/login");
   const enRegister = useMatch("/register");
 
@@ -40,7 +40,7 @@ const Navbar = () => {
           <ul className="flex">
             <li>
               <LinkButton
-                to="/productos"
+                to="/products"
                 variant={enProductos ? "outline" : "ghost"}
               >
                 Productos
@@ -48,7 +48,7 @@ const Navbar = () => {
             </li>
             <li>
               <LinkButton
-                to="/categorias"
+                to="/categories"
                 variant={enCategorias ? "outline" : "ghost"}
               >
                 Categorias
@@ -56,7 +56,7 @@ const Navbar = () => {
             </li>
             <li>
               <LinkButton
-                to="/ingredientes"
+                to="/ingredients"
                 variant={enIngredientes ? "outline" : "ghost"}
               >
                 Ingredientes

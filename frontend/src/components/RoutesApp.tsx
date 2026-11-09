@@ -15,10 +15,10 @@ const RoutesApp = () => (
     <Route path="/unauthorized" element={<UnauthorizedPage />} />
     {/* todos los recursos del backend requieren sesión */}
     <Route element={<ProtectedRoute />}>
-      <Route path="/" element={<Navigate to="categorias" />} />
-      <Route path="/categorias" element={<Categorias />} />
-      <Route path="/productos" element={<Productos />} />
-      <Route path="/ingredientes" element={<Ingredientes />} />
+      <Route path="/" element={<Navigate to="/categories" replace />} />
+      <Route path="/categories" element={<Categorias />} />
+      <Route path="/products" element={<Productos />} />
+      <Route path="/ingredients" element={<Ingredientes />} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>
