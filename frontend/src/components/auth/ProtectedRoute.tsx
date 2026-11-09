@@ -2,7 +2,11 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuthLoading, useUsuario } from "../../hooks/auth";
 import Spinner from "../ui/spinner";
 
-const ProtectedRoute = () => {
+type Props = {
+  allowedRoles?: string[];
+};
+
+const ProtectedRoute = ({ allowedRoles }: Props) => {
   const usuario = useUsuario();
   const loading = useAuthLoading();
   const location = useLocation();
@@ -18,6 +22,10 @@ const ProtectedRoute = () => {
 
   if (!usuario)
     return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+
+  // sin allowedRoles alcanza con tener sesión
+  if (allowedRoles && !allowedRoles.some((rol) => usuario.roles.includes(rol)))
+    return <Navigate to="/unauthorized" replace />;
 
   return <Outlet />;
 };
