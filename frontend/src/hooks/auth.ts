@@ -6,7 +6,10 @@ import { succeeded } from "../utils/promise";
 
 export const useUsuario = () => useAuthStore((s) => s.usuario);
 
-export const useAuthLoading = () => useAuthStore((s) => s.loading);
+export const useEsAdmin = () =>
+  useAuthStore((s) => s.usuario?.roles.includes("admin") ?? false);
+
+export const useAuthLoading =() => useAuthStore((s) => s.loading);
 
 export const useLogin = () => useAuthStore((s) => s.login);
 
