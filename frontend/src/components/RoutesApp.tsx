@@ -6,6 +6,7 @@ import NotFound from "../pages/NotFound";
 import Productos from "../pages/Productos";
 import RegisterPage from "../pages/RegisterPage";
 import UnauthorizedPage from "../pages/UnauthorizedPage";
+import Usuarios from "../pages/Usuarios";
 import ProtectedRoute from "./auth/ProtectedRoute";
 
 const RoutesApp = () => (
@@ -19,6 +20,9 @@ const RoutesApp = () => (
       <Route path="/categories" element={<Categorias />} />
       <Route path="/products" element={<Productos />} />
       <Route path="/ingredients" element={<Ingredientes />} />
+    </Route>
+    <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
+      <Route path="/admin/users" element={<Usuarios />} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>

@@ -1,6 +1,6 @@
 import { useMatch } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { useLogout, useUsuario } from "../hooks/auth";
+import { useEsAdmin, useLogout, useUsuario } from "../hooks/auth";
 import ActionButton from "./ui/action-button";
 import LinkButton from "./ui/link-button";
 
@@ -8,10 +8,12 @@ const Navbar = () => {
   const enProductos = useMatch("/products/*");
   const enCategorias = useMatch("/categories/*");
   const enIngredientes = useMatch("/ingredients/*");
+  const enUsuarios = useMatch("/admin/users/*");
   const enLogin = useMatch("/login");
   const enRegister = useMatch("/register");
 
   const usuario = useUsuario();
+  const esAdmin = useEsAdmin();
   const logout = useLogout();
   const queryClient = useQueryClient();
 
@@ -65,6 +67,16 @@ const Navbar = () => {
                 Ingredientes
               </LinkButton>
             </li>
+            {esAdmin && (
+              <li>
+                <LinkButton
+                  to="/admin/users"
+                  variant={enUsuarios ? "outline" : "ghost"}
+                >
+                  Usuarios
+                </LinkButton>
+              </li>
+            )}
           </ul>
           <ActionButton variant="primary" onClick={handleLogout}>
             Cerrar sesión
