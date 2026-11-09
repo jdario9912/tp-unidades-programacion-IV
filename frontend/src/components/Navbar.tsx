@@ -32,6 +32,9 @@ const Navbar = () => {
         {usuario && (
           <span className="text-sm">
             {usuario.nombre} {usuario.apellido}
+            <span className="ml-2 rounded border border-divider px-1.5 py-0.5 text-xs">
+              {usuario.roles.join(", ")}
+            </span>
           </span>
         )}
       </div>
