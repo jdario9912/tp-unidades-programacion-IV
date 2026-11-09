@@ -1,4 +1,8 @@
-import type { UsuarioAuth, UsuarioRegister } from "../types/auth.types";
+import type {
+  UsuarioAdmin,
+  UsuarioAuth,
+  UsuarioRegister,
+} from "../types/auth.types";
 import { get, post } from "./client";
 import { paths } from "./constantes";
 
@@ -27,4 +31,29 @@ export const handleRegister = async (
 
 export const handleLogout = async (): Promise<void> => {
   return post<Record<string, never>, void>(`${URL_AUTH}/logout`, {});
+};
+
+export const handleGetUsuarios = async (search = "") => {
+  // incluye a los desactivados para poder volver a activarlos
+  const params = new URLSearchParams({
+    limit: "50",
+    incluir_inactivos: "true",
+  });
+  if (search) params.set("search", search);
+
+  return get<UsuarioAdmin[]>(`${URL_AUTH}/admin/usuarios?${params}`);
+};
+
+export const handleActivarUsuario = async (id: number) => {
+  return post<Record<string, never>, UsuarioAdmin>(
+    `${URL_AUTH}/admin/usuarios/${id}/activar`,
+    {},
+  );
+};
+
+export const handleDesactivarUsuario = async (id: number) => {
+  return post<Record<string, never>, UsuarioAdmin>(
+    `${URL_AUTH}/admin/usuarios/${id}/desactivar`,
+    {},
+  );
 };

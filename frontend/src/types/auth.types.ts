@@ -13,3 +13,8 @@ export type UsuarioRegister = {
   celular?: string;
   password: string;
 };
+
+export type UsuarioAdmin = UsuarioAuth & {
+  activo: boolean;
+  deleted_at: string | null;
+};
