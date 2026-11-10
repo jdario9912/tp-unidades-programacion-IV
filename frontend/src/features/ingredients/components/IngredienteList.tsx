@@ -5,10 +5,10 @@ import {
   useTable,
   createSortedRowModel,
 } from "@tanstack/react-table";
-import type { Ingrediente } from "../../types/ingrediente";
+import type { Ingrediente } from "@/features/ingredients/types/ingrediente";
 import IngredienteModal from "./IngredienteModal";
 import IngredienteEliminar from "./IngredienteEliminar";
-import { useEsAdmin } from "../../hooks/auth";
+import { useEsAdmin } from "@/features/auth";
 
 type Props = {
   ingredientes: Ingrediente[];

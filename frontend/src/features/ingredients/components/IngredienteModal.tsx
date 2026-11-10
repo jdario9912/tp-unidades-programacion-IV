@@ -1,7 +1,7 @@
-import { useModal } from "../../hooks/modal";
-import type { Ingrediente } from "../../types/ingrediente";
-import { Modal } from "../ui/modal";
-import ActionButton from "../ui/action-button";
+import { useModal } from "@/shared/hooks/modal";
+import type { Ingrediente } from "@/features/ingredients/types/ingrediente";
+import { Modal } from "@/shared/components/ui/modal";
+import ActionButton from "@/shared/components/ui/action-button";
 import IngredienteForm from "./IngredienteForm";
 
 type Props = {

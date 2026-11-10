@@ -2,13 +2,13 @@ import type { ChangeEvent, SyntheticEvent } from "react";
 import {
   useCreateIngrediente,
   useUpdateIngrediente,
-} from "../../hooks/ingredientes";
-import type { Ingrediente } from "../../types/ingrediente";
-import Label from "../ui/label";
-import Input from "../ui/input";
-import ActionButton from "../ui/action-button";
-import FieldError from "../ui/field-error";
-import CardError from "../ui/card-error";
+} from "@/features/ingredients/hooks/useIngredients";
+import type { Ingrediente } from "@/features/ingredients/types/ingrediente";
+import Label from "@/shared/components/ui/label";
+import Input from "@/shared/components/ui/input";
+import ActionButton from "@/shared/components/ui/action-button";
+import FieldError from "@/shared/components/ui/field-error";
+import CardError from "@/shared/components/ui/card-error";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
 
 type Props = {

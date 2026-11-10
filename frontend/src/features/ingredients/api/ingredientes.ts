@@ -1,6 +1,6 @@
-import type { Ingrediente, IngredienteInput } from "../types/ingrediente";
-import { get, post, put, remove } from "./client";
-import { paths } from "./constantes";
+import type { Ingrediente, IngredienteInput } from "@/features/ingredients/types/ingrediente";
+import { get, post, put, remove } from "@/shared/api/client";
+import { paths } from "@/shared/api/constantes";
 
 const URL_INGREDIENTES = `/${paths.ingredientes}`;
 

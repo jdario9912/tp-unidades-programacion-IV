@@ -1,10 +1,10 @@
-import type { Ingrediente, IngredienteInput } from "../types/ingrediente";
+import type { Ingrediente, IngredienteInput } from "@/features/ingredients/types/ingrediente";
 import {
   handleActualizarIngrediente,
   handleCrearIngrediente,
   handleEliminarIngrediente,
   handleGetIngredientes,
-} from "../api/ingredientes";
+} from "@/features/ingredients/api/ingredientes";
 
 import {
   keepPreviousData,
@@ -12,7 +12,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { succeeded } from "../utils/promise";
+import { succeeded } from "@/shared/utils/promise";
 
 const INGREDIENTES_QUERY_KEY = "ingredientes";
 
