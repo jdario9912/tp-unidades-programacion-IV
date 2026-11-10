@@ -1,6 +1,5 @@
 import { useMatch } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
-import { useEsAdmin, useLogout, useUsuario } from "@/features/auth";
+import { useAuth } from "@/features/auth";
 import ActionButton from "@/shared/components/ui/action-button";
 import LinkButton from "@/shared/components/ui/link-button";
 
@@ -12,16 +11,7 @@ const Navbar = () => {
   const enLogin = useMatch("/login");
   const enRegister = useMatch("/register");
 
-  const usuario = useUsuario();
-  const esAdmin = useEsAdmin();
-  const logout = useLogout();
-  const queryClient = useQueryClient();
-
-  // ProtectedRoute redirige al login cuando usuario pasa a null
-  const handleLogout = async () => {
-    await logout();
-    queryClient.clear();
-  };
+  const { usuario, esAdmin, logout } = useAuth();
 
   return (
     <header className="flex justify-between items-center border-b border-divider px-4 md:px-6 lg:px-8">
@@ -78,7 +68,7 @@ const Navbar = () => {
               </li>
             )}
           </ul>
-          <ActionButton variant="primary" onClick={handleLogout}>
+          <ActionButton variant="primary" onClick={logout}>
             Cerrar sesión
           </ActionButton>
         </nav>

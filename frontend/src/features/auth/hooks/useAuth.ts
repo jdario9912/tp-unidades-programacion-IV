@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { handleRegister } from "@/features/auth/api/auth";
 import { useAuthStore } from "@/features/auth/store/authStore";
 import type { UsuarioRegister } from "@/features/auth/types/auth.types";
@@ -15,7 +15,27 @@ export const useLogin = () => useAuthStore((s) => s.login);
 
 export const useCheckAuth = () => useAuthStore((s) => s.checkAuth);
 
-export const useLogout = () => useAuthStore((s) => s.logout);
+export const useLogout = () => {
+  const logout = useAuthStore((s) => s.logout);
+  const queryClient = useQueryClient();
+
+  // ProtectedRoute redirige al login cuando usuario pasa a null
+  return async () => {
+    await logout();
+    queryClient.clear();
+  };
+};
+
+// lectura de la sesión e inicio y cierre en un solo hook
+export const useAuth = () => {
+  const usuario = useUsuario();
+  const esAdmin = useEsAdmin();
+  const checking = useAuthChecking();
+  const login = useLogin();
+  const logout = useLogout();
+
+  return { usuario, esAdmin, checking, login, logout };
+};
 
 export const useRegister = () => {
   const mutation = useMutation({
