@@ -1,4 +1,4 @@
-## Trabajo Práctico: Estado global con Zustand y Autenticación
+## Trabajo Práctico: Arquitectura por features y rutas protegidas
 
 **Ejecutar el backend**
 
