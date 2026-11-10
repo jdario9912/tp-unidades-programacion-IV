@@ -4,6 +4,7 @@ export {
   useCreateIngrediente,
   useDeleteIngrediente,
   useGetIngredientes,
+  useIngredients,
   useUpdateIngrediente,
 } from "./hooks/useIngredients";
 export type { Ingrediente, IngredienteInput } from "./types/ingrediente";

@@ -13,6 +13,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { succeeded } from "@/shared/utils/promise";
+import { notificarError, notificarExito } from "@/shared/utils/notificaciones";
 
 const INGREDIENTES_QUERY_KEY = "ingredientes";
 
@@ -40,7 +41,9 @@ export const useUpdateIngrediente = () => {
     mutationFn: handleActualizarIngrediente,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [INGREDIENTES_QUERY_KEY] });
+      notificarExito("Ingrediente actualizado");
     },
+    onError: notificarError,
   });
 
   const submit = async (id: number, ingrediente: IngredienteInput) => {
@@ -62,7 +65,9 @@ export const useCreateIngrediente = () => {
     mutationFn: handleCrearIngrediente,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [INGREDIENTES_QUERY_KEY] });
+      notificarExito("Ingrediente creado");
     },
+    onError: notificarError,
   });
 
   const submit = async (ingrediente: IngredienteInput) => {
@@ -84,7 +89,9 @@ export const useDeleteIngrediente = () => {
     mutationFn: handleEliminarIngrediente,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [INGREDIENTES_QUERY_KEY] });
+      notificarExito("Ingrediente eliminado");
     },
+    onError: notificarError,
   });
 
   const submit = async (id: number) => {
@@ -97,4 +104,14 @@ export const useDeleteIngrediente = () => {
     submit,
     reset: mutation.reset,
   };
+};
+
+// CRUD completo de ingredientes: listado y mutaciones de alta, edición y baja
+export const useIngredients = (search = "") => {
+  const listado = useGetIngredientes(search);
+  const crear = useCreateIngrediente();
+  const actualizar = useUpdateIngrediente();
+  const eliminar = useDeleteIngrediente();
+
+  return { ...listado, crear, actualizar, eliminar };
 };

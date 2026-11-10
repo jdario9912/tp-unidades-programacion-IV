@@ -1,6 +1,6 @@
 import IngredienteList from "@/features/ingredients/components/IngredienteList";
 import IngredienteModal from "@/features/ingredients/components/IngredienteModal";
-import { useGetIngredientes } from "@/features/ingredients/hooks/useIngredients";
+import { useIngredients } from "@/features/ingredients/hooks/useIngredients";
 import { useState, type ChangeEvent } from "react";
 import CardError from "@/shared/components/ui/card-error";
 import Input from "@/shared/components/ui/input";
@@ -13,7 +13,7 @@ import TableSkeleton from "@/shared/components/ui/table-skeleton";
 const Ingredientes = () => {
   const [busqueda, setBusqueda] = useState("");
   const search = useDebounce(busqueda.trim());
-  const { ingredientes, error, loading, fetching } = useGetIngredientes(search);
+  const { ingredientes, error, loading, fetching } = useIngredients(search);
   const esAdmin = useEsAdmin();
 
   return (
