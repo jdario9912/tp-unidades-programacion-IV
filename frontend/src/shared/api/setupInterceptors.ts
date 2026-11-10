@@ -1,5 +1,6 @@
 import { AxiosError, type InternalAxiosRequestConfig } from "axios";
 import { useAuthStore } from "@/features/auth";
+import { useNotificationStore } from "@/store/notificationStore";
 import api from "./api";
 import { paths } from "./constantes";
 import { handleApiError, toApiError } from "./handle-errors";
@@ -29,6 +30,12 @@ api.interceptors.response.use(
       useAuthStore.getState().clearSession();
       queryClient.clear();
     }
+
+    // un 403 no cierra la sesión: solo se avisa
+    if (status === 403)
+      useNotificationStore
+        .getState()
+        .showNotification("Acceso denegado", "error");
 
     // los consumidores reciben un ApiError con el mensaje ya extraído
     return Promise.reject(toApiError(error));

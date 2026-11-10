@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useCheckAuth } from "@/features/auth";
 import AppRouter from "@/routes/AppRouter";
+import Toast from "@/shared/components/Toast";
 
 function App() {
   const checkAuth = useCheckAuth();
@@ -10,7 +11,12 @@ function App() {
     checkAuth();
   }, [checkAuth]);
 
-  return <AppRouter />;
+  return (
+    <>
+      <AppRouter />
+      <Toast />
+    </>
+  );
 }
 
 export default App;
