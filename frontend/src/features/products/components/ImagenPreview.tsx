@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { esUrlValida } from "../../utils/url";
+import { esUrlValida } from "@/shared/utils/url";
 
 type Props = {
   url: string;

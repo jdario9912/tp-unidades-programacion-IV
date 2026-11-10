@@ -1,10 +1,10 @@
 import type { SyntheticEvent } from "react";
-import { useModal } from "../../hooks/modal";
-import ActionButton from "../ui/action-button";
-import Input from "../ui/input";
-import { Modal } from "../ui/modal";
-import CardError from "../ui/card-error";
-import { useDeleteProducto } from "../../hooks/productos";
+import { useModal } from "@/shared/hooks/modal";
+import ActionButton from "@/shared/components/ui/action-button";
+import Input from "@/shared/components/ui/input";
+import { Modal } from "@/shared/components/ui/modal";
+import CardError from "@/shared/components/ui/card-error";
+import { useDeleteProducto } from "@/features/products/hooks/useProducts";
 
 type Props = {
   idProducto: number;

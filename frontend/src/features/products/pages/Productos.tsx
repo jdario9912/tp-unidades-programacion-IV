@@ -1,14 +1,14 @@
-import ProductoList from "../components/productos/ProductoList";
-import ProductoModal from "../components/productos/ProductoModal";
-import { useGetProductos } from "../hooks/productos";
+import ProductoList from "@/features/products/components/ProductoList";
+import ProductoModal from "@/features/products/components/ProductoModal";
+import { useGetProductos } from "@/features/products/hooks/useProducts";
 import { useState, type ChangeEvent } from "react";
-import CardError from "../components/ui/card-error";
-import Input from "../components/ui/input";
-import Label from "../components/ui/label";
-import { useDebounce } from "../hooks/debounce";
-import { useEsAdmin } from "../hooks/auth";
-import Spinner from "../components/ui/spinner";
-import TableSkeleton from "../components/ui/table-skeleton";
+import CardError from "@/shared/components/ui/card-error";
+import Input from "@/shared/components/ui/input";
+import Label from "@/shared/components/ui/label";
+import { useDebounce } from "@/shared/hooks/debounce";
+import { useEsAdmin } from "@/features/auth";
+import Spinner from "@/shared/components/ui/spinner";
+import TableSkeleton from "@/shared/components/ui/table-skeleton";
 
 const Productos = () => {
   const [busqueda, setBusqueda] = useState("");

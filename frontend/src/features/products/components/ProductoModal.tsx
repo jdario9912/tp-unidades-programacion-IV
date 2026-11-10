@@ -1,7 +1,7 @@
-import { useModal } from "../../hooks/modal";
-import type { Producto } from "../../types/producto";
-import { Modal } from "../ui/modal";
-import ActionButton from "../ui/action-button";
+import { useModal } from "@/shared/hooks/modal";
+import type { Producto } from "@/features/products/types/producto";
+import { Modal } from "@/shared/components/ui/modal";
+import ActionButton from "@/shared/components/ui/action-button";
 import ProductoForm from "./ProductoForm";
 
 type Props = {

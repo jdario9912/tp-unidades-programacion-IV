@@ -1,4 +1,4 @@
-import type { Producto, ProductoInput } from "../types/producto";
+import type { Producto, ProductoInput } from "@/features/products/types/producto";
 import {
   handleActualizarProducto,
   handleAsignarCategoria,
@@ -8,7 +8,7 @@ import {
   handleGetProductos,
   handleQuitarCategoria,
   handleQuitarIngrediente,
-} from "../api/productos";
+} from "@/features/products/api/productos";
 
 import {
   keepPreviousData,
@@ -16,7 +16,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { succeeded } from "../utils/promise";
+import { succeeded } from "@/shared/utils/promise";
 
 const PRODUCTOS_QUERY_KEY = "productos";
 

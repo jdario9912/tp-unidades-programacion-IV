@@ -1,16 +1,16 @@
 import type { ChangeEvent, SyntheticEvent } from "react";
-import { useCreateProducto, useUpdateProducto } from "../../hooks/productos";
-import { useGetCategorias } from "../../hooks/categorias";
-import { useGetIngredientes } from "../../hooks/ingredientes";
-import type { Producto, ProductoFormValues } from "../../types/producto";
-import Label from "../ui/label";
-import Input from "../ui/input";
-import ActionButton from "../ui/action-button";
-import FieldError from "../ui/field-error";
-import CardError from "../ui/card-error";
-import Spinner from "../ui/spinner";
+import { useCreateProducto, useUpdateProducto } from "@/features/products/hooks/useProducts";
+import { useGetCategorias } from "@/features/categories";
+import { useGetIngredientes } from "@/features/ingredients";
+import type { Producto, ProductoFormValues } from "@/features/products/types/producto";
+import Label from "@/shared/components/ui/label";
+import Input from "@/shared/components/ui/input";
+import ActionButton from "@/shared/components/ui/action-button";
+import FieldError from "@/shared/components/ui/field-error";
+import CardError from "@/shared/components/ui/card-error";
+import Spinner from "@/shared/components/ui/spinner";
 import ImagenPreview from "./ImagenPreview";
-import { esUrlValida } from "../../utils/url";
+import { esUrlValida } from "@/shared/utils/url";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
 
 type Props = {

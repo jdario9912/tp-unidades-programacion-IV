@@ -1,6 +1,6 @@
-import type { Producto, ProductoInput } from "../types/producto";
-import { get, post, put, remove } from "./client";
-import { paths } from "./constantes";
+import type { Producto, ProductoInput } from "@/features/products/types/producto";
+import { get, post, put, remove } from "@/shared/api/client";
+import { paths } from "@/shared/api/constantes";
 
 const URL_PRODUCTOS = `/${paths.productos}`;
 

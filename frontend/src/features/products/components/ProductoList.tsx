@@ -5,10 +5,10 @@ import {
   useTable,
   createSortedRowModel,
 } from "@tanstack/react-table";
-import type { Producto } from "../../types/producto";
+import type { Producto } from "@/features/products/types/producto";
 import ProductoModal from "./ProductoModal";
 import ProductoEliminar from "./ProductoEliminar";
-import { useEsAdmin } from "../../hooks/auth";
+import { useEsAdmin } from "@/features/auth";
 
 type Props = {
   productos: Producto[];
