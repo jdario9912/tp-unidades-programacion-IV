@@ -76,7 +76,6 @@ export const handleApiError = (error: unknown): void => {
       break;
     case 401:
       console.warn("[api] No autorizado: ", message);
-      onUnauthorized?.();
       break;
     case 403:
       console.warn("[api] Permisos insuficientes: ", message);
@@ -90,10 +89,4 @@ export const handleApiError = (error: unknown): void => {
     default:
       console.error("[api] Error inesperado: ", message);
   }
-};
-
-let onUnauthorized: (() => void) | null = null;
-
-export const setUnauthorizedHandler = (handler: () => void): void => {
-  onUnauthorized = handler;
 };
