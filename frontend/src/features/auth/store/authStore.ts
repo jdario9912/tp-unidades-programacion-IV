@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { UsuarioAuth } from "../types/auth.types";
-import { handleLogin, handleLogout, handleMe } from "../api/auth";
+import type { UsuarioAuth } from "@/features/auth/types/auth.types";
+import { handleLogin, handleLogout, handleMe } from "@/features/auth/api/auth";
 
 type AuthState = {
   usuario: UsuarioAuth | null;

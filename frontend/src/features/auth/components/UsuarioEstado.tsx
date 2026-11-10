@@ -1,7 +1,7 @@
-import type { UsuarioAdmin } from "../../types/auth.types";
-import { useCambiarEstadoUsuario } from "../../hooks/usuarios";
-import ActionButton from "../ui/action-button";
-import FieldError from "../ui/field-error";
+import type { UsuarioAdmin } from "@/features/auth/types/auth.types";
+import { useCambiarEstadoUsuario } from "@/features/auth/hooks/useUsuarios";
+import ActionButton from "@/shared/components/ui/action-button";
+import FieldError from "@/shared/components/ui/field-error";
 
 type Props = {
   usuario: UsuarioAdmin;

@@ -1,9 +1,9 @@
-import type { UsuarioAdmin } from "../types/auth.types";
+import type { UsuarioAdmin } from "@/features/auth/types/auth.types";
 import {
   handleActivarUsuario,
   handleDesactivarUsuario,
   handleGetUsuarios,
-} from "../api/auth";
+} from "@/features/auth/api/auth";
 
 import {
   keepPreviousData,
@@ -11,7 +11,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { succeeded } from "../utils/promise";
+import { succeeded } from "@/shared/utils/promise";
 
 const USUARIOS_QUERY_KEY = "usuarios";
 

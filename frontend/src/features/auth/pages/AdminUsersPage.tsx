@@ -1,12 +1,12 @@
-import UsuarioList from "../components/usuarios/UsuarioList";
-import { useGetUsuarios } from "../hooks/usuarios";
+import UsuarioList from "@/features/auth/components/UsuarioList";
+import { useGetUsuarios } from "@/features/auth/hooks/useUsuarios";
 import { useState, type ChangeEvent } from "react";
-import CardError from "../components/ui/card-error";
-import Input from "../components/ui/input";
-import Label from "../components/ui/label";
-import { useDebounce } from "../hooks/debounce";
-import Spinner from "../components/ui/spinner";
-import TableSkeleton from "../components/ui/table-skeleton";
+import CardError from "@/shared/components/ui/card-error";
+import Input from "@/shared/components/ui/input";
+import Label from "@/shared/components/ui/label";
+import { useDebounce } from "@/shared/hooks/debounce";
+import Spinner from "@/shared/components/ui/spinner";
+import TableSkeleton from "@/shared/components/ui/table-skeleton";
 
 const Usuarios = () => {
   const [busqueda, setBusqueda] = useState("");

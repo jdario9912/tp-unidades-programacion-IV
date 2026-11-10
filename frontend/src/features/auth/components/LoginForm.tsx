@@ -1,11 +1,11 @@
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
-import { useLogin } from "../../hooks/auth";
-import Label from "../ui/label";
-import Input from "../ui/input";
-import FieldError from "../ui/field-error";
-import CardError from "../ui/card-error";
-import { validarEmail } from "../../utils/validaciones";
+import { useLogin } from "@/features/auth/hooks/useAuth";
+import Label from "@/shared/components/ui/label";
+import Input from "@/shared/components/ui/input";
+import FieldError from "@/shared/components/ui/field-error";
+import CardError from "@/shared/components/ui/card-error";
+import { validarEmail } from "@/shared/utils/validaciones";
 
 const validarPassword = ({ value }: { value: string }) => {
   if (!value) return "La contraseña es obligatoria";

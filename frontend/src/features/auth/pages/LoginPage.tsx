@@ -1,7 +1,7 @@
 import { Navigate, useLocation } from "react-router-dom";
-import LoginForm from "../components/auth/LoginForm";
-import LinkButton from "../components/ui/link-button";
-import { useUsuario } from "../hooks/auth";
+import LoginForm from "@/features/auth/components/LoginForm";
+import LinkButton from "@/shared/components/ui/link-button";
+import { useUsuario } from "@/features/auth/hooks/useAuth";
 
 type LocationState = { from?: string; registrado?: boolean } | null;
 

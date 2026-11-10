@@ -1,12 +1,12 @@
 import type { ChangeEvent, SyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
-import { useRegister } from "../../hooks/auth";
-import Label from "../ui/label";
-import Input from "../ui/input";
-import FieldError from "../ui/field-error";
-import CardError from "../ui/card-error";
-import { validarEmail } from "../../utils/validaciones";
+import { useRegister } from "@/features/auth/hooks/useAuth";
+import Label from "@/shared/components/ui/label";
+import Input from "@/shared/components/ui/input";
+import FieldError from "@/shared/components/ui/field-error";
+import CardError from "@/shared/components/ui/card-error";
+import { validarEmail } from "@/shared/utils/validaciones";
 
 // los límites coinciden con UserCreate del backend
 const validarNombre =

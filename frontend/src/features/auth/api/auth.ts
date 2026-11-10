@@ -2,9 +2,9 @@ import type {
   UsuarioAdmin,
   UsuarioAuth,
   UsuarioRegister,
-} from "../types/auth.types";
-import { get, post } from "./client";
-import { paths } from "./constantes";
+} from "@/features/auth/types/auth.types";
+import { get, post } from "@/shared/api/client";
+import { paths } from "@/shared/api/constantes";
 
 const URL_AUTH = `/${paths.auth}`;
 

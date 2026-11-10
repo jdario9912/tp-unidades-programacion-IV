@@ -5,7 +5,7 @@ import {
   useTable,
   createSortedRowModel,
 } from "@tanstack/react-table";
-import type { UsuarioAdmin } from "../../types/auth.types";
+import type { UsuarioAdmin } from "@/features/auth/types/auth.types";
 import UsuarioEstado from "./UsuarioEstado";
 
 type Props = {

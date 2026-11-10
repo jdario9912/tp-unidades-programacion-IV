@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { handleRegister } from "../api/auth";
-import { useAuthStore } from "../store/authStore";
-import type { UsuarioRegister } from "../types/auth.types";
-import { succeeded } from "../utils/promise";
+import { handleRegister } from "@/features/auth/api/auth";
+import { useAuthStore } from "@/features/auth/store/authStore";
+import type { UsuarioRegister } from "@/features/auth/types/auth.types";
+import { succeeded } from "@/shared/utils/promise";
 
 export const useUsuario = () => useAuthStore((s) => s.usuario);
 
