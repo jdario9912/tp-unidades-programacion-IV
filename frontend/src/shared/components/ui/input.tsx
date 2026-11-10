@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef } from "react";
-import { cn, type Variants } from "../../utils/cn";
+import { cn, type Variants } from "@/shared/utils/cn";
 
 type Props = ComponentPropsWithoutRef<"input"> & {
   value?: string;

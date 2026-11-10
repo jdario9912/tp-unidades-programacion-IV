@@ -1,37 +1,38 @@
-import type { ComponentPropsWithoutRef } from "react";
-import { cn, type Variants } from "../../utils/cn";
+import { Link, type LinkProps } from "react-router-dom";
+import { cn, type Variants } from "@/shared/utils/cn";
 
-type Props = ComponentPropsWithoutRef<"button"> & {
+type Props = LinkProps & {
   variant?: Variants;
 };
 
-const ActionButton = ({
-  children,
+const LinkButton = ({
+  to,
   className,
-  variant = "primary",
+  children,
+  variant = "ghost",
   ...rest
 }: Props) => {
   return (
-    <button
-      {...rest}
+    <Link
+      to={to}
       className={cn(
-        "px-4 py-2 rounded border border-transparent focus:outline-4",
+        "px-4 py-2 rounded border border-transparent hover:underline focus:outline-4",
         variant === "primary" &&
           "bg-primary text-off-white hover:bg-primary-hover focus:outline-primary/60",
         variant === "secondary" &&
           "bg-secondary text-off-white hover:bg-secondary-hover focus:outline-secondary/60",
         variant === "outline" &&
           "border-primary text-primary hover:bg-primary/10 focus:outline-primary/60",
-        variant === "ghost" &&
-          "bg-transparent hover:bg-hover-muted focus:outline-hover-muted/60",
+        variant === "ghost" && "bg-transparent focus:outline-hover-muted/60",
         variant === "destructive" &&
           "bg-destructive text-off-white hover:bg-destructive-hover focus:outline-destructive/60",
         className,
       )}
+      {...rest}
     >
       {children}
-    </button>
+    </Link>
   );
 };
 
-export default ActionButton;
+export default LinkButton;

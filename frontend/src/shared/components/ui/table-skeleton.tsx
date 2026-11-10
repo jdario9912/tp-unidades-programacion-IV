@@ -1,5 +1,5 @@
 import { type ComponentPropsWithoutRef } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@/shared/utils/cn";
 import Skeleton from "./skeleton";
 
 type Props = ComponentPropsWithoutRef<"div"> & {

@@ -4,7 +4,7 @@ import {
   type ComponentPropsWithoutRef,
   type ReactNode,
 } from "react";
-import { cn } from "../../utils/cn";
+import { cn } from "@/shared/utils/cn";
 
 type ModalProps = {
   abierto: boolean;

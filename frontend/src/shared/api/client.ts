@@ -1,4 +1,4 @@
-import api from "./axiosInstance";
+import api from "./api";
 
 export const get = async <T>(ruta: string): Promise<T> => {
   const { data } = await api.get<T>(ruta);

@@ -1,8 +1,8 @@
 import { useMatch } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEsAdmin, useLogout, useUsuario } from "../hooks/auth";
-import ActionButton from "./ui/action-button";
-import LinkButton from "./ui/link-button";
+import { useEsAdmin, useLogout, useUsuario } from "@/features/auth";
+import ActionButton from "@/shared/components/ui/action-button";
+import LinkButton from "@/shared/components/ui/link-button";
 
 const Navbar = () => {
   const enProductos = useMatch("/products/*");
