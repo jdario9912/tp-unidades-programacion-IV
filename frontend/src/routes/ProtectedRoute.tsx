@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useAuthLoading, useUsuario } from "@/features/auth";
+import { useAuthChecking, useUsuario } from "@/features/auth";
 import Spinner from "@/shared/components/ui/spinner";
 
 type Props = {
@@ -8,12 +8,11 @@ type Props = {
 
 const ProtectedRoute = ({ allowedRoles }: Props) => {
   const usuario = useUsuario();
-  const loading = useAuthLoading();
+  const checking = useAuthChecking();
   const location = useLocation();
 
-  // con un usuario persistido se renderiza enseguida mientras checkSession
-  // confirma la sesión; si falla, usuario pasa a null y se redirige
-  if (!usuario && loading)
+  // mientras /auth/me no responde no se sabe si hay sesión: no se redirige
+  if (checking)
     return (
       <div className="flex justify-center p-8">
         <Spinner />

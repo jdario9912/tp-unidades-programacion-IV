@@ -4,8 +4,8 @@ export { default as RegisterPage } from "./pages/RegisterPage";
 export { default as AdminUsersPage } from "./pages/AdminUsersPage";
 export { useAuthStore } from "./store/authStore";
 export {
-  useAuthLoading,
-  useCheckSession,
+  useAuthChecking,
+  useCheckAuth,
   useEsAdmin,
   useLogin,
   useLogout,

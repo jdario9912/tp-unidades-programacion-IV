@@ -1,14 +1,14 @@
 import { useEffect } from "react";
-import { useCheckSession } from "@/features/auth";
+import { useCheckAuth } from "@/features/auth";
 import AppRouter from "@/routes/AppRouter";
 
 function App() {
-  const checkSession = useCheckSession();
+  const checkAuth = useCheckAuth();
 
   // la sesión se recupera de la cookie HttpOnly al iniciar
   useEffect(() => {
-    checkSession();
-  }, [checkSession]);
+    checkAuth();
+  }, [checkAuth]);
 
   return <AppRouter />;
 }

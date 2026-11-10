@@ -9,13 +9,13 @@ export const useUsuario = () => useAuthStore((s) => s.usuario);
 export const useEsAdmin = () =>
   useAuthStore((s) => s.usuario?.roles.includes("admin") ?? false);
 
-export const useAuthLoading =() => useAuthStore((s) => s.loading);
+export const useAuthChecking = () => useAuthStore((s) => s.checking);
 
 export const useLogin = () => useAuthStore((s) => s.login);
 
-export const useLogout = () => useAuthStore((s) => s.logout);
+export const useCheckAuth = () => useAuthStore((s) => s.checkAuth);
 
-export const useCheckSession = () => useAuthStore((s) => s.checkSession);
+export const useLogout = () => useAuthStore((s) => s.logout);
 
 export const useRegister = () => {
   const mutation = useMutation({

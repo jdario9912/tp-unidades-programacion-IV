@@ -26,7 +26,7 @@ api.interceptors.response.use(
 
     // ante un 401 se limpia la sesión local; ProtectedRoute redirige al login
     if (status === 401 && !RUTAS_SIN_LIMPIEZA.some((r) => url.startsWith(r))) {
-      useAuthStore.setState({ usuario: null });
+      useAuthStore.getState().clearSession();
       queryClient.clear();
     }
 
