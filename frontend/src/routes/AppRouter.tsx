@@ -1,15 +1,13 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import Categorias from "../pages/Categorias";
-import Ingredientes from "../pages/Ingredientes";
-import LoginPage from "../pages/LoginPage";
-import NotFound from "../pages/NotFound";
-import Productos from "../pages/Productos";
-import RegisterPage from "../pages/RegisterPage";
-import UnauthorizedPage from "../pages/UnauthorizedPage";
-import Usuarios from "../pages/Usuarios";
-import ProtectedRoute from "./auth/ProtectedRoute";
+import { Categorias } from "@/features/categories";
+import { Ingredientes } from "@/features/ingredients";
+import { Productos } from "@/features/products";
+import { AdminUsersPage, LoginPage, RegisterPage } from "@/features/auth";
+import NotFound from "@/shared/components/NotFound";
+import UnauthorizedPage from "@/shared/components/UnauthorizedPage";
+import ProtectedRoute from "./ProtectedRoute";
 
-const RoutesApp = () => (
+const AppRouter = () => (
   <Routes>
     <Route path="/login" element={<LoginPage />} />
     <Route path="/register" element={<RegisterPage />} />
@@ -22,10 +20,10 @@ const RoutesApp = () => (
       <Route path="/ingredients" element={<Ingredientes />} />
     </Route>
     <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
-      <Route path="/admin/users" element={<Usuarios />} />
+      <Route path="/admin/users" element={<AdminUsersPage />} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>
 );
 
-export default RoutesApp;
+export default AppRouter;

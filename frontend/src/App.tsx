@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Footer from "./components/Footer";
-import Navbar from "./components/Navbar";
-import MainLayout from "./components/MainLayout";
-import RoutesApp from "./components/RoutesApp";
-import { ApiError, setUnauthorizedHandler } from "./api/handle-errors";
-import { useAuthStore } from "./store/authStore";
-import { useCheckSession } from "./hooks/auth";
+import Footer from "@/shared/components/Footer";
+import Navbar from "@/shared/components/Navbar";
+import MainLayout from "@/shared/components/MainLayout";
+import RoutesApp from "@/routes/AppRouter";
+import { ApiError, setUnauthorizedHandler } from "@/shared/api/handle-errors";
+import { useAuthStore } from "@/features/auth";
+import { useCheckSession } from "@/features/auth";
 
 const queryClient = new QueryClient({
   defaultOptions: {

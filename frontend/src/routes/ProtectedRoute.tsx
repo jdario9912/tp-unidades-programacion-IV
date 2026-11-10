@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useAuthLoading, useUsuario } from "../../hooks/auth";
-import Spinner from "../ui/spinner";
+import { useAuthLoading, useUsuario } from "@/features/auth";
+import Spinner from "@/shared/components/ui/spinner";
 
 type Props = {
   allowedRoles?: string[];
