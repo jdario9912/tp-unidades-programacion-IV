@@ -1,6 +1,6 @@
 import ProductoList from "@/features/products/components/ProductoList";
 import ProductoModal from "@/features/products/components/ProductoModal";
-import { useGetProductos } from "@/features/products/hooks/useProducts";
+import { useProducts } from "@/features/products/hooks/useProducts";
 import { useState, type ChangeEvent } from "react";
 import CardError from "@/shared/components/ui/card-error";
 import Input from "@/shared/components/ui/input";
@@ -13,7 +13,7 @@ import TableSkeleton from "@/shared/components/ui/table-skeleton";
 const Productos = () => {
   const [busqueda, setBusqueda] = useState("");
   const search = useDebounce(busqueda.trim());
-  const { productos, error, loading, fetching } = useGetProductos(search);
+  const { productos, error, loading, fetching } = useProducts(search);
   const esAdmin = useEsAdmin();
 
   return (

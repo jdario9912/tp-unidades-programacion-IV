@@ -17,6 +17,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { succeeded } from "@/shared/utils/promise";
+import { notificarError, notificarExito } from "@/shared/utils/notificaciones";
 
 const PRODUCTOS_QUERY_KEY = "productos";
 
@@ -75,9 +76,15 @@ export const useCreateProducto = () => {
 
       return producto;
     },
-    onSuccess: invalidar,
+    onSuccess: () => {
+      invalidar();
+      notificarExito("Producto creado");
+    },
     // el producto pudo crearse aunque falle alguna asignación
-    onError: invalidar,
+    onError: (error) => {
+      invalidar();
+      notificarError(error);
+    },
   });
 
   const submit = async (
@@ -145,8 +152,14 @@ export const useUpdateProducto = () => {
 
       return actualizado;
     },
-    onSuccess: invalidar,
-    onError: invalidar,
+    onSuccess: () => {
+      invalidar();
+      notificarExito("Producto actualizado");
+    },
+    onError: (error) => {
+      invalidar();
+      notificarError(error);
+    },
   });
 
   const submit = async (
@@ -180,7 +193,9 @@ export const useDeleteProducto = () => {
     mutationFn: handleEliminarProducto,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [PRODUCTOS_QUERY_KEY] });
+      notificarExito("Producto eliminado");
     },
+    onError: notificarError,
   });
 
   const submit = async (id: number) => {
@@ -193,4 +208,14 @@ export const useDeleteProducto = () => {
     submit,
     reset: mutation.reset,
   };
+};
+
+// CRUD completo de productos: listado y mutaciones de alta, edición y baja
+export const useProducts = (search = "") => {
+  const listado = useGetProductos(search);
+  const crear = useCreateProducto();
+  const actualizar = useUpdateProducto();
+  const eliminar = useDeleteProducto();
+
+  return { ...listado, crear, actualizar, eliminar };
 };

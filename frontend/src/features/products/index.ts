@@ -4,6 +4,7 @@ export {
   useCreateProducto,
   useDeleteProducto,
   useGetProductos,
+  useProducts,
   useUpdateProducto,
 } from "./hooks/useProducts";
 export type {
