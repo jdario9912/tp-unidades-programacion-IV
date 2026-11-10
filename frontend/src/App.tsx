@@ -1,26 +1,16 @@
 import { useEffect } from "react";
-import Footer from "@/shared/components/Footer";
-import Navbar from "@/shared/components/Navbar";
-import MainLayout from "@/shared/components/MainLayout";
-import AppRouter from "@/routes/AppRouter";
 import { useCheckSession } from "@/features/auth";
+import AppRouter from "@/routes/AppRouter";
 
 function App() {
   const checkSession = useCheckSession();
 
+  // la sesión se recupera de la cookie HttpOnly al iniciar
   useEffect(() => {
     checkSession();
   }, [checkSession]);
 
-  return (
-    <div className="text-letters">
-      <Navbar />
-      <MainLayout>
-        <AppRouter />
-      </MainLayout>
-      <Footer />
-    </div>
-  );
+  return <AppRouter />;
 }
 
 export default App;
