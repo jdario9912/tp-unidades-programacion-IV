@@ -1,11 +1,11 @@
 import type { ChangeEvent, SyntheticEvent } from "react";
-import { useCreateCategoria, useUpdateCategoria } from "../../hooks/categorias";
-import type { Categoria } from "../../types/categoria";
-import Label from "../ui/label";
-import Input from "../ui/input";
-import ActionButton from "../ui/action-button";
-import FieldError from "../ui/field-error";
-import CardError from "../ui/card-error";
+import { useCreateCategoria, useUpdateCategoria } from "@/features/categories/hooks/useCategories";
+import type { Categoria } from "@/features/categories/types/categoria";
+import Label from "@/shared/components/ui/label";
+import Input from "@/shared/components/ui/input";
+import ActionButton from "@/shared/components/ui/action-button";
+import FieldError from "@/shared/components/ui/field-error";
+import CardError from "@/shared/components/ui/card-error";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
 
 type Props = {

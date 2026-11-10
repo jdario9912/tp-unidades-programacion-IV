@@ -5,10 +5,10 @@ import {
   useTable,
   createSortedRowModel,
 } from "@tanstack/react-table";
-import type { Categoria } from "../../types/categoria";
+import type { Categoria } from "@/features/categories/types/categoria";
 import CategoriaModal from "./CategoriaModal";
 import CategoriaEliminar from "./CategoriaEliminar";
-import { useEsAdmin } from "../../hooks/auth";
+import { useEsAdmin } from "@/features/auth";
 
 type Props = {
   categorias: Categoria[];

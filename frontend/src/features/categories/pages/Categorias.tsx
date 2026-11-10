@@ -1,14 +1,14 @@
-import CategoriaList from "../components/categorias/CategoriaList";
-import CategoriaModal from "../components/categorias/CategoriaModal";
-import { useGetCategorias } from "../hooks/categorias";
+import CategoriaList from "@/features/categories/components/CategoriaList";
+import CategoriaModal from "@/features/categories/components/CategoriaModal";
+import { useGetCategorias } from "@/features/categories/hooks/useCategories";
 import { useState, type ChangeEvent } from "react";
-import CardError from "../components/ui/card-error";
-import Input from "../components/ui/input";
-import Label from "../components/ui/label";
-import { useDebounce } from "../hooks/debounce";
-import { useEsAdmin } from "../hooks/auth";
-import Spinner from "../components/ui/spinner";
-import TableSkeleton from "../components/ui/table-skeleton";
+import CardError from "@/shared/components/ui/card-error";
+import Input from "@/shared/components/ui/input";
+import Label from "@/shared/components/ui/label";
+import { useDebounce } from "@/shared/hooks/debounce";
+import { useEsAdmin } from "@/features/auth";
+import Spinner from "@/shared/components/ui/spinner";
+import TableSkeleton from "@/shared/components/ui/table-skeleton";
 
 const Categorias = () => {
   const [busqueda, setBusqueda] = useState("");

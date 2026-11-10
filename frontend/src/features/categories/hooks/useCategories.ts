@@ -1,11 +1,11 @@
-import type { Categoria, CategoriaInput } from "../types/categoria";
+import type { Categoria, CategoriaInput } from "@/features/categories/types/categoria";
 import {
   handleActualizarCategoria,
   handleGetCategoriaById,
   handleGetCategorias,
   handleCrearCategoria,
   handleEliminarCategoria,
-} from "../api/categorias";
+} from "@/features/categories/api/categorias";
 
 import {
   keepPreviousData,
@@ -13,7 +13,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { succeeded } from "../utils/promise";
+import { succeeded } from "@/shared/utils/promise";
 
 const CATEGORIAS_QUERY_KEY = "categorias";
 const CATEGORIA_QUERY_KEY = "categoria";

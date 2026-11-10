@@ -1,6 +1,6 @@
-import type { Categoria, CategoriaInput } from "../types/categoria";
-import { get, post, put, remove } from "./client";
-import { paths } from "./constantes";
+import type { Categoria, CategoriaInput } from "@/features/categories/types/categoria";
+import { get, post, put, remove } from "@/shared/api/client";
+import { paths } from "@/shared/api/constantes";
 
 const URL_CATEGORIAS = `/${paths.categorias}`;
 
