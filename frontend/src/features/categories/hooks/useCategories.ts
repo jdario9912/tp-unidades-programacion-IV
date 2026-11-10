@@ -14,6 +14,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { succeeded } from "@/shared/utils/promise";
+import { notificarError, notificarExito } from "@/shared/utils/notificaciones";
 
 const CATEGORIAS_QUERY_KEY = "categorias";
 const CATEGORIA_QUERY_KEY = "categoria";
@@ -51,7 +52,9 @@ export const useUpdateCategoria = () => {
     mutationFn: handleActualizarCategoria,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [CATEGORIAS_QUERY_KEY] });
+      notificarExito("Categoría actualizada");
     },
+    onError: notificarError,
   });
 
   const submit = async (id: number, categoria: CategoriaInput) => {
@@ -79,7 +82,9 @@ export const useCreateCategoria = () => {
     mutationFn: handleCrearCategoria,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [CATEGORIAS_QUERY_KEY] });
+      notificarExito("Categoría creada");
     },
+    onError: notificarError,
   });
 
   const submit = async (categoria: CategoriaInput) => {
@@ -101,7 +106,9 @@ export const useDeleteCategoria = () => {
     mutationFn: handleEliminarCategoria,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [CATEGORIAS_QUERY_KEY] });
+      notificarExito("Categoría eliminada");
     },
+    onError: notificarError,
   });
 
   const submit = async (id: number) => {
@@ -114,4 +121,14 @@ export const useDeleteCategoria = () => {
     submit,
     reset: mutation.reset,
   };
+};
+
+// CRUD completo de categorías: listado y mutaciones de alta, edición y baja
+export const useCategories = (search = "") => {
+  const listado = useGetCategorias(search);
+  const crear = useCreateCategoria();
+  const actualizar = useUpdateCategoria();
+  const eliminar = useDeleteCategoria();
+
+  return { ...listado, crear, actualizar, eliminar };
 };

@@ -1,6 +1,6 @@
 import CategoriaList from "@/features/categories/components/CategoriaList";
 import CategoriaModal from "@/features/categories/components/CategoriaModal";
-import { useGetCategorias } from "@/features/categories/hooks/useCategories";
+import { useCategories } from "@/features/categories/hooks/useCategories";
 import { useState, type ChangeEvent } from "react";
 import CardError from "@/shared/components/ui/card-error";
 import Input from "@/shared/components/ui/input";
@@ -13,7 +13,7 @@ import TableSkeleton from "@/shared/components/ui/table-skeleton";
 const Categorias = () => {
   const [busqueda, setBusqueda] = useState("");
   const search = useDebounce(busqueda.trim());
-  const { categorias, error, loading, fetching } = useGetCategorias(search);
+  const { categorias, error, loading, fetching } = useCategories(search);
   const esAdmin = useEsAdmin();
 
   return (
