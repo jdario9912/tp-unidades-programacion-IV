@@ -12,6 +12,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { succeeded } from "@/shared/utils/promise";
+import { notificarError, notificarExito } from "@/shared/utils/notificaciones";
 
 const USUARIOS_QUERY_KEY = "usuarios";
 
@@ -38,9 +39,11 @@ export const useCambiarEstadoUsuario = () => {
       usuario.activo
         ? handleDesactivarUsuario(usuario.id)
         : handleActivarUsuario(usuario.id),
-    onSuccess: () => {
+    onSuccess: (usuario) => {
       queryClient.invalidateQueries({ queryKey: [USUARIOS_QUERY_KEY] });
+      notificarExito(usuario.activo ? "Usuario activado" : "Usuario desactivado");
     },
+    onError: notificarError,
   });
 
   const submit = async (usuario: UsuarioAdmin) => {
