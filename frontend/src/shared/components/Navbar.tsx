@@ -2,6 +2,7 @@ import { useMatch } from "react-router-dom";
 import { useAuth } from "@/features/auth";
 import ActionButton from "@/shared/components/ui/action-button";
 import LinkButton from "@/shared/components/ui/link-button";
+import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
   const enProductos = useMatch("/products/*");
@@ -30,56 +31,59 @@ const Navbar = () => {
           </span>
         )}
       </div>
-      {usuario ? (
-        <nav className="flex items-center gap-x-2">
-          <ul className="flex">
-            <li>
-              <LinkButton
-                to="/products"
-                variant={enProductos ? "outline" : "ghost"}
-              >
-                Productos
-              </LinkButton>
-            </li>
-            <li>
-              <LinkButton
-                to="/categories"
-                variant={enCategorias ? "outline" : "ghost"}
-              >
-                Categorias
-              </LinkButton>
-            </li>
-            <li>
-              <LinkButton
-                to="/ingredients"
-                variant={enIngredientes ? "outline" : "ghost"}
-              >
-                Ingredientes
-              </LinkButton>
-            </li>
-            {esAdmin && (
+      <div className="flex items-center gap-x-2">
+        <ThemeToggle />
+        {usuario ? (
+          <nav className="flex items-center gap-x-2">
+            <ul className="flex">
               <li>
                 <LinkButton
-                  to="/admin/users"
-                  variant={enUsuarios ? "outline" : "ghost"}
+                  to="/products"
+                  variant={enProductos ? "outline" : "ghost"}
                 >
-                  Usuarios
+                  Productos
                 </LinkButton>
               </li>
-            )}
-          </ul>
-          <ActionButton variant="primary" onClick={logout}>
-            Cerrar sesión
-          </ActionButton>
-        </nav>
-      ) : (
-        !enLogin &&
-        !enRegister && (
-          <LinkButton to="/login" variant="outline">
-            Iniciar sesión
-          </LinkButton>
-        )
-      )}
+              <li>
+                <LinkButton
+                  to="/categories"
+                  variant={enCategorias ? "outline" : "ghost"}
+                >
+                  Categorias
+                </LinkButton>
+              </li>
+              <li>
+                <LinkButton
+                  to="/ingredients"
+                  variant={enIngredientes ? "outline" : "ghost"}
+                >
+                  Ingredientes
+                </LinkButton>
+              </li>
+              {esAdmin && (
+                <li>
+                  <LinkButton
+                    to="/admin/users"
+                    variant={enUsuarios ? "outline" : "ghost"}
+                  >
+                    Usuarios
+                  </LinkButton>
+                </li>
+              )}
+            </ul>
+            <ActionButton variant="primary" onClick={logout}>
+              Cerrar sesión
+            </ActionButton>
+          </nav>
+        ) : (
+          !enLogin &&
+          !enRegister && (
+            <LinkButton to="/login" variant="outline">
+              Iniciar sesión
+            </LinkButton>
+          )
+        )}
+      </div>
     </header>
   );
 };

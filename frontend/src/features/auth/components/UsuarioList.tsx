@@ -103,7 +103,7 @@ const UsuarioList = ({ usuarios }: Props) => {
       <table className="min-w-full border rounded-lg overflow-hidden">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id} className="bg-gray-200">
+            <tr key={headerGroup.id} className="bg-gray-200 dark:bg-gray-800">
               {headerGroup.headers.map((header) => {
                 if (header.isPlaceholder) return <th key={header.id} />;
 

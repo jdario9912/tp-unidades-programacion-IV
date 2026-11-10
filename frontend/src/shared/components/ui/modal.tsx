@@ -37,7 +37,7 @@ export const Modal = ({
         if (e.target === e.currentTarget) onCerrar();
       }}
       className={cn(
-        "m-auto w-[calc(100%-2rem)] max-w-xl rounded bg-white shadow border border-gray-300",
+        "m-auto w-[calc(100%-2rem)] max-w-xl rounded bg-background text-letters shadow border border-divider",
         className,
       )}
       {...rest}

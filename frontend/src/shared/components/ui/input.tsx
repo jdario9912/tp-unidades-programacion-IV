@@ -11,7 +11,7 @@ const Input = ({ className, type, value, variant, ...rest }: Props) => {
     <input
       type={type ?? "text"}
       className={cn(
-        "border border-gray-400 px-1 rounded min-h-8 focus:outline-4 focus:outline-primary/60 focus:border-primary/80",
+        "border border-gray-400 dark:border-gray-600 px-1 rounded min-h-8 focus:outline-4 focus:outline-primary/60 focus:border-primary/80",
         type === "submit" &&
           "bg-primary text-off-white px-4 border-none hover:bg-primary-hover",
         type === "submit" &&
