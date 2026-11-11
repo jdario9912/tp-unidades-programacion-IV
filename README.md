@@ -5,14 +5,14 @@ Trabajo Práctico Integrador de Programación 4. Es una aplicación web para un 
 - **Clientes**: se registran, recorren el catálogo, arman un carrito y confirman pedidos con dirección y forma de pago.
 - **Administrador**: gestiona categorías, productos, stock, pedidos y usuarios desde un panel.
 
-- **Repositorio**: https://github.com/jdario9912/tpi-programacion-IV
-- **Video de demostración**: _(completar con el link público)_
+- **Repositorio**: https://github.com/jdario9912/tp-unidades-programacion-IV/tree/trabajo-practico-integrador
+- **Video de demostración**: _https://youtu.be/8ERlKsdhsn4_
 
 ## Stack
 
-| Parte    | Tecnologías                                                                                    |
-| -------- | ---------------------------------------------------------------------------------------------- |
-| Backend  | Python, FastAPI, SQLModel, PostgreSQL (o SQLite), JWT en cookie HttpOnly, passlib/bcrypt        |
+| Parte    | Tecnologías                                                                                         |
+| -------- | --------------------------------------------------------------------------------------------------- |
+| Backend  | Python, FastAPI, SQLModel, PostgreSQL (o SQLite), JWT en cookie HttpOnly, passlib/bcrypt            |
 | Frontend | React 19, TypeScript, Vite, Tailwind CSS 4, TanStack Query/Form/Table, Zustand, Axios, React Router |
 
 ## Requisitos
@@ -41,15 +41,15 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
-| Variable                      | Descripción                                   | Ejemplo                                                |
-| ----------------------------- | --------------------------------------------- | ------------------------------------------------------ |
-| `DATABASE_URL`                | Conexión a la base (**obligatoria**)          | `postgresql://user:pass@localhost:5432/foodstore_db`   |
-| `SECRET_KEY`                  | Firma del JWT, **mínimo 32 caracteres**       | `cambiar-esta-clave-de-al-menos-32-caracteres`         |
-| `ALGORITHM`                   | Algoritmo del JWT                             | `HS256`                                                |
-| `ACCESS_TOKEN_EXPIRE_MINUTES` | Expiración de la cookie y del token (minutos) | `30`                                                   |
-| `FRONTEND_ORIGIN`             | Origen permitido en CORS                      | `http://localhost:5173`                                |
-| `ADMIN_EMAIL`                 | Email del admin que crea el seed              | `admin@foodstore.com`                                  |
-| `ADMIN_PASSWORD`              | Contraseña del admin que crea el seed         | `Admin1234!`                                           |
+| Variable                      | Descripción                                   | Ejemplo                                              |
+| ----------------------------- | --------------------------------------------- | ---------------------------------------------------- |
+| `DATABASE_URL`                | Conexión a la base (**obligatoria**)          | `postgresql://user:pass@localhost:5432/foodstore_db` |
+| `SECRET_KEY`                  | Firma del JWT, **mínimo 32 caracteres**       | `cambiar-esta-clave-de-al-menos-32-caracteres`       |
+| `ALGORITHM`                   | Algoritmo del JWT                             | `HS256`                                              |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | Expiración de la cookie y del token (minutos) | `30`                                                 |
+| `FRONTEND_ORIGIN`             | Origen permitido en CORS                      | `http://localhost:5173`                              |
+| `ADMIN_EMAIL`                 | Email del admin que crea el seed              | `admin@foodstore.com`                                |
+| `ADMIN_PASSWORD`              | Contraseña del admin que crea el seed         | `Admin1234!`                                         |
 
 Para usar SQLite en lugar de PostgreSQL: `DATABASE_URL=sqlite:///./foodstore.db`.
 
@@ -102,13 +102,14 @@ pnpm dev
 
 Abrir http://localhost:5173.
 
-| Variable       | Descripción                      | Ejemplo                        |
-| -------------- | -------------------------------- | ------------------------------ |
-| `VITE_API_URL` | URL de la API, con el `/api/v1`  | `http://localhost:8000/api/v1` |
+| Variable       | Descripción                     | Ejemplo                        |
+| -------------- | ------------------------------- | ------------------------------ |
+| `VITE_API_URL` | URL de la API, con el `/api/v1` | `http://localhost:8000/api/v1` |
 
 ## Funcionalidades
 
 **Cliente** (rol `user`)
+
 - Registro e inicio de sesión. La sesión viaja en la cookie HttpOnly `access_token` y el frontend nunca lee el token.
 - Catálogo paginado en el servidor, con búsqueda por nombre y filtro por categoría.
 - Carrito que se conserva al recargar la página.
@@ -116,12 +117,14 @@ Abrir http://localhost:5173.
 - «Mis pedidos», con el detalle de cada uno y la opción de cancelar mientras esté PENDIENTE.
 
 **Administrador** (rol `admin`)
+
 - Resumen con pedidos por estado, pedidos del día e ingresos de los entregados.
 - ABM de categorías y productos, con cambio de stock y disponibilidad.
 - Gestión de pedidos con la máquina de estados: PENDIENTE → EN_PREPARACION → ENTREGADO, y cancelación desde los estados no terminales.
 - Activación y desactivación de usuarios.
 
 **Reglas de negocio**
+
 - El pedido se crea completo o no se crea.
 - El stock se descuenta en la misma transacción que crea el pedido y se restituye al cancelarlo.
 - Las líneas del pedido copian el nombre y el precio del producto, así que el total no cambia después de creado.
