@@ -1,0 +1,108 @@
+@baseUrl = http://127.0.0.1:8000/api/v1
+@idPedido = 1
+
+### Iniciar Sesión como Usuario (registrarlo antes con auth.http)
+POST {{baseUrl}}/auth/token
+Content-Type: application/x-www-form-urlencoded
+
+username=juan&password=secreto123
+
+### Crear Pedido (descuenta stock y copia nombre y precio)
+POST {{baseUrl}}/pedidos
+Content-Type: application/json
+
+{
+  "items": [
+    { "producto_id": 2, "cantidad": 2 },
+    { "producto_id": 9, "cantidad": 1 }
+  ],
+  "forma_pago": "EFECTIVO",
+  "direccion_entrega": "Av. San Martín 1234",
+  "notas": "Tocar timbre 2B"
+}
+
+### Crear Pedido con Producto Repetido (Prueba: Error 400)
+POST {{baseUrl}}/pedidos
+Content-Type: application/json
+
+{
+  "items": [
+    { "producto_id": 2, "cantidad": 1 },
+    { "producto_id": 2, "cantidad": 1 }
+  ],
+  "forma_pago": "EFECTIVO",
+  "direccion_entrega": "Av. San Martín 1234"
+}
+
+### Crear Pedido con Stock Insuficiente (Prueba: Error 400, no se descuenta nada)
+POST {{baseUrl}}/pedidos
+Content-Type: application/json
+
+{
+  "items": [{ "producto_id": 3, "cantidad": 9999 }],
+  "forma_pago": "TRANSFERENCIA",
+  "direccion_entrega": "Av. San Martín 1234"
+}
+
+### Crear Pedido con Producto Inexistente (Prueba: Error 404)
+POST {{baseUrl}}/pedidos
+Content-Type: application/json
+
+{
+  "items": [{ "producto_id": 9999, "cantidad": 1 }],
+  "forma_pago": "EFECTIVO",
+  "direccion_entrega": "Av. San Martín 1234"
+}
+
+### Crear Pedido con Forma de Pago Inválida (Prueba: Error 422)
+POST {{baseUrl}}/pedidos
+Content-Type: application/json
+
+{
+  "items": [{ "producto_id": 2, "cantidad": 1 }],
+  "forma_pago": "TARJETA",
+  "direccion_entrega": "Av. San Martín 1234"
+}
+
+### Listar Mis Pedidos
+GET {{baseUrl}}/pedidos?skip=0&limit=20
+
+### Obtener Pedido Propio
+GET {{baseUrl}}/pedidos/{{idPedido}}
+
+### Cancelar Pedido Propio en PENDIENTE (restituye el stock)
+PATCH {{baseUrl}}/pedidos/{{idPedido}}/cancelar
+
+### Cancelar Pedido que ya no está PENDIENTE (Prueba: Error 400)
+PATCH {{baseUrl}}/pedidos/{{idPedido}}/cancelar
+
+### Resumen como User (Prueba: Error 403)
+GET {{baseUrl}}/pedidos/resumen
+
+### Iniciar Sesión como Admin
+POST {{baseUrl}}/auth/token
+Content-Type: application/x-www-form-urlencoded
+
+username=admin&password=Admin1234!
+
+### Listar Todos los Pedidos, Filtrados por Estado (admin)
+GET {{baseUrl}}/pedidos?estado=PENDIENTE
+
+### Resumen del Panel (admin)
+GET {{baseUrl}}/pedidos/resumen
+
+### Avanzar Pedido a EN_PREPARACION (admin)
+PATCH {{baseUrl}}/pedidos/{{idPedido}}/estado
+Content-Type: application/json
+
+{
+  "estado": "EN_PREPARACION"
+}
+
+### Transición Inválida desde un Estado Terminal (Prueba: Error 400)
+PATCH {{baseUrl}}/pedidos/{{idPedido}}/estado
+Content-Type: application/json
+
+{
+  "estado": "ENTREGADO"
+}

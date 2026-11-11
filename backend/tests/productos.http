@@ -1,0 +1,85 @@
+@baseUrl = http://127.0.0.1:8000/api/v1
+@idProducto = 1
+
+### Iniciar Sesión como Admin (las escrituras requieren rol admin)
+POST {{baseUrl}}/auth/token
+Content-Type: application/x-www-form-urlencoded
+
+username=admin&password=Admin1234!
+
+### Listar Productos (público, paginado)
+GET {{baseUrl}}/productos?skip=0&limit=20
+
+### Buscar Productos por Nombre y Categoría
+GET {{baseUrl}}/productos?search=pizza&categoria_id=2&disponible=true
+
+### Listar con Límite Mayor a 100 (Prueba: Error 422)
+GET {{baseUrl}}/productos?limit=101
+
+### Obtener Producto con su Categoría (público)
+GET {{baseUrl}}/productos/{{idProducto}}
+
+### Obtener Producto Inexistente (Prueba: Error 404)
+GET {{baseUrl}}/productos/9999
+
+### Crear Producto
+POST {{baseUrl}}/productos
+Content-Type: application/json
+
+{
+  "nombre": "Lomito completo",
+  "descripcion": "Lomo, jamón, queso, huevo y papas",
+  "precio_base": 13500,
+  "imagen_url": "https://placehold.co/600x400?text=Lomito",
+  "stock": 10,
+  "disponible": true,
+  "categoria_id": 1
+}
+
+### Crear Producto con Categoría Inexistente (Prueba: Error 404)
+POST {{baseUrl}}/productos
+Content-Type: application/json
+
+{
+  "nombre": "Producto huérfano",
+  "precio_base": 100,
+  "categoria_id": 9999
+}
+
+### Crear Producto con Precio Negativo (Prueba: Error 422)
+POST {{baseUrl}}/productos
+Content-Type: application/json
+
+{
+  "nombre": "Producto inválido",
+  "precio_base": -1,
+  "categoria_id": 1
+}
+
+### Actualizar Producto (parcial)
+PUT {{baseUrl}}/productos/{{idProducto}}
+Content-Type: application/json
+
+{
+  "precio_base": 8900
+}
+
+### Actualizar Stock y Disponibilidad
+PATCH {{baseUrl}}/productos/{{idProducto}}/stock
+Content-Type: application/json
+
+{
+  "stock": 25,
+  "disponible": true
+}
+
+### Actualizar Stock Negativo (Prueba: Error 422)
+PATCH {{baseUrl}}/productos/{{idProducto}}/stock
+Content-Type: application/json
+
+{
+  "stock": -5
+}
+
+### Eliminar Producto (baja lógica, 204)
+DELETE {{baseUrl}}/productos/{{idProducto}}
