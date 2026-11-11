@@ -1,20 +1,23 @@
-export type UsuarioAuth = {
+export type Rol = "user" | "admin";
+
+// mismos campos que UserPublic del backend
+export interface Usuario {
   id: number;
-  nombre: string;
-  apellido: string;
+  username: string;
+  full_name: string;
   email: string;
-  roles: string[];
-};
+  role: Rol;
+  disabled: boolean;
+  created_at: string;
+}
 
-export type UsuarioRegister = {
-  nombre: string;
-  apellido: string;
+export interface UsuarioRegister {
+  username: string;
+  full_name: string;
   email: string;
-  celular?: string;
   password: string;
-};
+}
 
-export type UsuarioAdmin = UsuarioAuth & {
-  activo: boolean;
-  deleted_at: string | null;
-};
+export interface MensajeResponse {
+  message: string;
+}

@@ -1,28 +1,30 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { handleRegister } from "@/features/auth/api/auth";
-import { useAuthStore } from "@/features/auth/store/authStore";
+import { useAuthStore } from "@/store/authStore";
 import type { UsuarioRegister } from "@/features/auth/types/auth.types";
 import { succeeded } from "@/shared/utils/promise";
 
 export const useUsuario = () => useAuthStore((s) => s.usuario);
 
 export const useEsAdmin = () =>
-  useAuthStore((s) => s.usuario?.roles.includes("admin") ?? false);
+  useAuthStore((s) => s.usuario?.role === "admin");
 
-export const useAuthChecking = () => useAuthStore((s) => s.checking);
+export const useAuthCargando = () => useAuthStore((s) => s.cargando);
 
 export const useLogin = () => useAuthStore((s) => s.login);
 
-export const useCheckAuth = () => useAuthStore((s) => s.checkAuth);
+export const useCheckSession = () => useAuthStore((s) => s.checkSession);
 
 export const useLogout = () => {
   const logout = useAuthStore((s) => s.logout);
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
-  // ProtectedRoute redirige al login cuando usuario pasa a null
   return async () => {
     await logout();
     queryClient.clear();
+    navigate("/login", { replace: true });
   };
 };
 
@@ -30,11 +32,11 @@ export const useLogout = () => {
 export const useAuth = () => {
   const usuario = useUsuario();
   const esAdmin = useEsAdmin();
-  const checking = useAuthChecking();
+  const cargando = useAuthCargando();
   const login = useLogin();
   const logout = useLogout();
 
-  return { usuario, esAdmin, checking, login, logout };
+  return { usuario, esAdmin, cargando, login, logout };
 };
 
 export const useRegister = () => {

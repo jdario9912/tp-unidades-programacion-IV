@@ -2,28 +2,32 @@ import type { ChangeEvent, SyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { useRegister } from "@/features/auth/hooks/useAuth";
-import Label from "@/shared/components/ui/label";
-import Input from "@/shared/components/ui/input";
-import FieldError from "@/shared/components/ui/field-error";
-import CardError from "@/shared/components/ui/card-error";
+import Label from "@/shared/ui/label";
+import Input from "@/shared/ui/input";
+import FieldError from "@/shared/ui/field-error";
+import CardError from "@/shared/ui/card-error";
 import { validarEmail } from "@/shared/utils/validaciones";
+import type { UsuarioRegister } from "@/features/auth/types/auth.types";
 
 // los límites coinciden con UserCreate del backend
-const validarNombre =
-  (campo: string) =>
-  ({ value }: { value: string }) => {
-    const nombre = value.trim();
+const validarUsername = ({ value }: { value: string }) => {
+  const username = value.trim();
 
-    if (!nombre) return `El ${campo} es obligatorio`;
-    if (nombre.length > 80)
-      return `El ${campo} no puede superar los 80 caracteres`;
+  if (!username) return "El usuario es obligatorio";
+  if (username.length < 3) return "El usuario debe tener al menos 3 caracteres";
+  if (username.length > 50)
+    return "El usuario no puede superar los 50 caracteres";
+  if (/\s/.test(username)) return "El usuario no puede tener espacios";
 
-    return undefined;
-  };
+  return undefined;
+};
 
-const validarCelular = ({ value }: { value: string }) => {
-  if (value.trim().length > 20)
-    return "El celular no puede superar los 20 caracteres";
+const validarFullName = ({ value }: { value: string }) => {
+  const nombre = value.trim();
+
+  if (!nombre) return "El nombre es obligatorio";
+  if (nombre.length > 100)
+    return "El nombre no puede superar los 100 caracteres";
 
   return undefined;
 };
@@ -38,7 +42,7 @@ const validarPassword = ({ value }: { value: string }) => {
   return undefined;
 };
 
-type Campo = "nombre" | "apellido" | "email" | "celular" | "password";
+type Campo = keyof UsuarioRegister;
 
 type CampoConfig = {
   name: Campo;
@@ -50,18 +54,18 @@ type CampoConfig = {
 
 const CAMPOS: CampoConfig[] = [
   {
-    name: "nombre",
-    label: "Nombre",
+    name: "username",
+    label: "Usuario",
     type: "text",
-    autoComplete: "given-name",
-    validar: validarNombre("nombre"),
+    autoComplete: "username",
+    validar: validarUsername,
   },
   {
-    name: "apellido",
-    label: "Apellido",
+    name: "full_name",
+    label: "Nombre completo",
     type: "text",
-    autoComplete: "family-name",
-    validar: validarNombre("apellido"),
+    autoComplete: "name",
+    validar: validarFullName,
   },
   {
     name: "email",
@@ -69,13 +73,6 @@ const CAMPOS: CampoConfig[] = [
     type: "email",
     autoComplete: "email",
     validar: validarEmail,
-  },
-  {
-    name: "celular",
-    label: "Celular (opcional)",
-    type: "tel",
-    autoComplete: "tel",
-    validar: validarCelular,
   },
   {
     name: "password",
@@ -92,21 +89,17 @@ const RegisterForm = () => {
 
   const form = useForm({
     defaultValues: {
-      nombre: "",
-      apellido: "",
+      username: "",
+      full_name: "",
       email: "",
-      celular: "",
       password: "",
     },
     validationLogic: revalidateLogic(),
     onSubmit: async ({ value }) => {
-      const celular = value.celular.trim();
       const ok = await submit({
-        nombre: value.nombre.trim(),
-        apellido: value.apellido.trim(),
+        username: value.username.trim(),
+        full_name: value.full_name.trim(),
         email: value.email.trim(),
-        // el celular vacío no se manda: el backend lo guarda como null
-        ...(celular && { celular }),
         password: value.password,
       });
 

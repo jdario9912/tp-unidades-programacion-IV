@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import RegisterForm from "@/features/auth/components/RegisterForm";
-import LinkButton from "@/shared/components/ui/link-button";
+import LinkButton from "@/shared/ui/link-button";
 import { useUsuario } from "@/features/auth/hooks/useAuth";
 
 const RegisterPage = () => {
