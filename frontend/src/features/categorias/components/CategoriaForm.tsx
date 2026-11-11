@@ -1,11 +1,11 @@
 import type { ChangeEvent, SyntheticEvent } from "react";
-import { useCreateCategoria, useUpdateCategoria } from "@/features/categories/hooks/useCategories";
-import type { Categoria } from "@/features/categories/types/categoria";
-import Label from "@/shared/components/ui/label";
-import Input from "@/shared/components/ui/input";
-import ActionButton from "@/shared/components/ui/action-button";
-import FieldError from "@/shared/components/ui/field-error";
-import CardError from "@/shared/components/ui/card-error";
+import { useCreateCategoria, useUpdateCategoria } from "@/features/categorias/hooks/useCategorias";
+import type { Categoria } from "@/features/categorias/types/categoria";
+import Label from "@/shared/ui/label";
+import Input from "@/shared/ui/input";
+import ActionButton from "@/shared/ui/action-button";
+import FieldError from "@/shared/ui/field-error";
+import CardError from "@/shared/ui/card-error";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
 
 type Props = {
@@ -17,8 +17,9 @@ const validarNombre = ({ value }: { value: string }) => {
   const nombre = value.trim();
 
   if (!nombre) return "El nombre es obligatorio";
-  if (nombre.length < 3) return "El nombre debe tener al menos 3 caracteres";
-  if (nombre.length > 50) return "El nombre no puede superar los 50 caracteres";
+  if (nombre.length < 2) return "El nombre debe tener al menos 2 caracteres";
+  if (nombre.length > 100)
+    return "El nombre no puede superar los 100 caracteres";
 
   return undefined;
 };
@@ -37,7 +38,7 @@ const validarDescripcion = ({ value }: { value: string }) => {
 const CategoriaForm = ({ categoria, cerrar }: Props) => {
   const initialValues = {
     nombre: categoria ? categoria.nombre : "",
-    descripcion: categoria ? categoria.descripcion : "",
+    descripcion: categoria?.descripcion ?? "",
   };
 
   const { submit: submitCreate, error: errorCreate } = useCreateCategoria();
@@ -49,9 +50,11 @@ const CategoriaForm = ({ categoria, cerrar }: Props) => {
     defaultValues: initialValues,
     validationLogic: revalidateLogic(),
     onSubmit: async ({ value }) => {
+      const descripcion = value.descripcion.trim();
       const input = {
         nombre: value.nombre.trim(),
-        descripcion: value.descripcion.trim(),
+        // vacía se guarda como null
+        descripcion: descripcion || null,
       };
 
       const ok = categoria

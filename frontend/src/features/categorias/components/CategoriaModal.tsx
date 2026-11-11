@@ -1,7 +1,7 @@
 import { useModal } from "@/shared/hooks/modal";
-import type { Categoria } from "@/features/categories/types/categoria";
-import { Modal } from "@/shared/components/ui/modal";
-import ActionButton from "@/shared/components/ui/action-button";
+import type { Categoria } from "@/features/categorias/types/categoria";
+import { Modal } from "@/shared/ui/modal";
+import ActionButton from "@/shared/ui/action-button";
 import CategoriaForm from "./CategoriaForm";
 
 type Props = {

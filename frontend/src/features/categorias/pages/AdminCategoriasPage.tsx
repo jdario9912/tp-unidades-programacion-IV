@@ -1,20 +1,16 @@
-import CategoriaList from "@/features/categories/components/CategoriaList";
-import CategoriaModal from "@/features/categories/components/CategoriaModal";
-import { useCategories } from "@/features/categories/hooks/useCategories";
+import CategoriaTable from "@/features/categorias/components/CategoriaTable";
+import CategoriaModal from "@/features/categorias/components/CategoriaModal";
+import { useGetCategorias } from "@/features/categorias/hooks/useCategorias";
 import { useState, type ChangeEvent } from "react";
-import CardError from "@/shared/components/ui/card-error";
-import Input from "@/shared/components/ui/input";
-import Label from "@/shared/components/ui/label";
-import { useDebounce } from "@/shared/hooks/debounce";
-import { useEsAdmin } from "@/features/auth";
-import Spinner from "@/shared/components/ui/spinner";
-import TableSkeleton from "@/shared/components/ui/table-skeleton";
+import EstadoError from "@/shared/components/EstadoError";
+import TableSkeleton from "@/shared/components/TableSkeleton";
+import Input from "@/shared/ui/input";
+import Label from "@/shared/ui/label";
+import Spinner from "@/shared/ui/spinner";
 
-const Categorias = () => {
+const AdminCategoriasPage = () => {
   const [busqueda, setBusqueda] = useState("");
-  const search = useDebounce(busqueda.trim());
-  const { categorias, error, loading, fetching } = useCategories(search);
-  const esAdmin = useEsAdmin();
+  const { categorias, error, loading, fetching } = useGetCategorias();
 
   return (
     <>
@@ -38,19 +34,17 @@ const Categorias = () => {
             }
           />
         </div>
-        {esAdmin && <CategoriaModal />}
+        <CategoriaModal />
       </div>
       {loading ? (
         <TableSkeleton className="px-4 sm:px-0" />
       ) : error ? (
-        <CardError className="m-4">
-          Error al cargar categorías: {error}
-        </CardError>
+        <EstadoError mensaje="Error al cargar categorías" error={error} />
       ) : (
-        <CategoriaList categorias={categorias ?? []} />
+        <CategoriaTable categorias={categorias ?? []} filtro={busqueda.trim()} />
       )}
     </>
   );
 };
 
-export default Categorias;
+export default AdminCategoriasPage;

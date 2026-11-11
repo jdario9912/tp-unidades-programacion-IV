@@ -1,32 +1,26 @@
-import type { Categoria, CategoriaInput } from "@/features/categories/types/categoria";
+import type {
+  Categoria,
+  CategoriaInput,
+} from "@/features/categorias/types/categoria";
 import {
   handleActualizarCategoria,
-  handleGetCategoriaById,
-  handleGetCategorias,
   handleCrearCategoria,
   handleEliminarCategoria,
-} from "@/features/categories/api/categorias";
+  handleGetCategorias,
+} from "@/features/categorias/api/categorias";
 
-import {
-  keepPreviousData,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { succeeded } from "@/shared/utils/promise";
-import { notificarError, notificarExito } from "@/shared/utils/notificaciones";
+import { notificarExito } from "@/shared/utils/notificaciones";
 
 const CATEGORIAS_QUERY_KEY = "categorias";
-const CATEGORIA_QUERY_KEY = "categoria";
+// los productos muestran su categoría: se refrescan cuando ella cambia
+const PRODUCTOS_QUERY_KEY = "productos";
 
-export const useGetCategorias = (search = "") => {
+export const useGetCategorias = () => {
   const { data, isLoading, isFetching, error } = useQuery<Categoria[]>({
-    // el search en la key separa la caché de cada búsqueda; las
-    // invalidaciones con [CATEGORIAS_QUERY_KEY] siguen alcanzando a todas
-    queryKey: [CATEGORIAS_QUERY_KEY, search],
-    queryFn: () => handleGetCategorias(search),
-    // mantiene la tabla anterior mientras llega el resultado de la búsqueda
-    placeholderData: keepPreviousData,
+    queryKey: [CATEGORIAS_QUERY_KEY],
+    queryFn: handleGetCategorias,
   });
 
   return {
@@ -37,34 +31,19 @@ export const useGetCategorias = (search = "") => {
   };
 };
 
-export const useGetCategoriaById = (id: number) => {
-  const { data, isLoading, error } = useQuery<Categoria>({
-    queryKey: [CATEGORIA_QUERY_KEY, id],
-    queryFn: () => handleGetCategoriaById(id),
-  });
-
-  return { categoria: data, loading: isLoading, error: error?.message };
-};
-
 export const useUpdateCategoria = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: handleActualizarCategoria,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [CATEGORIAS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [PRODUCTOS_QUERY_KEY] });
       notificarExito("Categoría actualizada");
     },
-    onError: notificarError,
   });
 
   const submit = async (id: number, categoria: CategoriaInput) => {
-    return succeeded(
-      mutation.mutateAsync({
-        id,
-        nombre: categoria.nombre,
-        descripcion: categoria.descripcion,
-      }),
-    );
+    return succeeded(mutation.mutateAsync({ id, ...categoria }));
   };
 
   return {
@@ -84,7 +63,6 @@ export const useCreateCategoria = () => {
       queryClient.invalidateQueries({ queryKey: [CATEGORIAS_QUERY_KEY] });
       notificarExito("Categoría creada");
     },
-    onError: notificarError,
   });
 
   const submit = async (categoria: CategoriaInput) => {
@@ -108,7 +86,6 @@ export const useDeleteCategoria = () => {
       queryClient.invalidateQueries({ queryKey: [CATEGORIAS_QUERY_KEY] });
       notificarExito("Categoría eliminada");
     },
-    onError: notificarError,
   });
 
   const submit = async (id: number) => {
@@ -121,14 +98,4 @@ export const useDeleteCategoria = () => {
     submit,
     reset: mutation.reset,
   };
-};
-
-// CRUD completo de categorías: listado y mutaciones de alta, edición y baja
-export const useCategories = (search = "") => {
-  const listado = useGetCategorias(search);
-  const crear = useCreateCategoria();
-  const actualizar = useUpdateCategoria();
-  const eliminar = useDeleteCategoria();
-
-  return { ...listado, crear, actualizar, eliminar };
 };
