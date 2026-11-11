@@ -1,20 +1,19 @@
-import ProductoList from "@/features/products/components/ProductoList";
-import ProductoModal from "@/features/products/components/ProductoModal";
-import { useProducts } from "@/features/products/hooks/useProducts";
 import { useState, type ChangeEvent } from "react";
-import CardError from "@/shared/components/ui/card-error";
-import Input from "@/shared/components/ui/input";
-import Label from "@/shared/components/ui/label";
-import { useDebounce } from "@/shared/hooks/debounce";
-import { useEsAdmin } from "@/features/auth";
-import Spinner from "@/shared/components/ui/spinner";
-import TableSkeleton from "@/shared/components/ui/table-skeleton";
+import { useGetProductos } from "@/features/productos/hooks/useProductos";
+import ProductoModal from "@/features/productos/components/ProductoModal";
+import ProductoTable from "@/features/productos/components/ProductoTable";
+import EstadoError from "@/shared/components/EstadoError";
+import TableSkeleton from "@/shared/components/TableSkeleton";
+import Input from "@/shared/ui/input";
+import Label from "@/shared/ui/label";
+import Spinner from "@/shared/ui/spinner";
 
-const Productos = () => {
+// el panel pide hasta 100 y pagina del lado del cliente
+const FILTROS = { skip: 0, limit: 100 };
+
+const AdminProductosPage = () => {
   const [busqueda, setBusqueda] = useState("");
-  const search = useDebounce(busqueda.trim());
-  const { productos, error, loading, fetching } = useProducts(search);
-  const esAdmin = useEsAdmin();
+  const { productos, error, loading, fetching } = useGetProductos(FILTROS);
 
   return (
     <>
@@ -38,19 +37,17 @@ const Productos = () => {
             }
           />
         </div>
-        {esAdmin && <ProductoModal />}
+        <ProductoModal />
       </div>
       {loading ? (
         <TableSkeleton className="px-4 sm:px-0" />
       ) : error ? (
-        <CardError className="m-4">
-          Error al cargar productos: {error}
-        </CardError>
+        <EstadoError mensaje="Error al cargar productos" error={error} />
       ) : (
-        <ProductoList productos={productos ?? []} />
+        <ProductoTable productos={productos ?? []} filtro={busqueda.trim()} />
       )}
     </>
   );
 };
 
-export default Productos;
+export default AdminProductosPage;

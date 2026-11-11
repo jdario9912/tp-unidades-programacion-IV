@@ -1,7 +1,7 @@
 import { useModal } from "@/shared/hooks/modal";
-import type { Producto } from "@/features/products/types/producto";
-import { Modal } from "@/shared/components/ui/modal";
-import ActionButton from "@/shared/components/ui/action-button";
+import type { Producto } from "@/features/productos/types/producto";
+import { Modal } from "@/shared/ui/modal";
+import ActionButton from "@/shared/ui/action-button";
 import ProductoForm from "./ProductoForm";
 
 type Props = {
@@ -27,7 +27,7 @@ const ProductoModal = ({ producto }: Props) => {
       <Modal abierto={abierto} onCerrar={cerrar}>
         <div className="flex justify-between p-2 px-4">
           <h2 className="font-bold">
-            {producto ? "Ver Producto" : "Añadir Producto"}
+            {producto ? "Editar Producto" : "Añadir Producto"}
           </h2>
 
           <ActionButton onClick={cerrar} variant="ghost">
