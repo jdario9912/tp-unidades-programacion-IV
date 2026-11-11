@@ -1,22 +1,30 @@
+from typing import Callable, Self
+
 from sqlmodel import Session
+
+from .database import session_factory
 
 
 class UnitOfWork:
-    def __init__(self, session: Session) -> None:
-        self._session = session
+    """
+    Abre la sesión al entrar al `with` y la cierra al salir: commit si el bloque
+    terminó bien, rollback si hubo una excepción. Ningún Service ni Router hace commit.
 
-    def __enter__(self) -> "UnitOfWork":
+    Las subclases crean sus repositorios en `__enter__`, sobre la misma sesión.
+    """
+
+    def __init__(self, factory: Callable[[], Session] = session_factory) -> None:
+        self._factory = factory
+
+    def __enter__(self) -> Self:
+        self.session = self._factory()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
-        if exc_type is None:
-            self._session.commit()
-        else:
-            self._session.rollback()
-        self._session.close()
-
-    def commit(self) -> None:
-        self._session.commit()
-
-    def rollback(self) -> None:
-        self._session.rollback()
+        try:
+            if exc_type is None:
+                self.session.commit()
+            else:
+                self.session.rollback()
+        finally:
+            self.session.close()

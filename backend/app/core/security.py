@@ -1,36 +1,38 @@
 from datetime import timedelta
 from typing import Optional
 
-import bcrypt
-import jwt
+from jose import JWTError, jwt
+from passlib.context import CryptContext
 
 from .config import settings
-from .models import utc_now
+from .fechas import utc_now
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def hash_password(password: str) -> str:
     """Devuelve el hash bcrypt (60 caracteres) de la contraseña."""
-    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+    return pwd_context.hash(password)
 
 
-def verify_password(password: str, password_hash: str) -> bool:
-    return bcrypt.checkpw(password.encode("utf-8"), password_hash.encode("utf-8"))
+def verify_password(password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(password, hashed_password)
 
 
-def crear_access_token(usuario_id: int) -> str:
+def create_access_token(usuario_id: int) -> str:
     """
-    JWT con el id del usuario en `sub`. Los roles no van en el token:
-    se leen de la base en cada request, así un cambio tiene efecto inmediato.
+    JWT con el id del usuario en `sub`. El rol no va en el token:
+    se lee de la base en cada request, así un cambio tiene efecto inmediato.
     """
-    expira = utc_now() + timedelta(minutes=settings.access_token_expire_minutes)
+    expira = utc_now() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     payload = {"sub": str(usuario_id), "exp": expira}
-    return jwt.encode(payload, settings.secret_key, algorithm=settings.jwt_algorithm)
+    return jwt.encode(payload, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 
-def decodificar_access_token(token: str) -> Optional[int]:
+def decode_access_token(token: str) -> Optional[int]:
     """Devuelve el id del usuario, o None si el token es inválido o venció."""
     try:
-        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.jwt_algorithm])
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         return int(payload["sub"])
-    except (jwt.InvalidTokenError, KeyError, ValueError):
+    except (JWTError, KeyError, ValueError):
         return None
