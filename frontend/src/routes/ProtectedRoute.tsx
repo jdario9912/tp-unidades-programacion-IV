@@ -1,18 +1,19 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useAuthChecking, useUsuario } from "@/features/auth";
-import Spinner from "@/shared/components/ui/spinner";
+import { useAuthCargando, useUsuario, type Rol } from "@/features/auth";
+import Spinner from "@/shared/ui/spinner";
 
 type Props = {
-  allowedRoles?: string[];
+  allowedRoles?: Rol[];
 };
 
+// solo decide qué pantalla mostrar: la protección real es require_role en el backend
 const ProtectedRoute = ({ allowedRoles }: Props) => {
   const usuario = useUsuario();
-  const checking = useAuthChecking();
+  const cargando = useAuthCargando();
   const location = useLocation();
 
-  // mientras /auth/me no responde no se sabe si hay sesión: no se redirige
-  if (checking)
+  // mientras /auth/me no responde no se sabe si la sesión sigue viva: no se redirige
+  if (cargando)
     return (
       <div className="flex justify-center p-8">
         <Spinner />
@@ -23,7 +24,7 @@ const ProtectedRoute = ({ allowedRoles }: Props) => {
     return <Navigate to="/login" replace state={{ from: location.pathname }} />;
 
   // sin allowedRoles alcanza con tener sesión
-  if (allowedRoles && !allowedRoles.some((rol) => usuario.roles.includes(rol)))
+  if (allowedRoles && !allowedRoles.includes(usuario.role))
     return <Navigate to="/unauthorized" replace />;
 
   return <Outlet />;
