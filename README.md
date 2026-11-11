@@ -6,7 +6,7 @@ Trabajo Práctico Integrador de Programación 4. Es una aplicación web para un 
 - **Administrador**: gestiona categorías, productos, stock, pedidos y usuarios desde un panel.
 
 - **Repositorio**: https://github.com/jdario9912/tp-unidades-programacion-IV/tree/trabajo-practico-integrador
-- **Video de demostración**: _https://youtu.be/8ERlKsdhsn4_
+- **Video de demostración**: https://youtu.be/8ERlKsdhsn4
 
 ## Stack
 
