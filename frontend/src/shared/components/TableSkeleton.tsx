@@ -1,6 +1,6 @@
 import { type ComponentPropsWithoutRef } from "react";
 import { cn } from "@/shared/utils/cn";
-import Skeleton from "./skeleton";
+import Skeleton from "./Skeleton";
 
 type Props = ComponentPropsWithoutRef<"div"> & {
   rows?: number;

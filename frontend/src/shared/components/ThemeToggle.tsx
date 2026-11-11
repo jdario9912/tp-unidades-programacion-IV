@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useThemeStore } from "@/store/themeStore";
-import ActionButton from "@/shared/components/ui/action-button";
+import ActionButton from "@/shared/ui/action-button";
 
 const ThemeToggle = () => {
   const darkMode = useThemeStore((s) => s.darkMode);

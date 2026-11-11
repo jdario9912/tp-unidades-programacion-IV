@@ -1,4 +1,4 @@
-import LinkButton from "@/shared/components/ui/link-button";
+import LinkButton from "@/shared/ui/link-button";
 
 const NotFound = () => {
   return (

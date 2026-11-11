@@ -15,7 +15,7 @@ const ActionButton = ({
     <button
       {...rest}
       className={cn(
-        "px-4 py-2 rounded border border-transparent focus:outline-4",
+        "px-4 py-2 rounded border border-transparent focus:outline-4 disabled:cursor-not-allowed disabled:opacity-50",
         variant === "primary" &&
           "bg-primary text-off-white hover:bg-primary-hover focus:outline-primary/60",
         variant === "secondary" &&
